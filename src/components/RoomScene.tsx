@@ -384,8 +384,14 @@ function SmartModel({ name, color, modelUrl, scale }: { name: string; color: str
  
   // 11. QAPI (Full 3D Architectural Door Frame, Panel & Double-sided Handles)
   if (name.includes("Qapı")) {
-    const doorColor = color && color !== "#ffffff" ? color : "#8b5a2b";
     const is360 = appMode === "360-photo";
+    
+    // 360° Foto rejimində qapı çərçivəsini və panelini silirik (yalnız divardakı qapı oyuğu/kəsiyi qalır)
+    if (is360) {
+      return null;
+    }
+
+    const doorColor = color && color !== "#ffffff" ? color : "#8b5a2b";
 
     return (
       <group>
@@ -402,53 +408,33 @@ function SmartModel({ name, color, modelUrl, scale }: { name: string; color: str
           <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
         </RoundedBox>
 
-        {/* Qapı Layı / Paneli */}
-        {is360 ? (
-          /* 360° Foto rejimində qapı tam 90 dərəcə AÇIQ (Swung wide open against the frame) durur ki, keçid 100% təmiz görünsün */
-          <group position={[-0.48, 1.0, 0]} rotation={[0, -Math.PI / 1.8, 0]}>
-            <RoundedBox args={[0.96, 2.0, 0.05]} radius={0.005} smoothness={4} position={[0.48, 0, 0]} castShadow receiveShadow>
-              <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} side={THREE.DoubleSide} />
-            </RoundedBox>
-            <group position={[0.86, 0, 0]}>
-              <mesh position={[0, 0, 0.04]} castShadow receiveShadow>
-                <boxGeometry args={[0.03, 0.12, 0.02]} />
-                <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-              </mesh>
-              <mesh position={[0, 0, -0.04]} castShadow receiveShadow>
-                <boxGeometry args={[0.03, 0.12, 0.02]} />
-                <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-              </mesh>
-            </group>
-          </group>
-        ) : (
-          /* 3D Otaq rejimində bağlama/açma və baxış açısına görə bütöv görünüş */
-          <group position={[0, 1.0, 0]}>
-            <RoundedBox args={[0.96, 2.0, 0.05]} radius={0.005} smoothness={4} position={[0, 0, 0]} castShadow receiveShadow>
-              <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} side={THREE.DoubleSide} />
-            </RoundedBox>
+        {/* 3D Otaq rejimində bağlama/açma və baxış açısına görə bütöv görünüş */}
+        <group position={[0, 1.0, 0]}>
+          <RoundedBox args={[0.96, 2.0, 0.05]} radius={0.005} smoothness={4} position={[0, 0, 0]} castShadow receiveShadow>
+            <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} side={THREE.DoubleSide} />
+          </RoundedBox>
 
-            {/* Qızılı Qulplar */}
-            <group position={[0.38, 0, 0]}>
-              <mesh position={[0, 0, 0.04]} castShadow receiveShadow>
-                <boxGeometry args={[0.03, 0.12, 0.02]} />
-                <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-              </mesh>
-              <mesh position={[0.04, 0.02, 0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
-                <cylinderGeometry args={[0.01, 0.01, 0.1]} />
-                <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-              </mesh>
+          {/* Qızılı Qulplar */}
+          <group position={[0.38, 0, 0]}>
+            <mesh position={[0, 0, 0.04]} castShadow receiveShadow>
+              <boxGeometry args={[0.03, 0.12, 0.02]} />
+              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+            </mesh>
+            <mesh position={[0.04, 0.02, 0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+            </mesh>
 
-              <mesh position={[0, 0, -0.04]} castShadow receiveShadow>
-                <boxGeometry args={[0.03, 0.12, 0.02]} />
-                <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-              </mesh>
-              <mesh position={[0.04, 0.02, -0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
-                <cylinderGeometry args={[0.01, 0.01, 0.1]} />
-                <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-              </mesh>
-            </group>
+            <mesh position={[0, 0, -0.04]} castShadow receiveShadow>
+              <boxGeometry args={[0.03, 0.12, 0.02]} />
+              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+            </mesh>
+            <mesh position={[0.04, 0.02, -0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+            </mesh>
           </group>
-        )}
+        </group>
       </group>
     );
   }
