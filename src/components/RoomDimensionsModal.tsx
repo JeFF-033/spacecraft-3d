@@ -78,12 +78,9 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
   };
 
   const modalContent = (
-    <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-[9999] pointer-events-none flex items-start justify-end p-4 md:p-6 pt-20">
       <div 
-        className="bg-[#0e0e15] border border-white/20 rounded-3xl w-full max-w-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col relative text-white animate-scale-up"
+        className="pointer-events-auto bg-[#0e0e15]/95 backdrop-blur-xl border border-white/20 rounded-3xl w-full max-w-sm shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col relative text-white animate-scale-up border-indigo-500/30"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
