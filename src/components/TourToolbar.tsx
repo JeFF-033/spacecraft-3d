@@ -6,7 +6,7 @@ import { useStore } from "@/store/useStore";
 import { MousePointer2, MapPin, Tag, Plus, Camera, Play, Pause, Box, LayoutTemplate, Menu, SlidersHorizontal, Sparkles } from "lucide-react";
 import { export360Panorama } from "@/lib/cubemapToEquirectangular";
 import { useMultiplayer } from "@/hooks/useMultiplayer";
-import { calculateAttachedRoomPosition } from "@/lib/roomSystem";
+import { calculateAttachedRoomPosition, getAllRoomBounds } from "@/lib/roomSystem";
 
 const compressImage = (file: File, maxWidth = 8192, maxHeight = 4096, quality = 0.95): Promise<Blob> => {
   return new Promise((resolve, reject) => {
@@ -637,13 +637,11 @@ export default function TourToolbar() {
                   onChange={(e) => setSelectedParentRoomId(e.target.value)}
                   className="w-full bg-black/60 border border-white/15 focus:border-purple-500 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 font-bold appearance-none cursor-pointer shadow-inner pr-10 transition-all"
                 >
-                  {furnitureLayers
-                    .filter((f) => f.type === "room" || f.id === "main-room")
-                    .map((r) => (
-                      <option key={r.id} value={r.id} className="bg-neutral-900 text-white py-2 font-medium">
-                        🏠 {r.name || "Əsas Otaq"} ({r.position?.x?.toFixed(1)}, {r.position?.z?.toFixed(1)})
-                      </option>
-                    ))}
+                  {getAllRoomBounds(furnitureLayers, useStore.getState().roomSize, currentFloor).map((r) => (
+                    <option key={r.id} value={r.id} className="bg-neutral-900 text-white py-2 font-medium">
+                      🏠 {r.name} ({r.centerX.toFixed(1)}, {r.centerZ.toFixed(1)})
+                    </option>
+                  ))}
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 font-mono">
                   ▼

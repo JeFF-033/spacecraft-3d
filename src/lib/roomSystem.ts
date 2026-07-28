@@ -160,54 +160,94 @@ export function calculateAttachedRoomPosition(
   const targetLength = smallLength ?? roomSize.length;
   const rooms = getAllRoomBounds(furnitureLayers, roomSize, currentFloor);
 
-  // Find target room or default to primary room
-  let target = rooms.find((r) => r.id === targetRoomId) || rooms[0];
+  // 1. Seçilmiş Ana Otaq (Parent Room)
+  const parent = rooms.find((r) => r.id === targetRoomId) || rooms[0];
 
-  let candidateX = target.centerX;
-  let candidateZ = target.centerZ;
-  let boundaryX = target.centerX;
-  let boundaryZ = target.centerZ;
+  let candidateX = parent.centerX;
+  let candidateZ = parent.centerZ;
+  let boundaryX = parent.centerX;
+  let boundaryZ = parent.centerZ;
 
   if (direction === "right") {
-    let maxRight = target.maxX;
-    rooms.forEach((r) => {
-      if (Math.abs(r.centerZ - target.centerZ) < Math.max(r.length, targetLength) / 2 + 0.1) {
-        if (r.maxX > maxRight) maxRight = r.maxX;
+    let currentRight = parent.maxX;
+    let findNext = true;
+    while (findNext) {
+      const adjacentRoom = rooms.find(
+        (r) =>
+          r.id !== parent.id &&
+          Math.abs(r.minX - currentRight) < 0.3 &&
+          Math.abs(r.centerZ - parent.centerZ) < Math.max(r.length, targetLength) / 2
+      );
+      if (adjacentRoom) {
+        currentRight = adjacentRoom.maxX;
+      } else {
+        findNext = false;
       }
-    });
-    candidateX = maxRight + smallWidth / 2;
-    candidateZ = target.centerZ;
-    boundaryX = maxRight;
+    }
+    candidateX = currentRight + smallWidth / 2;
+    candidateZ = parent.centerZ;
+    boundaryX = currentRight;
+    boundaryZ = parent.centerZ;
   } else if (direction === "left") {
-    let minLeft = target.minX;
-    rooms.forEach((r) => {
-      if (Math.abs(r.centerZ - target.centerZ) < Math.max(r.length, targetLength) / 2 + 0.1) {
-        if (r.minX < minLeft) minLeft = r.minX;
+    let currentLeft = parent.minX;
+    let findNext = true;
+    while (findNext) {
+      const adjacentRoom = rooms.find(
+        (r) =>
+          r.id !== parent.id &&
+          Math.abs(r.maxX - currentLeft) < 0.3 &&
+          Math.abs(r.centerZ - parent.centerZ) < Math.max(r.length, targetLength) / 2
+      );
+      if (adjacentRoom) {
+        currentLeft = adjacentRoom.minX;
+      } else {
+        findNext = false;
       }
-    });
-    candidateX = minLeft - smallWidth / 2;
-    candidateZ = target.centerZ;
-    boundaryX = minLeft;
+    }
+    candidateX = currentLeft - smallWidth / 2;
+    candidateZ = parent.centerZ;
+    boundaryX = currentLeft;
+    boundaryZ = parent.centerZ;
   } else if (direction === "front") {
-    let maxFront = target.maxZ;
-    rooms.forEach((r) => {
-      if (Math.abs(r.centerX - target.centerX) < Math.max(r.width, smallWidth) / 2 + 0.1) {
-        if (r.maxZ > maxFront) maxFront = r.maxZ;
+    let currentFront = parent.maxZ;
+    let findNext = true;
+    while (findNext) {
+      const adjacentRoom = rooms.find(
+        (r) =>
+          r.id !== parent.id &&
+          Math.abs(r.minZ - currentFront) < 0.3 &&
+          Math.abs(r.centerX - parent.centerX) < Math.max(r.width, smallWidth) / 2
+      );
+      if (adjacentRoom) {
+        currentFront = adjacentRoom.maxZ;
+      } else {
+        findNext = false;
       }
-    });
-    candidateX = target.centerX;
-    candidateZ = maxFront + targetLength / 2;
-    boundaryZ = maxFront;
+    }
+    candidateX = parent.centerX;
+    candidateZ = currentFront + targetLength / 2;
+    boundaryX = parent.centerX;
+    boundaryZ = currentFront;
   } else if (direction === "back") {
-    let minBack = target.minZ;
-    rooms.forEach((r) => {
-      if (Math.abs(r.centerX - target.centerX) < Math.max(r.width, smallWidth) / 2 + 0.1) {
-        if (r.minZ < minBack) minBack = r.minZ;
+    let currentBack = parent.minZ;
+    let findNext = true;
+    while (findNext) {
+      const adjacentRoom = rooms.find(
+        (r) =>
+          r.id !== parent.id &&
+          Math.abs(r.maxZ - currentBack) < 0.3 &&
+          Math.abs(r.centerX - parent.centerX) < Math.max(r.width, smallWidth) / 2
+      );
+      if (adjacentRoom) {
+        currentBack = adjacentRoom.minZ;
+      } else {
+        findNext = false;
       }
-    });
-    candidateX = target.centerX;
-    candidateZ = minBack - targetLength / 2;
-    boundaryZ = minBack;
+    }
+    candidateX = parent.centerX;
+    candidateZ = currentBack - targetLength / 2;
+    boundaryX = parent.centerX;
+    boundaryZ = currentBack;
   }
 
   return {
@@ -217,7 +257,7 @@ export function calculateAttachedRoomPosition(
     smallLength: targetLength,
     boundaryX,
     boundaryZ,
-    parentRoomId: target.id,
-    parentRoomName: target.name
+    parentRoomId: parent.id,
+    parentRoomName: parent.name
   };
 }
