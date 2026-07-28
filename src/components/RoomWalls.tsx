@@ -443,7 +443,7 @@ function SingleRoomBox({
 
       {/* Back Wall (Z-) */}
       <FadingWall 
-        position={[centerX, height / 2, topEdge]} 
+        position={[centerX, height / 2, topEdge + (hasBackAdjacent ? 0.005 : 0)]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
         isWalkthrough={isWalkthrough}
@@ -455,7 +455,7 @@ function SingleRoomBox({
 
       {/* Front Wall (Z+) */}
       <FadingWall 
-        position={[centerX, height / 2, bottomEdge]} 
+        position={[centerX, height / 2, bottomEdge - (hasFrontAdjacent ? 0.005 : 0)]} 
         rotation={[0, Math.PI, 0]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
@@ -468,7 +468,7 @@ function SingleRoomBox({
 
       {/* Left Wall (X-) */}
       <FadingWall 
-        position={[leftEdge, height / 2, centerZ]} 
+        position={[leftEdge + (hasLeftAdjacent ? 0.005 : 0), height / 2, centerZ]} 
         rotation={[0, Math.PI / 2, 0]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
@@ -481,7 +481,7 @@ function SingleRoomBox({
 
       {/* Right Wall (X+) */}
       <FadingWall 
-        position={[rightEdge, height / 2, centerZ]} 
+        position={[rightEdge - (hasRightAdjacent ? 0.005 : 0), height / 2, centerZ]} 
         rotation={[0, -Math.PI / 2, 0]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
