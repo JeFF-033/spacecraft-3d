@@ -680,6 +680,11 @@ function SmartModel({ name, color, modelUrl, scale, doorStyle }: { name: string;
     );
   }
  
+  // Otaq Qutusu / Bloku (3D otaq RoomWalls tərəfindən render olunur, burada mebel kimi qutu göstərilmir)
+  if (name === "Otaq Bloku" || name.includes("Otaq Kubu")) {
+    return null;
+  }
+
   // Default obyekt
   return (
     <RoundedBox args={[1, 1, 1]} radius={0.05} smoothness={4} position={[0, 0.5, 0]} castShadow receiveShadow>
@@ -691,6 +696,11 @@ function SmartModel({ name, color, modelUrl, scale, doorStyle }: { name: string;
 function FurnitureItem({ data }: { data: any }) {
   const { selectedId, setSelectedId, updateFurniture, deleteFurniture, duplicateFurniture, saveHistory, transformMode, isWalkthrough, isGridSnapEnabled, gridSnapSize, furnitureLayers, currentFloor, appMode, isTransforming } = useStore();
   const { pushUpdate } = useMultiplayer();
+  
+  // Otaq düyünləri (type === "room") 3D otaq kimi RoomWalls tərəfindən tikilir, mebel kimi blok render olunmur
+  if (data.type === "room" || data.name === "Otaq Bloku" || data.name?.includes("Otaq Kubu")) {
+    return null;
+  }
   const isSelected = selectedId === data.id;
   const meshRef = useRef<THREE.Group>(null);
   
