@@ -101,6 +101,17 @@ export default function TourToolbar() {
   const [attachDirection, setAttachDirection] = React.useState<"right" | "left" | "front" | "back">("right");
   const [selectedParentRoomId, setSelectedParentRoomId] = React.useState<string>("main-room");
 
+  React.useEffect(() => {
+    if (isAddRoomModalOpen) {
+      const allRooms = getAllRoomBounds(furnitureLayers, useStore.getState().roomSize, currentFloor);
+      const currentCameraNode = furnitureLayers.find(f => f.id === currentTourNodeId);
+      const activeRoom = allRooms.find(r => r.id === currentCameraNode?.nodeId) || allRooms[allRooms.length - 1] || allRooms[0];
+      if (activeRoom) {
+        setSelectedParentRoomId(activeRoom.id);
+      }
+    }
+  }, [isAddRoomModalOpen]);
+
   const executeAddRoom = async (files?: FileList | null) => {
     const state = useStore.getState();
     const currentRooms = furnitureLayers.filter(f => f.type === "room" || f.id === "main-room");
