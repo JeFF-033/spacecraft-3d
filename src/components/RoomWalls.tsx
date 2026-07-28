@@ -31,90 +31,22 @@ function FadingWall({
   
   useFrame(({ camera }) => {
     if (groupRef.current) {
-      // 360° Foto rejimində divarlar həmişə 100% bütöv, opaq və tam təmiz keçidli olmalıdır
-      if (appMode === "360-photo") {
-        currentOpacityRef.current = 1;
-        groupRef.current.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const material = (child as THREE.Mesh).material;
-            if (material) {
-              const updateMat = (m: any) => {
-                if (m.transparent) {
-                  m.transparent = false;
-                  m.opacity = 1;
-                  m.depthWrite = true;
-                  m.needsUpdate = true;
-                }
-              };
-              if (Array.isArray(material)) material.forEach(updateMat);
-              else updateMat(material);
-            }
-          }
-        });
-        return;
-      }
-
-      const centerVec = new THREE.Vector3(center[0], center[1], center[2]);
-      const distToCenter = camera.position.distanceTo(centerVec);
-      const wallPos = new THREE.Vector3(position[0], position[1], position[2]);
-      const distToWall = camera.position.distanceTo(wallPos);
-      
-      // Kameranın bu otağın içində olub-olmadığını yoxlayırıq
-      const minDim = Math.min(roomSize.width, roomSize.length) / 2;
-      const isInside = Math.abs(camera.position.x - center[0]) < minDim && 
-                       Math.abs(camera.position.z - center[2]) < minDim;
-
-      // İç bölmə divarları həmişə 100% bütöv və görünən qalmalıdır
-      let targetOpacity = 1;
-      if (!isDividingWall && !isInside && distToWall < distToCenter) {
-        targetOpacity = 0.15; // Glass effect for exterior walls only in 3D room mode
-      }
-
-      // Əgər artıq hədəf şəffaflığa çatıbsa, dəyişiklik etmirik
-      if (Math.abs(currentOpacityRef.current - targetOpacity) < 0.005) {
-        return;
-      }
-
-      currentOpacityRef.current = THREE.MathUtils.lerp(currentOpacityRef.current, targetOpacity, 0.1);
-      if (Math.abs(currentOpacityRef.current - targetOpacity) < 0.005) {
-        currentOpacityRef.current = targetOpacity;
-      }
-      
+      // Həm 360° Foto, həm də 3D Otaq rejimində divarlar həmişə 100% bütöv və opaq (solid) qalmalıdır
+      currentOpacityRef.current = 1;
       groupRef.current.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           const material = (child as THREE.Mesh).material;
           if (material) {
-            const updateMaterial = (m: any) => {
-              const targetDepthWrite = targetOpacity === 1;
-              let changed = false;
-              if (targetOpacity === 1) {
-                if (m.transparent) {
-                  m.transparent = false;
-                  changed = true;
-                }
-              } else {
-                if (!m.transparent) {
-                  m.transparent = true;
-                  changed = true;
-                }
-              }
-              if (m.opacity !== currentOpacityRef.current) {
-                m.opacity = currentOpacityRef.current;
-              }
-              if (m.depthWrite !== targetDepthWrite) {
-                m.depthWrite = targetDepthWrite;
-                changed = true;
-              }
-              if (changed) {
+            const updateMat = (m: any) => {
+              if (m.transparent) {
+                m.transparent = false;
+                m.opacity = 1;
+                m.depthWrite = true;
                 m.needsUpdate = true;
               }
             };
-
-            if (Array.isArray(material)) {
-              material.forEach(updateMaterial);
-            } else {
-              updateMaterial(material);
-            }
+            if (Array.isArray(material)) material.forEach(updateMat);
+            else updateMat(material);
           }
         }
       });
@@ -278,11 +210,14 @@ function SingleRoomBox({
       );
     }
 
-    // Əgər divarda keçid/qapı kəsiyi varsa, onu 3 fiziki divar hissəsinə (Sol, Sağ, Üst Lintel) bölərək render edirik
-    // Divarın rotasiya bucağına uyğun olaraq dəqiq local koordinat hesablamaq
+    // Əgər divarda keçid/qapı/pəncərə kəsiyi varsa, onu fiziki divar hissələrinə (Sol, Sağ, Üst Lintel və Alt Sill) bölərək render edirik
     const op = snappedOpenings[0];
-    const doorWidth = op.scale?.x || 1.1;
-    const doorHeight = op.scale?.y || 2.1;
+    const isWindow = op.name?.includes("Pəncərə") || op.type === "window";
+    const openingWidth = op.scale?.x || (isWindow ? 1.2 : 1.1);
+    const openingHeight = op.scale?.y || (isWindow ? 1.2 : 2.1);
+    
+    const defaultCenterY = isWindow ? 1.4 : 1.05;
+    const openingCenterY = op.position?.y !== undefined && op.position?.y !== 0 ? op.position.y : defaultCenterY;
 
     let doorLocalX = 0;
     if (wallType === 'back') {
@@ -296,16 +231,22 @@ function SingleRoomBox({
     }
 
     const wallHalf = wallWidth / 2;
-    const doorMin = doorLocalX - doorWidth / 2;
-    const doorMax = doorLocalX + doorWidth / 2;
+    const doorMin = doorLocalX - openingWidth / 2;
+    const doorMax = doorLocalX + openingWidth / 2;
 
     const leftSectionWidth = Math.max(0, doorMin - (-wallHalf));
     const rightSectionWidth = Math.max(0, wallHalf - doorMax);
-    const topSectionHeight = Math.max(0, wallHeight - doorHeight);
+
+    const bottomY = isWindow ? Math.max(0, openingCenterY - openingHeight / 2) : 0;
+    const topY = isWindow ? Math.min(wallHeight, openingCenterY + openingHeight / 2) : Math.min(wallHeight, openingHeight);
+
+    const topSectionHeight = Math.max(0, wallHeight - topY);
+    const bottomSectionHeight = Math.max(0, bottomY);
 
     const leftCenterX = -wallHalf + leftSectionWidth / 2;
     const rightCenterX = doorMax + rightSectionWidth / 2;
-    const topCenterY = (doorHeight + wallHeight) / 2 - wallHeight / 2;
+    const topCenterY = (topY + wallHeight) / 2 - wallHeight / 2;
+    const bottomCenterY = bottomY / 2 - wallHeight / 2;
 
     return (
       <group>
@@ -325,10 +266,18 @@ function SingleRoomBox({
           </mesh>
         )}
 
-        {/* Qapının üstündəki divar hissəsi (Lintel) */}
+        {/* Qapı/Pəncərə üstündəki divar hissəsi (Lintel) */}
         {topSectionHeight > 0.02 && (
           <mesh position={[doorLocalX, topCenterY, 0]} receiveShadow castShadow>
-            <boxGeometry args={[doorWidth, topSectionHeight, 0.2]} />
+            <boxGeometry args={[openingWidth, topSectionHeight, 0.2]} />
+            {material}
+          </mesh>
+        )}
+
+        {/* Pəncərə altındakı divar hissəsi (Sill) */}
+        {bottomSectionHeight > 0.02 && (
+          <mesh position={[doorLocalX, bottomCenterY, 0]} receiveShadow castShadow>
+            <boxGeometry args={[openingWidth, bottomSectionHeight, 0.2]} />
             {material}
           </mesh>
         )}
