@@ -442,63 +442,55 @@ function SingleRoomBox({
       )}
 
       {/* Back Wall (Z-) */}
-      {(!hasBackAdjacent || currentRoomId === "main-room") && (
-        <FadingWall 
-          position={[centerX, height / 2, topEdge]} 
-          roomSize={roomSize} 
-          center={[centerX, 0, centerZ]} 
-          isWalkthrough={isWalkthrough}
-          isDividingWall={hasBackAdjacent}
-          appMode={appMode}
-        >
-          {renderCSGWall(width, height, effectiveBackOpenings, 'back')}
-        </FadingWall>
-      )}
+      <FadingWall 
+        position={[centerX, height / 2, topEdge]} 
+        roomSize={roomSize} 
+        center={[centerX, 0, centerZ]} 
+        isWalkthrough={isWalkthrough}
+        isDividingWall={hasBackAdjacent}
+        appMode={appMode}
+      >
+        {renderCSGWall(width, height, effectiveBackOpenings, 'back')}
+      </FadingWall>
 
       {/* Front Wall (Z+) */}
-      {(!hasFrontAdjacent || currentRoomId === "main-room") && (
-        <FadingWall 
-          position={[centerX, height / 2, bottomEdge]} 
-          rotation={[0, Math.PI, 0]} 
-          roomSize={roomSize} 
-          center={[centerX, 0, centerZ]} 
-          isWalkthrough={isWalkthrough}
-          isDividingWall={hasFrontAdjacent}
-          appMode={appMode}
-        >
-          {renderCSGWall(width, height, effectiveFrontOpenings, 'front')}
-        </FadingWall>
-      )}
+      <FadingWall 
+        position={[centerX, height / 2, bottomEdge]} 
+        rotation={[0, Math.PI, 0]} 
+        roomSize={roomSize} 
+        center={[centerX, 0, centerZ]} 
+        isWalkthrough={isWalkthrough}
+        isDividingWall={hasFrontAdjacent}
+        appMode={appMode}
+      >
+        {renderCSGWall(width, height, effectiveFrontOpenings, 'front')}
+      </FadingWall>
 
       {/* Left Wall (X-) */}
-      {(!hasLeftAdjacent || currentRoomId === "main-room") && (
-        <FadingWall 
-          position={[leftEdge, height / 2, centerZ]} 
-          rotation={[0, Math.PI / 2, 0]} 
-          roomSize={roomSize} 
-          center={[centerX, 0, centerZ]} 
-          isWalkthrough={isWalkthrough}
-          isDividingWall={hasLeftAdjacent}
-          appMode={appMode}
-        >
-          {renderCSGWall(length, height, effectiveLeftOpenings, 'left')}
-        </FadingWall>
-      )}
+      <FadingWall 
+        position={[leftEdge, height / 2, centerZ]} 
+        rotation={[0, Math.PI / 2, 0]} 
+        roomSize={roomSize} 
+        center={[centerX, 0, centerZ]} 
+        isWalkthrough={isWalkthrough}
+        isDividingWall={hasLeftAdjacent}
+        appMode={appMode}
+      >
+        {renderCSGWall(length, height, effectiveLeftOpenings, 'left')}
+      </FadingWall>
 
       {/* Right Wall (X+) */}
-      {(!hasRightAdjacent || currentRoomId === "main-room") && (
-        <FadingWall 
-          position={[rightEdge, height / 2, centerZ]} 
-          rotation={[0, -Math.PI / 2, 0]} 
-          roomSize={roomSize} 
-          center={[centerX, 0, centerZ]} 
-          isWalkthrough={isWalkthrough}
-          isDividingWall={hasRightAdjacent}
-          appMode={appMode}
-        >
-          {renderCSGWall(length, height, effectiveRightOpenings, 'right')}
-        </FadingWall>
-      )}
+      <FadingWall 
+        position={[rightEdge, height / 2, centerZ]} 
+        rotation={[0, -Math.PI / 2, 0]} 
+        roomSize={roomSize} 
+        center={[centerX, 0, centerZ]} 
+        isWalkthrough={isWalkthrough}
+        isDividingWall={hasRightAdjacent}
+        appMode={appMode}
+      >
+        {renderCSGWall(length, height, effectiveRightOpenings, 'right')}
+      </FadingWall>
     </group>
   );
 }
