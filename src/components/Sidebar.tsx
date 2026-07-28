@@ -1087,65 +1087,109 @@ export default function Sidebar() {
       )}
 
       {activeMainTab === "material" && (
-        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">İşıqlandırma</h3>
-            <div className="flex items-center gap-2">
-              <Moon className="w-3 h-3 text-indigo-400" />
-              <input type="range" min="0" max="2" step="0.1" value={ambientLightIntensity} onChange={(e) => setAmbientLightIntensity(parseFloat(e.target.value))} className="w-16 accent-indigo-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
-              <Sun className="w-3 h-3 text-amber-400" />
-            </div>
-          </div>
+        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar mb-4 space-y-4">
+          {/* Section 1: Məkan İşıqlandırması & Günəş */}
+          <div className="bg-black/40 p-3.5 rounded-2xl border border-white/10 space-y-3.5">
+            <h3 className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+              Məkan Mühiti & İşıqlandırma
+            </h3>
 
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">Saat (Günəş)</h3>
-            <div className="flex items-center gap-2">
-              <input type="range" min="0" max="24" step="0.5" value={timeOfDay} onChange={(e) => useStore.setState({ timeOfDay: parseFloat(e.target.value) })} className="w-20 accent-amber-500 h-1 bg-gradient-to-r from-indigo-500 via-amber-500 to-indigo-900 rounded-lg appearance-none cursor-pointer" />
-              <span className="text-[10px] font-bold w-8 text-right">{Math.floor(timeOfDay).toString().padStart(2, '0')}:{(timeOfDay % 1) * 60 === 0 ? '00' : '30'}</span>
-            </div>
-          </div>
-          
-          <div className="bg-black/40 p-3 rounded-xl border border-white/5 mb-4">
-            <h3 className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest mb-3">Otaq Ölçüləri (m)</h3>
-            <div className="flex flex-col gap-2 mb-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] text-neutral-400">En (X)</span>
-                <input type="range" min="4" max="20" step="0.5" value={roomSize.width} onChange={(e) => useStore.setState({ roomSize: { ...roomSize, width: parseFloat(e.target.value) } })} className="w-24 accent-indigo-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
-                <span className="text-[10px] font-bold w-6 text-right">{roomSize.width}</span>
+            {/* İşıq Şiddəti */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-xs text-neutral-300 font-medium">
+                <span>İşıq Şiddəti</span>
+                <span className="font-mono text-indigo-400">{ambientLightIntensity.toFixed(1)}x</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] text-neutral-400">Uzunluq (Z)</span>
-                <input type="range" min="4" max="20" step="0.5" value={roomSize.length} onChange={(e) => useStore.setState({ roomSize: { ...roomSize, length: parseFloat(e.target.value) } })} className="w-24 accent-indigo-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
-                <span className="text-[10px] font-bold w-6 text-right">{roomSize.length}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] text-neutral-400">Hündürlük (Y)</span>
-                <input type="range" min="2" max="6" step="0.1" value={roomSize.height} onChange={(e) => useStore.setState({ roomSize: { ...roomSize, height: parseFloat(e.target.value) } })} className="w-24 accent-indigo-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
-                <span className="text-[10px] font-bold w-6 text-right">{roomSize.height}</span>
+              <div className="flex items-center gap-2">
+                <Moon className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="2" 
+                  step="0.1" 
+                  value={ambientLightIntensity} 
+                  onChange={(e) => setAmbientLightIntensity(parseFloat(e.target.value))} 
+                  className="w-full accent-indigo-500 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer" 
+                />
+                <Sun className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 pb-3 border-t border-white/5">
-              <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Xarici Shell-i Gizlə</span>
+            {/* Günəş Saatı */}
+            <div className="space-y-1 pt-2 border-t border-white/5">
+              <div className="flex items-center justify-between text-xs text-neutral-300 font-medium">
+                <span>Günəş Mövqeyi (Saat)</span>
+                <span className="font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 text-[11px]">
+                  {Math.floor(timeOfDay).toString().padStart(2, '0')}:{(timeOfDay % 1) * 60 === 0 ? '00' : '30'}
+                </span>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="24" 
+                step="0.5" 
+                value={timeOfDay} 
+                onChange={(e) => useStore.setState({ timeOfDay: parseFloat(e.target.value) })} 
+                className="w-full accent-amber-500 h-1.5 bg-gradient-to-r from-indigo-500 via-amber-500 to-indigo-900 rounded-lg appearance-none cursor-pointer" 
+              />
+            </div>
+
+            {/* Xarici Shell-i Gizlə / Göstər */}
+            <div className="flex items-center justify-between pt-2 border-t border-white/5">
+              <span className="text-xs text-neutral-300 font-medium">Xarici Divarları Qatla</span>
               <button 
                 onClick={() => setHideOuterShell(!hideOuterShell)}
-                className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all border ${
+                className={`px-3 py-1 rounded-xl text-xs font-bold transition-all border ${
                   hideOuterShell 
                     ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.1)]' 
-                    : 'bg-white/5 text-neutral-400 border-white/10 hover:bg-white/10 hover:text-white'
+                    : 'bg-white/5 text-neutral-300 border-white/10 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 {hideOuterShell ? "GİZLİDİR 👁️‍🗨️" : "GÖSTƏR 👀"}
               </button>
             </div>
+          </div>
 
-            <div className="flex gap-2 mb-3 pt-3 border-t border-white/5">
-              <button onClick={() => setActiveTab("wall")} className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeTab === 'wall' ? 'bg-white/10 text-white' : 'text-neutral-500 hover:bg-white/5'}`}>Divar</button>
-              <button onClick={() => setActiveTab("floor")} className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeTab === 'floor' ? 'bg-white/10 text-white' : 'text-neutral-500 hover:bg-white/5'}`}>Döşəmə</button>
+          {/* Section 2: Material & Tekstura Redaktoru */}
+          <div className="bg-black/40 p-3.5 rounded-2xl border border-white/10 space-y-3.5">
+            <h3 className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-purple-400" />
+              Səhnə Materialları
+            </h3>
+
+            {/* Divar / Döşəmə Tab Selector */}
+            <div className="flex gap-2 p-1 bg-white/5 rounded-xl border border-white/5">
+              <button 
+                onClick={() => setActiveTab("wall")} 
+                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                  activeTab === 'wall' 
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30' 
+                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                🧱 Divar
+              </button>
+              <button 
+                onClick={() => setActiveTab("floor")} 
+                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                  activeTab === 'floor' 
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30' 
+                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                🪵 Döşəmə
+              </button>
             </div>
             
-            <div className="flex items-center justify-between mb-3 bg-white/5 p-2 rounded-lg">
-              <span className="text-[10px] text-neutral-400 font-medium">Boya (Rəng)</span>
+            {/* Color Picker */}
+            <div className="flex items-center justify-between bg-white/[0.03] p-2.5 rounded-xl border border-white/10">
+              <div className="flex flex-col">
+                <span className="text-xs text-white font-bold">Boya (Rəng)</span>
+                <span className="text-[10px] text-neutral-400">
+                  {activeTab === 'wall' ? 'Əsas divar rəngini seçin' : 'Əsas döşəmə rəngini seçin'}
+                </span>
+              </div>
               <input 
                 type="color" 
                 value={activeTab === 'wall' ? wallColor : floorColor} 
@@ -1159,29 +1203,56 @@ export default function Sidebar() {
                     setRoomTextures({ floorTexture: null });
                   }
                 }} 
-                className="w-5 h-5 rounded cursor-pointer bg-transparent border-0 p-0" 
+                className="w-7 h-7 rounded-xl cursor-pointer bg-transparent border border-white/20 p-0.5 shadow-inner" 
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              {TEXTURES.map((tex, idx) => {
-                const isSelected = activeTab === 'wall' ? wallTexture === tex.url : floorTexture === tex.url;
-                return (
-                  <div 
-                    key={idx} 
+            {/* Texture Presets Grid */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-neutral-300">Teksturalar & Naxışlar</span>
+                {(activeTab === 'wall' ? wallTexture : floorTexture) && (
+                  <button
                     onClick={() => {
-                      if (activeTab === 'wall') setRoomTextures({ wallTexture: tex.url });
-                      else setRoomTextures({ floorTexture: tex.url });
+                      if (activeTab === 'wall') setRoomTextures({ wallTexture: null });
+                      else setRoomTextures({ floorTexture: null });
                     }}
-                    className={`group relative cursor-pointer rounded-lg overflow-hidden border aspect-video ${isSelected ? 'border-indigo-500 ring-2 ring-indigo-500/50' : 'border-white/10 hover:border-white/30'}`}
+                    className="text-[10px] text-rose-400 hover:text-rose-300 font-bold uppercase tracking-wider"
                   >
-                    <img src={tex.url} alt={tex.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-x-0 bottom-0 bg-black/70 backdrop-blur-sm p-1 text-center">
-                      <span className="text-[8px] font-bold text-white uppercase tracking-wider">{tex.name}</span>
+                    Teksturanı Sıfırla
+                  </button>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {TEXTURES.map((tex, idx) => {
+                  const isSelected = activeTab === 'wall' ? wallTexture === tex.url : floorTexture === tex.url;
+                  return (
+                    <div 
+                      key={idx} 
+                      onClick={() => {
+                        if (activeTab === 'wall') setRoomTextures({ wallTexture: tex.url });
+                        else setRoomTextures({ floorTexture: tex.url });
+                      }}
+                      className={`group relative cursor-pointer rounded-xl overflow-hidden border transition-all duration-200 aspect-[4/3] ${
+                        isSelected 
+                          ? 'border-indigo-500 ring-2 ring-indigo-500/50 shadow-lg shadow-indigo-500/20 scale-[1.02]' 
+                          : 'border-white/10 hover:border-white/30 hover:scale-[1.01]'
+                      }`}
+                    >
+                      <img src={tex.url} alt={tex.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-1.5 text-center">
+                        <span className="text-[9px] font-black text-white uppercase tracking-wider drop-shadow">{tex.name}</span>
+                      </div>
+                      {isSelected && (
+                        <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px] font-bold shadow-md">
+                          ✓
+                        </div>
+                      )}
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

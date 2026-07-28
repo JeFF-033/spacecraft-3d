@@ -254,8 +254,7 @@ function SingleRoomBox({
     wallWidth: number,
     wallHeight: number,
     snappedOpenings: any[],
-    wallType: 'back' | 'front' | 'left' | 'right',
-    wallThickness: number = 0.2
+    wallType: 'back' | 'front' | 'left' | 'right'
   ) => {
     const material = (
       <TexturedMaterial
@@ -272,7 +271,7 @@ function SingleRoomBox({
     if (snappedOpenings.length === 0) {
       return (
         <mesh receiveShadow castShadow>
-          <boxGeometry args={[wallWidth, wallHeight, wallThickness]} />
+          <boxGeometry args={[wallWidth, wallHeight, 0.2]} />
           {material}
         </mesh>
       );
@@ -321,7 +320,7 @@ function SingleRoomBox({
         {/* Sol divar hissəsi */}
         {leftSectionWidth > 0.02 && (
           <mesh position={[leftCenterX, 0, 0]} receiveShadow castShadow>
-            <boxGeometry args={[leftSectionWidth, wallHeight, wallThickness]} />
+            <boxGeometry args={[leftSectionWidth, wallHeight, 0.2]} />
             {material}
           </mesh>
         )}
@@ -329,7 +328,7 @@ function SingleRoomBox({
         {/* Sağ divar hissəsi */}
         {rightSectionWidth > 0.02 && (
           <mesh position={[rightCenterX, 0, 0]} receiveShadow castShadow>
-            <boxGeometry args={[rightSectionWidth, wallHeight, wallThickness]} />
+            <boxGeometry args={[rightSectionWidth, wallHeight, 0.2]} />
             {material}
           </mesh>
         )}
@@ -337,7 +336,7 @@ function SingleRoomBox({
         {/* Qapı/Pəncərə üstündəki divar hissəsi (Lintel) */}
         {topSectionHeight > 0.02 && (
           <mesh position={[doorLocalX, topCenterY, 0]} receiveShadow castShadow>
-            <boxGeometry args={[openingWidth, topSectionHeight, wallThickness]} />
+            <boxGeometry args={[openingWidth, topSectionHeight, 0.2]} />
             {material}
           </mesh>
         )}
@@ -345,7 +344,7 @@ function SingleRoomBox({
         {/* Pəncərə altındakı divar hissəsi (Sill) */}
         {bottomSectionHeight > 0.02 && (
           <mesh position={[doorLocalX, bottomCenterY, 0]} receiveShadow castShadow>
-            <boxGeometry args={[openingWidth, bottomSectionHeight, wallThickness]} />
+            <boxGeometry args={[openingWidth, bottomSectionHeight, 0.2]} />
             {material}
           </mesh>
         )}
@@ -444,19 +443,19 @@ function SingleRoomBox({
 
       {/* Back Wall (Z-) */}
       <FadingWall 
-        position={[centerX, height / 2, topEdge + (hasBackAdjacent ? 0.05 : 0)]} 
+        position={[centerX, height / 2, topEdge + (hasBackAdjacent ? 0.005 : 0)]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
         isWalkthrough={isWalkthrough}
         isDividingWall={hasBackAdjacent}
         appMode={appMode}
       >
-        {renderCSGWall(width, height, effectiveBackOpenings, 'back', hasBackAdjacent ? 0.1 : 0.2)}
+        {renderCSGWall(width, height, effectiveBackOpenings, 'back')}
       </FadingWall>
 
       {/* Front Wall (Z+) */}
       <FadingWall 
-        position={[centerX, height / 2, bottomEdge - (hasFrontAdjacent ? 0.05 : 0)]} 
+        position={[centerX, height / 2, bottomEdge - (hasFrontAdjacent ? 0.005 : 0)]} 
         rotation={[0, Math.PI, 0]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
@@ -464,12 +463,12 @@ function SingleRoomBox({
         isDividingWall={hasFrontAdjacent}
         appMode={appMode}
       >
-        {renderCSGWall(width, height, effectiveFrontOpenings, 'front', hasFrontAdjacent ? 0.1 : 0.2)}
+        {renderCSGWall(width, height, effectiveFrontOpenings, 'front')}
       </FadingWall>
 
       {/* Left Wall (X-) */}
       <FadingWall 
-        position={[leftEdge + (hasLeftAdjacent ? 0.05 : 0), height / 2, centerZ]} 
+        position={[leftEdge + (hasLeftAdjacent ? 0.005 : 0), height / 2, centerZ]} 
         rotation={[0, Math.PI / 2, 0]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
@@ -477,12 +476,12 @@ function SingleRoomBox({
         isDividingWall={hasLeftAdjacent}
         appMode={appMode}
       >
-        {renderCSGWall(length, height, effectiveLeftOpenings, 'left', hasLeftAdjacent ? 0.1 : 0.2)}
+        {renderCSGWall(length, height, effectiveLeftOpenings, 'left')}
       </FadingWall>
 
       {/* Right Wall (X+) */}
       <FadingWall 
-        position={[rightEdge - (hasRightAdjacent ? 0.05 : 0), height / 2, centerZ]} 
+        position={[rightEdge - (hasRightAdjacent ? 0.005 : 0), height / 2, centerZ]} 
         rotation={[0, -Math.PI / 2, 0]} 
         roomSize={roomSize} 
         center={[centerX, 0, centerZ]} 
@@ -490,7 +489,7 @@ function SingleRoomBox({
         isDividingWall={hasRightAdjacent}
         appMode={appMode}
       >
-        {renderCSGWall(length, height, effectiveRightOpenings, 'right', hasRightAdjacent ? 0.1 : 0.2)}
+        {renderCSGWall(length, height, effectiveRightOpenings, 'right')}
       </FadingWall>
     </group>
   );
