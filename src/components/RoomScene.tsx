@@ -52,7 +52,7 @@ function GltfModel({ url }: { url: string }) {
 }
 
 // Procedural (Ağıllı) 3D Modellər generatoru - HomeByMe keyfiyyətində detallı yığım
-function SmartModel({ name, color, modelUrl, scale }: { name: string; color: string; modelUrl: string | null; scale?: any }) {
+function SmartModel({ name, color, modelUrl, scale, doorStyle }: { name: string; color: string; modelUrl: string | null; scale?: any; doorStyle?: string }) {
   const { appMode } = useStore();
 
   if (modelUrl) {
@@ -372,17 +372,8 @@ function SmartModel({ name, color, modelUrl, scale }: { name: string; color: str
       </group>
     );
   }
- 
-  // Əlavə Otaq Bloku və ya Qapı/Pəncərə
-  if (name === "Otaq Bloku") {
-    return (
-      <RoundedBox args={[4, 3, 4]} radius={0.01} smoothness={4} position={[0, 1.5, 0]} receiveShadow>
-        <meshStandardMaterial color={color} side={THREE.BackSide} roughness={0.9} />
-      </RoundedBox>
-    );
-  }
- 
-  // 11. QAPI (Full 3D Architectural Door Frame, Panel & Double-sided Handles)
+
+  // 11. QAPI (Full 3D Architectural Door Frame & 6 Modern Styles)
   if (name.includes("Qapı")) {
     const is360 = appMode === "360-photo";
     
@@ -392,49 +383,232 @@ function SmartModel({ name, color, modelUrl, scale }: { name: string; color: str
     }
 
     const doorColor = color && color !== "#ffffff" ? color : "#8b5a2b";
+    const style = doorStyle || "classic-wood";
 
     return (
-      <group>
-        {/* Sol çərçivə (Left Trim) */}
-        <RoundedBox args={[0.08, 2.1, 0.24]} radius={0.005} smoothness={4} position={[-0.52, 1.05, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
-        </RoundedBox>
-        {/* Sağ çərçivə (Right Trim) */}
-        <RoundedBox args={[0.08, 2.1, 0.24]} radius={0.005} smoothness={4} position={[0.52, 1.05, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
-        </RoundedBox>
-        {/* Üst çərçivə (Top Lintel Trim) */}
-        <RoundedBox args={[1.12, 0.08, 0.24]} radius={0.005} smoothness={4} position={[0, 2.06, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
-        </RoundedBox>
+      <group scale={[1 / 1.1, 1 / 2.1, 1 / 0.2]}>
+        {/* 1. MODERN AĞ QAPI (Modern Sleek White) */}
+        {style === "modern-white" && (
+          <group>
+            {/* Çərçivə (Mat Ağ) */}
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[-0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#ffffff" roughness={0.3} metalness={0.05} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#ffffff" roughness={0.3} metalness={0.05} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[1.12, 0.08, 0.22]} radius={0.005} smoothness={4} position={[0, 2.06, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#ffffff" roughness={0.3} metalness={0.05} side={THREE.DoubleSide} />
+            </RoundedBox>
 
-        {/* 3D Otaq rejimində bağlama/açma və baxış açısına görə bütöv görünüş */}
-        <group position={[0, 1.0, 0]}>
-          <RoundedBox args={[0.96, 2.0, 0.05]} radius={0.005} smoothness={4} position={[0, 0, 0]} castShadow receiveShadow>
-            <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} side={THREE.DoubleSide} />
-          </RoundedBox>
-
-          {/* Qızılı Qulplar */}
-          <group position={[0.38, 0, 0]}>
-            <mesh position={[0, 0, 0.04]} castShadow receiveShadow>
-              <boxGeometry args={[0.03, 0.12, 0.02]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-            </mesh>
-            <mesh position={[0.04, 0.02, 0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
-              <cylinderGeometry args={[0.01, 0.01, 0.1]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-            </mesh>
-
-            <mesh position={[0, 0, -0.04]} castShadow receiveShadow>
-              <boxGeometry args={[0.03, 0.12, 0.02]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-            </mesh>
-            <mesh position={[0.04, 0.02, -0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
-              <cylinderGeometry args={[0.01, 0.01, 0.1]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
-            </mesh>
+            {/* Qapı Paneli (Parlaq/Mat Ağ + Xrom Zolaq) */}
+            <group position={[0, 1.0, 0]}>
+              <RoundedBox args={[0.96, 2.0, 0.04]} radius={0.005} smoothness={4} castShadow receiveShadow>
+                <meshStandardMaterial color="#f8f9fa" roughness={0.2} metalness={0.05} side={THREE.DoubleSide} />
+              </RoundedBox>
+              {/* Vertikal Xrom Zolaq */}
+              <mesh position={[-0.2, 0, 0.022]} castShadow receiveShadow>
+                <boxGeometry args={[0.02, 1.95, 0.002]} />
+                <meshStandardMaterial color="#e5e7eb" metalness={0.95} roughness={0.1} side={THREE.DoubleSide} />
+              </mesh>
+              {/* Silver Handle */}
+              <group position={[0.38, 0, 0]}>
+                <mesh position={[0, 0, 0.03]} castShadow receiveShadow>
+                  <boxGeometry args={[0.02, 0.14, 0.015]} />
+                  <meshStandardMaterial color="#d1d5db" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+                </mesh>
+                <mesh position={[0.04, 0.02, 0.05]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
+                  <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+                  <meshStandardMaterial color="#d1d5db" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+                </mesh>
+              </group>
+            </group>
           </group>
-        </group>
+        )}
+
+        {/* 2. İKİ TAYLI ŞÜŞƏLİ QAPI (Modern Double Glass) */}
+        {style === "modern-double-glass" && (
+          <group>
+            {/* Qara Alüminium Çərçivə */}
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[-0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#1a1a1a" roughness={0.4} metalness={0.8} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#1a1a1a" roughness={0.4} metalness={0.8} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[1.12, 0.08, 0.22]} radius={0.005} smoothness={4} position={[0, 2.06, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#1a1a1a" roughness={0.4} metalness={0.8} side={THREE.DoubleSide} />
+            </RoundedBox>
+
+            {/* Sol və Sağ Şüşə Taylar */}
+            <group position={[0, 1.0, 0]}>
+              {/* Sol Tay */}
+              <group position={[-0.24, 0, 0]}>
+                <RoundedBox args={[0.47, 1.98, 0.04]} radius={0.005} smoothness={4} castShadow receiveShadow>
+                  <meshStandardMaterial color="#1f2937" roughness={0.3} metalness={0.7} side={THREE.DoubleSide} />
+                </RoundedBox>
+                <mesh position={[0, 0, 0]} receiveShadow>
+                  <planeGeometry args={[0.38, 1.85]} />
+                  <meshStandardMaterial color="#38bdf8" transparent opacity={0.35} roughness={0.05} metalness={0.9} side={THREE.DoubleSide} />
+                </mesh>
+                <mesh position={[0.18, 0, 0.03]} castShadow receiveShadow>
+                  <boxGeometry args={[0.02, 0.4, 0.02]} />
+                  <meshStandardMaterial color="#111827" metalness={0.9} roughness={0.1} />
+                </mesh>
+              </group>
+              {/* Sağ Tay */}
+              <group position={[0.24, 0, 0]}>
+                <RoundedBox args={[0.47, 1.98, 0.04]} radius={0.005} smoothness={4} castShadow receiveShadow>
+                  <meshStandardMaterial color="#1f2937" roughness={0.3} metalness={0.7} side={THREE.DoubleSide} />
+                </RoundedBox>
+                <mesh position={[0, 0, 0]} receiveShadow>
+                  <planeGeometry args={[0.38, 1.85]} />
+                  <meshStandardMaterial color="#38bdf8" transparent opacity={0.35} roughness={0.05} metalness={0.9} side={THREE.DoubleSide} />
+                </mesh>
+                <mesh position={[-0.18, 0, 0.03]} castShadow receiveShadow>
+                  <boxGeometry args={[0.02, 0.4, 0.02]} />
+                  <meshStandardMaterial color="#111827" metalness={0.9} roughness={0.1} />
+                </mesh>
+              </group>
+            </group>
+          </group>
+        )}
+
+        {/* 3. TAXTA & BUZLU ŞÜŞƏ ZOLAQLI QAPI (Wood & Frosted Glass Stripe) */}
+        {style === "wood-frosted-glass" && (
+          <group>
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[-0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color={doorColor} roughness={0.6} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color={doorColor} roughness={0.6} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[1.12, 0.08, 0.22]} radius={0.005} smoothness={4} position={[0, 2.06, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color={doorColor} roughness={0.6} side={THREE.DoubleSide} />
+            </RoundedBox>
+
+            <group position={[0, 1.0, 0]}>
+              <RoundedBox args={[0.96, 2.0, 0.04]} radius={0.005} smoothness={4} castShadow receiveShadow>
+                <meshStandardMaterial color={doorColor} roughness={0.6} side={THREE.DoubleSide} />
+              </RoundedBox>
+              {/* Ortadakı Vertikal Buzlu Şüşə Zolaq */}
+              <mesh position={[0, 0, 0]} receiveShadow>
+                <boxGeometry args={[0.15, 1.8, 0.042]} />
+                <meshStandardMaterial color="#e0f2fe" transparent opacity={0.55} roughness={0.2} metalness={0.8} side={THREE.DoubleSide} />
+              </mesh>
+              <group position={[0.38, 0, 0]}>
+                <mesh position={[0, 0, 0.03]} castShadow receiveShadow>
+                  <boxGeometry args={[0.02, 0.12, 0.02]} />
+                  <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
+                </mesh>
+              </group>
+            </group>
+          </group>
+        )}
+
+        {/* 4. ANTRASİT GİZLİ ÇƏRÇİVƏLİ QAPI (Anthracite Flush) */}
+        {style === "anthracite-flush" && (
+          <group>
+            <group position={[0, 1.0, 0]}>
+              <RoundedBox args={[0.98, 2.02, 0.04]} radius={0.002} smoothness={4} castShadow receiveShadow>
+                <meshStandardMaterial color="#282a36" roughness={0.4} metalness={0.2} side={THREE.DoubleSide} />
+              </RoundedBox>
+              {/* Horizontal Oyuq Xətlər */}
+              {[-0.6, -0.2, 0.2, 0.6].map((yPos, idx) => (
+                <mesh key={idx} position={[0, yPos, 0.021]}>
+                  <boxGeometry args={[0.85, 0.008, 0.002]} />
+                  <meshStandardMaterial color="#111" metalness={0.9} />
+                </mesh>
+              ))}
+              <group position={[0.4, 0, 0]}>
+                <mesh position={[0, 0, 0.03]} castShadow receiveShadow>
+                  <boxGeometry args={[0.015, 0.15, 0.015]} />
+                  <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.05} />
+                </mesh>
+              </group>
+            </group>
+          </group>
+        )}
+
+        {/* 5. FRANSIZ TORLU QAPI (French Steel Grid) */}
+        {style === "french-grid" && (
+          <group>
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[-0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#111111" roughness={0.3} metalness={0.9} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[0.08, 2.1, 0.22]} radius={0.005} smoothness={4} position={[0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#111111" roughness={0.3} metalness={0.9} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[1.12, 0.08, 0.22]} radius={0.005} smoothness={4} position={[0, 2.06, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color="#111111" roughness={0.3} metalness={0.9} side={THREE.DoubleSide} />
+            </RoundedBox>
+
+            <group position={[0, 1.0, 0]}>
+              <RoundedBox args={[0.96, 2.0, 0.04]} radius={0.005} smoothness={4} castShadow receiveShadow>
+                <meshStandardMaterial color="#111111" roughness={0.3} metalness={0.9} side={THREE.DoubleSide} />
+              </RoundedBox>
+              {/* Şüşə Ekran */}
+              <mesh position={[0, 0, 0]} receiveShadow>
+                <planeGeometry args={[0.82, 1.86]} />
+                <meshStandardMaterial color="#ffffff" transparent opacity={0.25} roughness={0.05} metalness={0.95} side={THREE.DoubleSide} />
+              </mesh>
+              {/* Grid mullions */}
+              <mesh position={[0, 0, 0.021]}>
+                <boxGeometry args={[0.02, 1.86, 0.002]} />
+                <meshStandardMaterial color="#111111" metalness={0.9} />
+              </mesh>
+              <mesh position={[0, 0.3, 0.021]}>
+                <boxGeometry args={[0.82, 0.02, 0.002]} />
+                <meshStandardMaterial color="#111111" metalness={0.9} />
+              </mesh>
+              <mesh position={[0, -0.3, 0.021]}>
+                <boxGeometry args={[0.82, 0.02, 0.002]} />
+                <meshStandardMaterial color="#111111" metalness={0.9} />
+              </mesh>
+            </group>
+          </group>
+        )}
+
+        {/* 6. KLASSİK TAXTA QAPI (Classic Wood) */}
+        {(style === "classic-wood" || !["modern-white", "modern-double-glass", "wood-frosted-glass", "anthracite-flush", "french-grid"].includes(style)) && (
+          <group>
+            <RoundedBox args={[0.08, 2.1, 0.24]} radius={0.005} smoothness={4} position={[-0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[0.08, 2.1, 0.24]} radius={0.005} smoothness={4} position={[0.52, 1.05, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
+            </RoundedBox>
+            <RoundedBox args={[1.12, 0.08, 0.24]} radius={0.005} smoothness={4} position={[0, 2.06, 0]} castShadow receiveShadow>
+              <meshStandardMaterial color={doorColor} roughness={0.5} metalness={0.05} side={THREE.DoubleSide} />
+            </RoundedBox>
+
+            <group position={[0, 1.0, 0]}>
+              <RoundedBox args={[0.96, 2.0, 0.05]} radius={0.005} smoothness={4} position={[0, 0, 0]} castShadow receiveShadow>
+                <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} side={THREE.DoubleSide} />
+              </RoundedBox>
+
+              <group position={[0.38, 0, 0]}>
+                <mesh position={[0, 0, 0.04]} castShadow receiveShadow>
+                  <boxGeometry args={[0.03, 0.12, 0.02]} />
+                  <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+                </mesh>
+                <mesh position={[0.04, 0.02, 0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
+                  <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+                  <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+                </mesh>
+
+                <mesh position={[0, 0, -0.04]} castShadow receiveShadow>
+                  <boxGeometry args={[0.03, 0.12, 0.02]} />
+                  <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+                </mesh>
+                <mesh position={[0.04, 0.02, -0.06]} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
+                  <cylinderGeometry args={[0.01, 0.01, 0.1]} />
+                  <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
+                </mesh>
+              </group>
+            </group>
+          </group>
+        )}
       </group>
     );
   }
@@ -589,7 +763,7 @@ function FurnitureItem({ data }: { data: any }) {
         }}
       >
         <Suspense fallback={<ModelLoader />}>
-          <SmartModel name={data.type === "camera" ? "360 Kamera" : data.name} color={data.color} modelUrl={data.modelUrl} scale={data.scale} />
+          <SmartModel name={data.type === "camera" ? "360 Kamera" : data.name} color={data.color} modelUrl={data.modelUrl} scale={data.scale} doorStyle={data.doorStyle} />
         </Suspense>
 
         {/* Canlı İşıqlandırma Mənbəyi (Spot, Lüstr, LED üçün) */}

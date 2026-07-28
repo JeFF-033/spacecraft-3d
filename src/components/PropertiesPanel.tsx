@@ -231,6 +231,102 @@ export default function PropertiesPanel() {
                 </div>
               )}
 
+              {/* Qapı Ölçü Və Modern Model Ayarları */}
+              {(selectedItem.type === "door" || selectedItem.name.includes("Qapı")) && (
+                <div className="bg-emerald-500/5 p-4 rounded-xl border border-emerald-500/10 space-y-4">
+                  <h3 className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                    🚪 Modern Qapı Parametrləri
+                  </h3>
+
+                  {/* En (Width - X) */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] text-neutral-400">
+                      <span>En (X)</span>
+                      <span className="font-mono text-emerald-400">{(selectedItem.scale?.x || 1.1).toFixed(2)}m</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0.7" 
+                      max="3.0" 
+                      step="0.05" 
+                      value={selectedItem.scale?.x || 1.1} 
+                      onChange={(e) => updateFurniture(selectedItem.id, { scale: { ...selectedItem.scale, x: parseFloat(e.target.value) } })}
+                      onMouseUp={() => pushUpdate()}
+                      onTouchEnd={() => pushUpdate()}
+                      className="w-full accent-emerald-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Hündürlük (Height - Y) */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] text-neutral-400">
+                      <span>Hündürlük (Y)</span>
+                      <span className="font-mono text-emerald-400">{(selectedItem.scale?.y || 2.1).toFixed(2)}m</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="1.8" 
+                      max="3.5" 
+                      step="0.05" 
+                      value={selectedItem.scale?.y || 2.1} 
+                      onChange={(e) => updateFurniture(selectedItem.id, { scale: { ...selectedItem.scale, y: parseFloat(e.target.value) } })}
+                      onMouseUp={() => pushUpdate()}
+                      onTouchEnd={() => pushUpdate()}
+                      className="w-full accent-emerald-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Qalınlıq (Thickness - Z) */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] text-neutral-400">
+                      <span>Qalınlıq (Z)</span>
+                      <span className="font-mono text-emerald-400">{(selectedItem.scale?.z || 0.2).toFixed(2)}m</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0.1" 
+                      max="0.5" 
+                      step="0.02" 
+                      value={selectedItem.scale?.z || 0.2} 
+                      onChange={(e) => updateFurniture(selectedItem.id, { scale: { ...selectedItem.scale, z: parseFloat(e.target.value) } })}
+                      onMouseUp={() => pushUpdate()}
+                      onTouchEnd={() => pushUpdate()}
+                      className="w-full accent-emerald-500 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Modern Qapı Modelləri Kataloqu */}
+                  <div className="space-y-2 pt-2 border-t border-white/5">
+                    <span className="text-[10px] text-neutral-400 block font-semibold">Modern Qapı Stili</span>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: "modern-white", label: "⚪ Modern Ağ", color: "#f8f9fa" },
+                        { id: "modern-double-glass", label: "🔲 İki Taylı Şüşə", color: "#1a1a1a" },
+                        { id: "wood-frosted-glass", label: "🪵 Taxta & Şüşə", color: "#8b5a2b" },
+                        { id: "anthracite-flush", label: "⬛ Antrasit Gizli", color: "#282a36" },
+                        { id: "french-grid", label: "🪟 Fransız Torlu", color: "#111111" },
+                        { id: "classic-wood", label: "🪵 Klassik Taxta", color: "#8b5a2b" },
+                      ].map((style) => (
+                        <button
+                          key={style.id}
+                          onClick={() => {
+                            updateFurniture(selectedItem.id, { doorStyle: style.id, color: style.color });
+                            pushUpdate();
+                          }}
+                          className={`py-2 px-2 rounded-lg border text-[10px] font-bold transition-all text-left flex items-center justify-between ${
+                            (selectedItem.doorStyle || "classic-wood") === style.id
+                              ? "bg-emerald-600/30 text-white border-emerald-500 shadow-md"
+                              : "bg-black/30 text-neutral-400 border-white/10 hover:text-white hover:border-white/20"
+                          }`}
+                        >
+                          <span>{style.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Ağıllı İşıqlandırma Ayarları */}
               {selectedItem.lightIntensity !== undefined && (
                 <div className="bg-amber-500/5 p-4 rounded-xl border border-amber-500/10 space-y-4">

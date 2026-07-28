@@ -31,6 +31,7 @@ interface Furniture {
   floorColor?: string; // Otaq qutusu üçün döşəmə rəngi
   wallTexture?: string | null; // Otaq qutusu üçün divar teksturası
   floorTexture?: string | null; // Otaq qutusu üçün döşəmə teksturası
+  doorStyle?: string; // Qapı modeli stili: classic-wood | modern-white | modern-double-glass | wood-frosted-glass | anthracite-flush | french-grid
 }
 
 export interface TourNode {
