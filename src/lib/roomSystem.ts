@@ -160,57 +160,64 @@ export function calculateAttachedRoomPosition(
   const targetLength = smallLength ?? roomSize.length;
   const rooms = getAllRoomBounds(furnitureLayers, roomSize, currentFloor);
 
-  // Find parent target room or default to primary room / furthest bounding room
-  let targetRoom = rooms.find((r) => r.id === targetRoomId);
-  if (!targetRoom) {
-    if (direction === "right") {
-      let maxRight = -Infinity;
-      rooms.forEach((r) => { if (r.maxX > maxRight) { maxRight = r.maxX; targetRoom = r; } });
-    } else if (direction === "left") {
-      let minLeft = Infinity;
-      rooms.forEach((r) => { if (r.minX < minLeft) { minLeft = r.minX; targetRoom = r; } });
-    } else if (direction === "front") {
-      let maxFront = -Infinity;
-      rooms.forEach((r) => { if (r.maxZ > maxFront) { maxFront = r.maxZ; targetRoom = r; } });
-    } else if (direction === "back") {
-      let minBack = Infinity;
-      rooms.forEach((r) => { if (r.minZ < minBack) { minBack = r.minZ; targetRoom = r; } });
-    }
-  }
+  // Find target room or default to primary room
+  let target = rooms.find((r) => r.id === targetRoomId) || rooms[0];
 
-  const pRoom = targetRoom || rooms[0];
-
-  let newRoomX = pRoom.centerX;
-  let newRoomZ = pRoom.centerZ;
-  let boundaryX = pRoom.centerX;
-  let boundaryZ = pRoom.centerZ;
+  let candidateX = target.centerX;
+  let candidateZ = target.centerZ;
+  let boundaryX = target.centerX;
+  let boundaryZ = target.centerZ;
 
   if (direction === "right") {
-    newRoomX = pRoom.maxX + smallWidth / 2;
-    newRoomZ = pRoom.centerZ;
-    boundaryX = pRoom.maxX;
+    let maxRight = target.maxX;
+    rooms.forEach((r) => {
+      if (Math.abs(r.centerZ - target.centerZ) < Math.max(r.length, targetLength) / 2 + 0.1) {
+        if (r.maxX > maxRight) maxRight = r.maxX;
+      }
+    });
+    candidateX = maxRight + smallWidth / 2;
+    candidateZ = target.centerZ;
+    boundaryX = maxRight;
   } else if (direction === "left") {
-    newRoomX = pRoom.minX - smallWidth / 2;
-    newRoomZ = pRoom.centerZ;
-    boundaryX = pRoom.minX;
+    let minLeft = target.minX;
+    rooms.forEach((r) => {
+      if (Math.abs(r.centerZ - target.centerZ) < Math.max(r.length, targetLength) / 2 + 0.1) {
+        if (r.minX < minLeft) minLeft = r.minX;
+      }
+    });
+    candidateX = minLeft - smallWidth / 2;
+    candidateZ = target.centerZ;
+    boundaryX = minLeft;
   } else if (direction === "front") {
-    newRoomX = pRoom.centerX;
-    newRoomZ = pRoom.maxZ + targetLength / 2;
-    boundaryZ = pRoom.maxZ;
+    let maxFront = target.maxZ;
+    rooms.forEach((r) => {
+      if (Math.abs(r.centerX - target.centerX) < Math.max(r.width, smallWidth) / 2 + 0.1) {
+        if (r.maxZ > maxFront) maxFront = r.maxZ;
+      }
+    });
+    candidateX = target.centerX;
+    candidateZ = maxFront + targetLength / 2;
+    boundaryZ = maxFront;
   } else if (direction === "back") {
-    newRoomX = pRoom.centerX;
-    newRoomZ = pRoom.minZ - targetLength / 2;
-    boundaryZ = pRoom.minZ;
+    let minBack = target.minZ;
+    rooms.forEach((r) => {
+      if (Math.abs(r.centerX - target.centerX) < Math.max(r.width, smallWidth) / 2 + 0.1) {
+        if (r.minZ < minBack) minBack = r.minZ;
+      }
+    });
+    candidateX = target.centerX;
+    candidateZ = minBack - targetLength / 2;
+    boundaryZ = minBack;
   }
 
   return {
-    newRoomX,
-    newRoomZ,
+    newRoomX: candidateX,
+    newRoomZ: candidateZ,
     smallWidth,
     smallLength: targetLength,
     boundaryX,
     boundaryZ,
-    parentRoomId: pRoom.id,
-    parentRoomName: pRoom.name
+    parentRoomId: target.id,
+    parentRoomName: target.name
   };
 }
