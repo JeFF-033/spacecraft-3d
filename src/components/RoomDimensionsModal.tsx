@@ -77,6 +77,28 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
     pushUpdate();
   };
 
+  const targetFurniture = furnitureLayers.find((f) => f.id === currentRoom.id);
+  const activeWallColor = isMain ? (wallColor || "#ffffff") : (targetFurniture?.color || wallColor || "#ffffff");
+  const activeFloorColor = isMain ? (floorColor || "#8c8c8c") : (targetFurniture?.floorColor || floorColor || "#8c8c8c");
+
+  const handleWallColorChange = (color: string) => {
+    if (isMain) {
+      setRoomColors({ wallColor: color });
+    } else if (targetFurniture) {
+      updateFurniture(targetFurniture.id, { color });
+    }
+    pushUpdate();
+  };
+
+  const handleFloorColorChange = (color: string) => {
+    if (isMain) {
+      setRoomColors({ floorColor: color });
+    } else if (targetFurniture) {
+      updateFurniture(targetFurniture.id, { floorColor: color });
+    }
+    pushUpdate();
+  };
+
   const modalContent = (
     <div className="fixed inset-0 z-[9999] pointer-events-none flex items-start justify-end p-4 md:p-6 pt-20">
       <div 
@@ -200,11 +222,8 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
               <span className="text-xs font-bold text-neutral-300">🧱 Divar Rəngi</span>
               <input
                 type="color"
-                value={wallColor || "#ffffff"}
-                onChange={(e) => {
-                  setRoomColors({ wallColor: e.target.value });
-                  pushUpdate();
-                }}
+                value={activeWallColor}
+                onChange={(e) => handleWallColorChange(e.target.value)}
                 className="w-8 h-8 rounded-xl cursor-pointer bg-transparent border border-white/20 p-0.5"
               />
             </div>
@@ -212,11 +231,8 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
               <span className="text-xs font-bold text-neutral-300">🪵 Döşəmə Rəngi</span>
               <input
                 type="color"
-                value={floorColor || "#8c8c8c"}
-                onChange={(e) => {
-                  setRoomColors({ floorColor: e.target.value });
-                  pushUpdate();
-                }}
+                value={activeFloorColor}
+                onChange={(e) => handleFloorColorChange(e.target.value)}
                 className="w-8 h-8 rounded-xl cursor-pointer bg-transparent border border-white/20 p-0.5"
               />
             </div>
