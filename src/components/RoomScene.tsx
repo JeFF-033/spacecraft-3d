@@ -114,7 +114,7 @@ function SmartModel({ name, color, modelUrl, scale, doorStyle }: { name: string;
   }
 
   // 3. İKİ NƏFƏRLİK YATAQ (Double Bed)
-  if (name.includes("Yataq")) {
+  if (name.includes("Yataq") && !name.includes("Qapı")) {
     return (
       <group>
         {/* Yataq Karkası (Taxta) */}
