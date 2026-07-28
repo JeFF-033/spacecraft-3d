@@ -110,6 +110,7 @@ interface AppState {
   updateFurniture: (id: string, updates: Partial<Furniture>) => void;
   setSelectedId: (id: string | null) => void;
   setRoomColors: (colors: { wallColor?: string; floorColor?: string }) => void;
+  setRoomSize: (size: { width: number; length: number; height: number }) => void;
   setRoomTextures: (textures: { wallTexture?: string | null; floorTexture?: string | null }) => void;
   setTransformMode: (mode: "translate" | "rotate" | "scale") => void;
   setAmbientLightIntensity: (intensity: number) => void;
@@ -507,6 +508,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   setSelectedId: (id) => set({ selectedId: id }),
   setRoomColors: (colors) => set((state) => ({ ...state, ...colors })),
+  setRoomSize: (size) => set({ roomSize: size }),
   setRoomTextures: (textures) => set((state) => ({ ...state, ...textures })),
   setTransformMode: (mode) => set({ transformMode: mode }),
   setAmbientLightIntensity: (intensity) => set({ ambientLightIntensity: intensity }),
