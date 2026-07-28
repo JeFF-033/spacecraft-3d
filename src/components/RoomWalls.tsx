@@ -415,17 +415,7 @@ function SingleRoomBox({
   return (
     <group>
       {/* Floor */}
-      <mesh 
-        rotation={[-Math.PI / 2, 0, 0]} 
-        position={[centerX, 0, centerZ]} 
-        receiveShadow
-        onClick={(e) => {
-          if (roomId) {
-            e.stopPropagation();
-            useStore.getState().setSelectedId(roomId);
-          }
-        }}
-      >
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[centerX, 0, centerZ]} receiveShadow>
         <planeGeometry args={[width, length]} />
         <TexturedMaterial 
           color={floorColor} 
