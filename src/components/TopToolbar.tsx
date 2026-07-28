@@ -3,8 +3,10 @@
 import React from "react";
 import { useStore } from "@/store/useStore";
 import { Undo, Redo, Map, Magnet, Plus, Ruler, User } from "lucide-react";
+import RoomDimensionsModal from "./RoomDimensionsModal";
 
 export default function TopToolbar() {
+  const [isRoomDimensionsOpen, setIsRoomDimensionsOpen] = React.useState(false);
   const { 
     is2DView, setIs2DView, 
     isWalkthrough, setIsWalkthrough,
@@ -166,8 +168,16 @@ export default function TopToolbar() {
 
       <div className="w-px h-5 sm:h-6 bg-white/10 mx-0.5 sm:mx-1 shrink-0"></div>
 
-      {/* Elementlər: Qapı, Pəncərə */}
+      {/* Elementlər: Qapı, Pəncərə, Otaq Ölçüləri */}
       <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <button 
+          onClick={() => setIsRoomDimensionsOpen(true)} 
+          className="flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all bg-gradient-to-r from-indigo-600/40 to-purple-600/40 hover:from-indigo-600/60 hover:to-purple-600/60 text-white border border-indigo-400/50 shadow-md cursor-pointer active:scale-95"
+          title="Otaq Ölçülərini Və Rənglərini Redaktə Et"
+        >
+          📐 Otaq Ölçüləri
+        </button>
+
         <button 
           onClick={addDoor} 
           className="flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-2 rounded-xl text-[10px] sm:text-[11px] font-bold transition-all text-neutral-400 hover:text-white hover:bg-white/10"
@@ -184,6 +194,10 @@ export default function TopToolbar() {
         </button>
       </div>
 
+      <RoomDimensionsModal 
+        isOpen={isRoomDimensionsOpen} 
+        onClose={() => setIsRoomDimensionsOpen(false)} 
+      />
     </div>
   );
 }

@@ -4,176 +4,6 @@ import React, { useState } from "react";
 import { useStore } from "@/store/useStore";
 import { Trash2, Copy, Move, RotateCw, Maximize, SlidersHorizontal, Camera, Upload, X } from "lucide-react";
 import { useMultiplayer } from "@/hooks/useMultiplayer";
-import { getAllRoomBounds } from "@/lib/roomSystem";
-
-function RoomDimensionsEditor() {
-  const { 
-    roomSize, 
-    setRoomSize, 
-    furnitureLayers, 
-    updateFurniture, 
-    selectedId, 
-    setSelectedId, 
-    currentFloor, 
-    wallColor, 
-    setRoomColors, 
-    floorColor 
-  } = useStore();
-  const { pushUpdate } = useMultiplayer();
-
-  const allRooms = getAllRoomBounds(furnitureLayers, roomSize, currentFloor);
-  const [activeRoomId, setActiveRoomId] = useState<string>(selectedId || "main-room");
-
-  const currentRoom = allRooms.find((r) => r.id === activeRoomId) || allRooms[0];
-  const isMain = currentRoom.id === "main-room";
-
-  const handleWidthChange = (val: number) => {
-    if (isMain) {
-      setRoomSize({ ...roomSize, width: val });
-    } else {
-      const roomItem = furnitureLayers.find((f) => f.id === currentRoom.id);
-      if (roomItem) {
-        updateFurniture(roomItem.id, { scale: { ...roomItem.scale, x: val } });
-      }
-    }
-    pushUpdate();
-  };
-
-  const handleLengthChange = (val: number) => {
-    if (isMain) {
-      setRoomSize({ ...roomSize, length: val });
-    } else {
-      const roomItem = furnitureLayers.find((f) => f.id === currentRoom.id);
-      if (roomItem) {
-        updateFurniture(roomItem.id, { scale: { ...roomItem.scale, z: val } });
-      }
-    }
-    pushUpdate();
-  };
-
-  const handleHeightChange = (val: number) => {
-    if (isMain) {
-      setRoomSize({ ...roomSize, height: val });
-    } else {
-      const roomItem = furnitureLayers.find((f) => f.id === currentRoom.id);
-      if (roomItem) {
-        updateFurniture(roomItem.id, { scale: { ...roomItem.scale, y: val } });
-      }
-    }
-    pushUpdate();
-  };
-
-  return (
-    <div className="space-y-6 flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10">
-      <div className="bg-purple-500/10 p-4 rounded-2xl border border-purple-500/20 space-y-4 shadow-lg">
-        <h3 className="text-xs font-black text-purple-300 uppercase tracking-widest flex items-center gap-2">
-          🏠 Otaq Ölçüləri Redaktoru
-        </h3>
-
-        {/* Room Selector Dropdown */}
-        <div className="space-y-1">
-          <span className="text-[10px] text-neutral-400 block font-semibold">Redaktə Olunacaq Otaq:</span>
-          <select
-            value={currentRoom.id}
-            onChange={(e) => {
-              setActiveRoomId(e.target.value);
-              if (e.target.value !== "main-room") {
-                setSelectedId(e.target.value);
-              }
-            }}
-            className="w-full bg-black/60 border border-white/15 focus:border-purple-500 rounded-xl px-3 py-2.5 text-xs text-white font-bold appearance-none cursor-pointer"
-          >
-            {allRooms.map((r) => (
-              <option key={r.id} value={r.id} className="bg-neutral-900 text-white py-1">
-                🏠 {r.name} ({r.width.toFixed(1)}m × {r.length.toFixed(1)}m)
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* En (Width - X) */}
-        <div className="space-y-1.5">
-          <div className="flex justify-between text-[11px] text-neutral-300">
-            <span>En (X-ölçüsü)</span>
-            <span className="font-mono text-purple-400 font-bold">{currentRoom.width.toFixed(1)}m</span>
-          </div>
-          <input
-            type="range"
-            min="4"
-            max="30"
-            step="0.5"
-            value={currentRoom.width}
-            onChange={(e) => handleWidthChange(parseFloat(e.target.value))}
-            className="w-full accent-purple-500 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer"
-          />
-        </div>
-
-        {/* Uzunluq (Length - Z) */}
-        <div className="space-y-1.5">
-          <div className="flex justify-between text-[11px] text-neutral-300">
-            <span>Uzunluq (Z-ölçüsü)</span>
-            <span className="font-mono text-purple-400 font-bold">{currentRoom.length.toFixed(1)}m</span>
-          </div>
-          <input
-            type="range"
-            min="4"
-            max="30"
-            step="0.5"
-            value={currentRoom.length}
-            onChange={(e) => handleLengthChange(parseFloat(e.target.value))}
-            className="w-full accent-purple-500 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer"
-          />
-        </div>
-
-        {/* Hündürlük (Height - Y) */}
-        <div className="space-y-1.5">
-          <div className="flex justify-between text-[11px] text-neutral-300">
-            <span>Hündürlük (Y-ölçüsü)</span>
-            <span className="font-mono text-purple-400 font-bold">{currentRoom.height.toFixed(1)}m</span>
-          </div>
-          <input
-            type="range"
-            min="2"
-            max="6"
-            step="0.1"
-            value={currentRoom.height}
-            onChange={(e) => handleHeightChange(parseFloat(e.target.value))}
-            className="w-full accent-purple-500 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer"
-          />
-        </div>
-
-        {/* Color controls */}
-        <div className="grid grid-cols-2 gap-2 bg-black/30 p-3 rounded-xl border border-white/5 pt-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-neutral-400 font-medium">Divar Rəngi</span>
-            <input
-              type="color"
-              value={wallColor || "#ffffff"}
-              onChange={(e) => {
-                setRoomColors({ wallColor: e.target.value });
-                pushUpdate();
-              }}
-              className="w-6 h-6 rounded cursor-pointer bg-transparent border-0 p-0"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-neutral-400 font-medium">Döşəmə Rəngi</span>
-            <input
-              type="color"
-              value={floorColor || "#8c8c8c"}
-              onChange={(e) => {
-                setRoomColors({ floorColor: e.target.value });
-                pushUpdate();
-              }}
-              className="w-6 h-6 rounded cursor-pointer bg-transparent border-0 p-0"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function PropertiesPanel() {
   const { selectedId, furnitureLayers, updateFurniture, duplicateFurniture, deleteFurniture, transformMode, setTransformMode, isPropertiesPanelOpen, setIsPropertiesPanelOpen } = useStore();
   const selectedItem = furnitureLayers.find((f) => f.id === selectedId);
@@ -235,7 +65,13 @@ export default function PropertiesPanel() {
             </button>
           </div>
           {!selectedItem ? (
-            <RoomDimensionsEditor />
+            <div className="flex-1 flex flex-col items-center justify-center text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-white/5 to-white/0 rounded-3xl flex items-center justify-center mb-6 border border-white/10 shadow-inner">
+                <span className="text-4xl drop-shadow-lg">🪄</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-2 tracking-tight">Heç Nə Seçilməyib</h3>
+              <p className="text-neutral-500 text-xs leading-relaxed">Xüsusiyyətləri görmək və alətlərdən istifadə etmək üçün səhnədən bir obyekt seçin</p>
+            </div>
           ) : (
             <>
               <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 border-b border-white/5 pb-4 sm:pb-6">
