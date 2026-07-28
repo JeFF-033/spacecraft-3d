@@ -31,22 +31,89 @@ function FadingWall({
   
   useFrame(({ camera }) => {
     if (groupRef.current) {
-      // Həm 360° Foto, həm də 3D Otaq rejimində divarlar həmişə 100% bütöv və opaq (solid) qalmalıdır
-      currentOpacityRef.current = 1;
+      // 360° Foto rejimində divarlar həmişə 100% bütöv və opaq (solid) qalmalıdır
+      if (appMode === "360-photo") {
+        currentOpacityRef.current = 1;
+        groupRef.current.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const material = (child as THREE.Mesh).material;
+            if (material) {
+              const updateMat = (m: any) => {
+                if (m.transparent) {
+                  m.transparent = false;
+                  m.opacity = 1;
+                  m.depthWrite = true;
+                  m.needsUpdate = true;
+                }
+              };
+              if (Array.isArray(material)) material.forEach(updateMat);
+              else updateMat(material);
+            }
+          }
+        });
+        return;
+      }
+
+      // 3D Otaq rejimində kamera bucağına görə qabaqdakı divar pəncərə kimi şəffaflaşsın (glass effect)
+      const centerVec = new THREE.Vector3(center[0], center[1], center[2]);
+      const distToCenter = camera.position.distanceTo(centerVec);
+      const wallPos = new THREE.Vector3(position[0], position[1], position[2]);
+      const distToWall = camera.position.distanceTo(wallPos);
+      
+      const minDim = Math.min(roomSize.width, roomSize.length) / 2;
+      const isInside = Math.abs(camera.position.x - center[0]) < minDim && 
+                       Math.abs(camera.position.z - center[2]) < minDim;
+
+      let targetOpacity = 1;
+      if (!isDividingWall && !isInside && distToWall < distToCenter) {
+        targetOpacity = 0.15; // Kamera tərəfə baxan divar pəncərə/glass effekti alsın
+      }
+
+      if (Math.abs(currentOpacityRef.current - targetOpacity) < 0.005) {
+        currentOpacityRef.current = targetOpacity;
+      } else {
+        currentOpacityRef.current = THREE.MathUtils.lerp(currentOpacityRef.current, targetOpacity, 0.1);
+      }
+      
       groupRef.current.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           const material = (child as THREE.Mesh).material;
           if (material) {
-            const updateMat = (m: any) => {
-              if (m.transparent) {
-                m.transparent = false;
-                m.opacity = 1;
-                m.depthWrite = true;
+            const updateMaterial = (m: any) => {
+              const targetDepthWrite = currentOpacityRef.current > 0.9;
+              let changed = false;
+              
+              if (currentOpacityRef.current < 0.99) {
+                if (!m.transparent) {
+                  m.transparent = true;
+                  changed = true;
+                }
+              } else {
+                if (m.transparent) {
+                  m.transparent = false;
+                  changed = true;
+                }
+              }
+
+              if (m.opacity !== currentOpacityRef.current) {
+                m.opacity = currentOpacityRef.current;
+              }
+
+              if (m.depthWrite !== targetDepthWrite) {
+                m.depthWrite = targetDepthWrite;
+                changed = true;
+              }
+
+              if (changed) {
                 m.needsUpdate = true;
               }
             };
-            if (Array.isArray(material)) material.forEach(updateMat);
-            else updateMat(material);
+
+            if (Array.isArray(material)) {
+              material.forEach(updateMaterial);
+            } else {
+              updateMaterial(material);
+            }
           }
         }
       });
