@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useStore } from "@/store/useStore";
 import { useMultiplayer } from "@/hooks/useMultiplayer";
 import { getAllRoomBounds } from "@/lib/roomSystem";
@@ -12,6 +13,12 @@ interface RoomDimensionsModalProps {
 }
 
 export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { 
     roomSize, 
     setRoomSize, 
@@ -32,7 +39,7 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
   const currentRoom = allRooms.find((r) => r.id === activeRoomId) || allRooms[0];
   const isMain = currentRoom.id === "main-room";
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleWidthChange = (val: number) => {
     if (isMain) {
@@ -70,16 +77,19 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
     pushUpdate();
   };
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
+  const modalContent = (
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
+      onClick={onClose}
+    >
       <div 
-        className="bg-[#0e0e15] border border-white/15 rounded-3xl w-full max-w-lg shadow-[0_25px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col relative text-white"
+        className="bg-[#0e0e15] border border-white/20 rounded-3xl w-full max-w-lg shadow-[0_25px_70px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col relative text-white animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-white/[0.02]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
               <Ruler className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -113,7 +123,7 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
                     setSelectedId(e.target.value);
                   }
                 }}
-                className="w-full bg-black/60 border border-white/15 focus:border-indigo-500 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-bold appearance-none cursor-pointer shadow-inner pr-10 transition-all"
+                className="w-full bg-black/70 border border-white/15 focus:border-indigo-500 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-bold appearance-none cursor-pointer shadow-inner pr-10 transition-all"
               >
                 {allRooms.map((r) => (
                   <option key={r.id} value={r.id} className="bg-neutral-900 text-white py-2 font-medium">
@@ -130,7 +140,7 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
           {/* Sliders Container */}
           <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 space-y-4">
             {/* En (Width - X) */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-neutral-300 flex items-center gap-1.5">↔️ En (X-ölçüsü)</span>
                 <span className="font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-lg border border-indigo-500/20 text-xs">
@@ -149,7 +159,7 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
             </div>
 
             {/* Uzunluq (Length - Z) */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-neutral-300 flex items-center gap-1.5">↕️ Uzunluq (Z-ölçüsü)</span>
                 <span className="font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-lg border border-indigo-500/20 text-xs">
@@ -168,7 +178,7 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
             </div>
 
             {/* Hündürlük (Height - Y) */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-neutral-300 flex items-center gap-1.5">⏫ Hündürlük (Y-ölçüsü)</span>
                 <span className="font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-lg border border-indigo-500/20 text-xs">
@@ -228,4 +238,6 @@ export default function RoomDimensionsModal({ isOpen, onClose }: RoomDimensionsM
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
