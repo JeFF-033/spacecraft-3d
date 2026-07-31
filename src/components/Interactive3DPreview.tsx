@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Float, ContactShadows, Html } from "@react-three/drei";
 import * as THREE from "three";
-import { Sun, Moon, Sparkles, Layers, RefreshCw, Check } from "lucide-react";
+import { Sun, Moon, Sparkles, Layers, RefreshCw, Check, Tv } from "lucide-react";
 
 // Bright, Ultra-Vivid Architectural Room Component
 function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, setActiveHotspot }: { 
@@ -21,7 +21,7 @@ function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, se
     }
   });
 
-  // Material settings according to selection
+  // Selected Accent Material (Applies to Coffee Table Surface & Sofa Accent Pillows ONLY)
   const materialProps = React.useMemo(() => {
     switch (materialType) {
       case "marble":
@@ -66,16 +66,28 @@ function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, se
         </mesh>
       ))}
 
-      {/* Decorative Vivid Artwork Canvas */}
+      {/* FIXED REALISTIC OLED SMART TV PANEL (Does NOT change color with material buttons!) */}
       <group position={[0, 2.3, -2.32]}>
+        {/* Outer Slim TV Frame */}
         <mesh castShadow>
-          <boxGeometry args={[1.8, 1.2, 0.05]} />
-          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.2} />
+          <boxGeometry args={[2.0, 1.15, 0.04]} />
+          <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.1} />
         </mesh>
-        {/* Canvas painting with selected material highlight */}
-        <mesh position={[0, 0, 0.03]}>
-          <planeGeometry args={[1.7, 1.1]} />
-          <meshStandardMaterial {...materialProps} />
+
+        {/* Glossy Black OLED Screen Glass Display */}
+        <mesh position={[0, 0, 0.023]}>
+          <planeGeometry args={[1.92, 1.07]} />
+          <meshStandardMaterial 
+            color="#09090B" 
+            roughness={0.03} 
+            metalness={0.95}
+          />
+        </mesh>
+
+        {/* Ambient Standby / Art line indicator */}
+        <mesh position={[0, -0.5, 0.025]}>
+          <planeGeometry args={[0.08, 0.015]} />
+          <meshBasicMaterial color="#38BDF8" />
         </mesh>
       </group>
 
@@ -111,7 +123,7 @@ function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, se
           <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
         </mesh>
 
-        {/* Accent Pillows */}
+        {/* Accent Pillows (Material Selection Applies Here!) */}
         <mesh position={[-0.8, 0.45, -0.3]} rotation={[0, 0.2, 0.1]} castShadow>
           <boxGeometry args={[0.45, 0.4, 0.18]} />
           <meshStandardMaterial {...materialProps} />
@@ -143,9 +155,9 @@ function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, se
         </Html>
       </group>
 
-      {/* 4. CRISP WHITE MARBLE COFFEE TABLE */}
+      {/* 4. CRISP MARBLE COFFEE TABLE (Material Selection Applies to Surface!) */}
       <group position={[0, 0.2, 0.9]} onClick={(e) => { e.stopPropagation(); setActiveHotspot("table"); }}>
-        {/* Marble Table Surface */}
+        {/* Table Surface with Selected Material */}
         <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.85, 0.85, 0.06, 32]} />
           <meshStandardMaterial {...materialProps} />
@@ -170,7 +182,7 @@ function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, se
             className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Masa: İtalyan Carrara</span>
+            <span>Masa: Seçilmiş Material</span>
           </button>
         </Html>
       </group>
@@ -346,13 +358,13 @@ export default function Interactive3DPreview() {
         {activeHotspot && (
           <div className="absolute top-4 right-4 bg-neutral-900/95 border border-indigo-500/50 p-4 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs text-xs text-white animate-fadeIn">
             <div className="flex items-center justify-between font-bold text-indigo-300 mb-1">
-              <span>{activeHotspot === "sofa" ? "Royal Blue Velvet Divan" : "İtalyan Carrara Masa"}</span>
+              <span>{activeHotspot === "sofa" ? "Royal Blue Velvet Divan" : "Mərmər / Seçilmiş Masa"}</span>
               <span className="text-[10px] bg-indigo-500/20 px-2 py-0.5 rounded text-indigo-200">SpaceCraft 3D Object</span>
             </div>
             <p className="text-neutral-300 text-[11px] leading-relaxed">
               {activeHotspot === "sofa" 
                 ? "Dəbdəbəli royal blue velvet parça örtüyü, yüksək sıxlıqlı qubka və parıldayan qızıl ayaq vurğuları ilə xüsusi hazırlanmış modern divan modulu."
-                : "Təbii İtalyan Carrara mərmər səthi və mat cilalanmış brass metal baza ayaqları ilə interyerə dinamika verən kofe masası."}
+                : "Seçilmiş lüks material örtüyü və mat cilalanmış brass metal baza ayaqları ilə interyerə dinamika verən kofe masası."}
             </p>
           </div>
         )}
@@ -361,7 +373,7 @@ export default function Interactive3DPreview() {
       {/* Material Selector Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-white/10 relative z-10">
         <div className="flex items-center gap-2 text-xs font-semibold text-neutral-300">
-          <Layers className="w-4 h-4 text-indigo-400" /> Otaq Materialını Seçin:
+          <Layers className="w-4 h-4 text-indigo-400" /> Masa Və Yastıq Materialını Seçin:
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
