@@ -1,15 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Float, ContactShadows } from "@react-three/drei";
-import * as THREE from "three";
 import { 
   ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, 
   Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download,
   Maximize2, Move, RotateCcw, Ruler, Grid, MousePointer, Paintbrush,
-  Sun, Settings, Trash2, Lock, Plus, Sliders, RefreshCw
+  Sun, Settings, Trash2, Lock, Plus, Sliders, RefreshCw, Wand2, SlidersHorizontal
 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
@@ -17,141 +14,55 @@ import Navbar from "@/components/Navbar";
 import HeroVideoModal from "@/components/HeroVideoModal";
 import Interactive3DPreview from "@/components/Interactive3DPreview";
 
-// Real 3D WebGL Room Scene inside the Hero Editor Window
-function HeroEditor3DScene() {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((_, delta) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.08;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[0, -0.5, 0]}>
-      {/* Light Marble Floor */}
-      <mesh position={[0, -0.05, 0]} receiveShadow>
-        <boxGeometry args={[4.8, 0.1, 4.8]} />
-        <meshStandardMaterial color="#E5E7EB" roughness={0.12} metalness={0.15} />
-      </mesh>
-
-      {/* Rug */}
-      <mesh position={[0, 0.01, 0.3]} receiveShadow>
-        <boxGeometry args={[3.0, 0.02, 2.4]} />
-        <meshStandardMaterial color="#4B5563" roughness={0.85} />
-      </mesh>
-
-      {/* Back Wall & Slats */}
-      <mesh position={[0, 1.75, -2.35]} receiveShadow castShadow>
-        <boxGeometry args={[4.8, 3.5, 0.1]} />
-        <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
-      </mesh>
-
-      {[-1.6, -1.2, -0.8, -0.4, 0, 0.4, 0.8, 1.2, 1.6].map((xPos, i) => (
-        <mesh key={i} position={[xPos, 1.75, -2.28]} castShadow receiveShadow>
-          <boxGeometry args={[0.15, 3.5, 0.04]} />
-          <meshStandardMaterial color="#B45309" roughness={0.35} />
-        </mesh>
-      ))}
-
-      {/* OLED TV Display (Fixed Glossy Black) */}
-      <group position={[0, 2.2, -2.22]}>
-        <mesh castShadow>
-          <boxGeometry args={[1.9, 1.1, 0.04]} />
-          <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.1} />
-        </mesh>
-        <mesh position={[0, 0, 0.023]}>
-          <planeGeometry args={[1.82, 1.02]} />
-          <meshStandardMaterial color="#09090B" roughness={0.03} metalness={0.95} />
-        </mesh>
-      </group>
-
-      {/* Royal Blue Sofa */}
-      <group position={[0, 0.45, -0.6]}>
-        <mesh position={[0, 0, 0]} castShadow receiveShadow>
-          <boxGeometry args={[2.6, 0.35, 1.2]} />
-          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
-        </mesh>
-        {[-0.8, 0, 0.8].map((cx, i) => (
-          <mesh key={i} position={[cx, 0.22, 0.05]} castShadow receiveShadow>
-            <boxGeometry args={[0.8, 0.2, 1.1]} />
-            <meshStandardMaterial color="#2563EB" roughness={0.55} />
-          </mesh>
-        ))}
-        <mesh position={[0, 0.55, -0.45]} castShadow receiveShadow>
-          <boxGeometry args={[2.6, 0.6, 0.3]} />
-          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
-        </mesh>
-        {[-1.2, 1.2].map((lx, i) =>
-          [-0.45, 0.45].map((lz, j) => (
-            <mesh key={`${i}-${j}`} position={[lx, -0.2, lz]} castShadow>
-              <cylinderGeometry args={[0.03, 0.02, 0.25, 16]} />
-              <meshStandardMaterial color="#F59E0B" metalness={0.95} roughness={0.1} />
-            </mesh>
-          ))
-        )}
-      </group>
-
-      {/* Marble Coffee Table */}
-      <group position={[0, 0.2, 0.8]}>
-        <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
-          <cylinderGeometry args={[0.8, 0.8, 0.06, 32]} />
-          <meshStandardMaterial color="#FFFFFF" roughness={0.05} metalness={0.1} />
-        </mesh>
-        <mesh position={[0, 0.07, 0]} castShadow>
-          <cylinderGeometry args={[0.3, 0.45, 0.14, 32]} />
-          <meshStandardMaterial color="#D97706" metalness={0.9} roughness={0.15} />
-        </mesh>
-      </group>
-
-      {/* Floor Lamp */}
-      <group position={[1.7, 1.2, -1.7]}>
-        <mesh position={[0, -1.15, 0]} castShadow>
-          <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
-          <meshStandardMaterial color="#1E293B" metalness={0.9} />
-        </mesh>
-        <mesh position={[0, 0, 0]} castShadow>
-          <cylinderGeometry args={[0.025, 0.025, 2.3, 16]} />
-          <meshStandardMaterial color="#F59E0B" metalness={0.9} roughness={0.2} />
-        </mesh>
-        <mesh position={[0, 1.1, 0]} castShadow>
-          <cylinderGeometry args={[0.28, 0.38, 0.42, 32]} />
-          <meshStandardMaterial color="#FFFFFF" roughness={0.2} emissive="#FEF08A" emissiveIntensity={0.6} />
-        </mesh>
-        <pointLight position={[0, 1, 0]} intensity={4.5} color="#FEF08A" distance={5} />
-      </group>
-
-      {/* Plant */}
-      <group position={[-1.7, 0.6, -1.5]}>
-        <mesh position={[0, -0.2, 0]} castShadow>
-          <cylinderGeometry args={[0.22, 0.18, 0.45, 32]} />
-          <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
-        </mesh>
-        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
-          <mesh position={[0, 0.25, 0]} castShadow>
-            <dodecahedronGeometry args={[0.32, 1]} />
-            <meshStandardMaterial color="#10B981" roughness={0.3} />
-          </mesh>
-        </Float>
-      </group>
-
-      <ContactShadows position={[0, 0.02, 0]} opacity={0.6} scale={6} blur={2.0} far={4} />
-    </group>
-  );
-}
-
 export default function LandingPage() {
   const [animationStep, setAnimationStep] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [activeTool, setActiveTool] = useState<"select" | "wall" | "furniture" | "material" | "ai">("select");
-  const [activeViewMode, setActiveViewMode] = useState<"2d" | "3d" | "vr">("3d");
+  
+  // AI Laser Scanner Position (0 to 100%)
+  const [scanPos, setScanPos] = useState(55);
+  const [isAutoScanning, setIsAutoScanning] = useState(true);
+  const [activePreset, setActivePreset] = useState<"japandi" | "luxury" | "emerald" | "nordic">("luxury");
 
+  // Smooth Auto Scanning Effect
   useEffect(() => {
+    if (!isAutoScanning) return;
+    let direction = 1;
     const interval = setInterval(() => {
-      setAnimationStep((prev) => (prev + 1) % 5);
-    }, 4000);
+      setScanPos((prev) => {
+        if (prev >= 85) direction = -1;
+        if (prev <= 15) direction = 1;
+        return prev + direction * 0.4;
+      });
+    }, 30);
     return () => clearInterval(interval);
-  }, []);
+  }, [isAutoScanning]);
+
+  const stylePresets = {
+    luxury: {
+      name: "Royal Velvet & Mərmər Lüks",
+      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
+      prompt: "✨ AI Prompt: Royal Blue Velvet Divan, Carrara Mərmər & Slatted Walnut Wall",
+      badge: "AI 4K Render Engine"
+    },
+    japandi: {
+      name: "Japandi Təbii Estetika",
+      img: "/images/gallery_japandi.png",
+      prompt: "✨ AI Prompt: Japandi Minimalist Təbii Ağac, Soft Warm Ambient Lights",
+      badge: "Japandi v2.4"
+    },
+    emerald: {
+      name: "Zümrüd Yaşıl & Qızıl Loft",
+      img: "/images/gallery_kitchen.png",
+      prompt: "✨ AI Prompt: Emerald Velvet Sofa, Brushed Brass Metal & Dark Obsidian Tile",
+      badge: "Emerald Loft 4K"
+    },
+    nordic: {
+      name: "Nordic Yataq Konsepti",
+      img: "/images/gallery_bedroom.png",
+      prompt: "✨ AI Prompt: Nordic White Linen Bed, Warm Wood Accents & Panoramic Window",
+      badge: "Nordic Minimal"
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#09090B] text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
@@ -282,286 +193,173 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* MASTERPIECE HERO EDITOR SHOWCASE MOCKUP WITH REAL LIVE 3D CANVAS */}
+          {/* INNOVATIVE & TOTALLY UNIQUE HERO EDITOR: AI ARCHITECTURAL LASER SCAN TRANSFORMATION */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.9 }}
             className="w-full mt-20 relative rounded-3xl border border-white/15 bg-neutral-950/95 shadow-2xl p-2 sm:p-3 max-w-6xl backdrop-blur-2xl overflow-hidden"
           >
-            {/* 1. TOP MAC OS STYLE BROWSER HEADER */}
+            {/* 1. MAC OS STYLE BROWSER HEADER */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-neutral-900/90 rounded-t-2xl">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 <div className="ml-4 text-xs font-mono text-neutral-400 hidden sm:inline flex items-center gap-2">
-                  <Box className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>spacecraft-3d.com/editor/room-104</span>
+                  <Wand2 className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+                  <span>spacecraft-3d.com/editor/ai-scan-engine</span>
                 </div>
               </div>
 
-              {/* Active Step Indicator Pill */}
-              <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-200 bg-neutral-950 px-3.5 py-1 rounded-full border border-white/15 whitespace-nowrap shrink-0 shadow-inner">
-                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-                {animationStep === 0 && "Addım 1: Səhnə Planı & Ölçülər"}
-                {animationStep === 1 && "Addım 2: Gemini AI Generasiyası"}
-                {animationStep === 2 && "Addım 3: Mebel Layout Seçimi"}
-                {animationStep === 3 && "Addım 4: Rəng Və Material Shading"}
-                {animationStep === 4 && "Addım 5: Magic Erase (Silmə)"}
+              {/* Laser Scan Toggle & Status Badge */}
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => setIsAutoScanning(!isAutoScanning)}
+                  className="px-3 py-1 rounded-full bg-neutral-950 border border-white/15 text-[11px] font-mono text-cyan-300 flex items-center gap-1.5 hover:border-cyan-400 transition-colors cursor-pointer"
+                >
+                  <span className={`w-2 h-2 rounded-full ${isAutoScanning ? 'bg-cyan-400 animate-ping' : 'bg-neutral-500'}`}></span>
+                  <span>{isAutoScanning ? "Laser Scan: Avto" : "Laser Scan: Əl İlə"}</span>
+                </button>
               </div>
             </div>
 
-            {/* 2. ARCHITECTURAL TOP TOOLBAR DOCK */}
-            <div className="px-4 py-2.5 bg-neutral-900/80 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
-              {/* Tool Selection Group */}
-              <div className="flex items-center gap-1.5 bg-neutral-950/80 p-1 rounded-xl border border-white/10">
-                <button 
-                  onClick={() => setActiveTool("select")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "select" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  <MousePointer className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Seç</span>
-                </button>
-                <button 
-                  onClick={() => setActiveTool("wall")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "wall" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  <Ruler className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Divar</span>
-                </button>
-                <button 
-                  onClick={() => setActiveTool("furniture")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "furniture" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  <Box className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Mebel</span>
-                </button>
-                <button 
-                  onClick={() => setActiveTool("material")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "material" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  <Paintbrush className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Material</span>
-                </button>
-                <button 
-                  onClick={() => setActiveTool("ai")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "ai" ? "bg-purple-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span className="hidden sm:inline">AI Assist</span>
-                </button>
+            {/* 2. TOP AI COMMAND & PRESET BAR */}
+            <div className="px-4 py-3 bg-neutral-900/80 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+              {/* Dynamic Prompt Header */}
+              <div className="flex items-center gap-2 font-mono text-neutral-200 text-[11px] bg-neutral-950/80 px-3.5 py-1.5 rounded-xl border border-white/10">
+                <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+                <span className="truncate max-w-md">{stylePresets[activePreset].prompt}</span>
               </div>
 
-              {/* View Mode Switcher */}
-              <div className="flex items-center gap-1 bg-neutral-950/80 p-1 rounded-xl border border-white/10">
-                <button 
-                  onClick={() => setActiveViewMode("2d")}
-                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "2d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  2D Plan
-                </button>
-                <button 
-                  onClick={() => setActiveViewMode("3d")}
-                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "3d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  3D Səhnə
-                </button>
-                <button 
-                  onClick={() => setActiveViewMode("vr")}
-                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "vr" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                >
-                  VR Gəzinti
-                </button>
-              </div>
-
-              {/* Action Snap / Grid Toggles */}
-              <div className="hidden lg:flex items-center gap-3 text-neutral-400 text-[11px] font-mono">
-                <span className="flex items-center gap-1 text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
-                  <Grid className="w-3 h-3" /> Grid: Snap 10cm
-                </span>
-                <span className="flex items-center gap-1 text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
-                  <Ruler className="w-3 h-3" /> Auto Dimensions
-                </span>
+              {/* Style Presets Switcher */}
+              <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+                {(["luxury", "japandi", "emerald", "nordic"] as const).map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => setActivePreset(key)}
+                    className={`px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      activePreset === key 
+                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30 scale-105 border border-indigo-400/40" 
+                        : "bg-neutral-950/60 text-neutral-400 hover:text-white border border-white/10"
+                    }`}
+                  >
+                    {stylePresets[key].name}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* 3. MAIN EDITOR WORKSPACE WITH REAL LIVE 3D CANVAS */}
-            <div className="aspect-[16/9] bg-[#0c0e17] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
-              
-              {/* CONTINUOUS 60FPS SMOOTH MULTIPLAYER CURSORS */}
-              <div className="absolute top-[35%] left-[22%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
+            {/* 3. DYNAMIC BEFORE/AFTER ARCHITECTURAL LASER SCANNER VIEWPORT */}
+            <div 
+              className="aspect-[16/9] md:aspect-[21/9] w-full rounded-b-2xl overflow-hidden relative select-none cursor-ew-resize group"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                setScanPos(Math.min(Math.max(x, 5), 95));
+              }}
+            >
+              {/* LAYER 1: RAW 2D ARCHITECTURAL CAD BLUEPRINT (LEFT SIDE) */}
+              <div className="absolute inset-0 bg-[#070913] p-8 flex items-center justify-center">
+                {/* CAD Grid Background */}
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#38bdf8 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                
+                {/* High-Precision Neon CAD Floorplan Blueprint Graphics */}
+                <div className="relative w-full max-w-2xl aspect-[16/9] border-2 border-cyan-500/60 bg-neutral-950/90 rounded-2xl p-6 shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col justify-between">
+                  {/* Dimension Annotations */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyan-950 border border-cyan-500/50 px-3 py-0.5 rounded text-[10px] font-mono text-cyan-300">
+                    Otaq Sahəsi: 8.40m × 6.20m (52.08 m²)
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs font-mono text-cyan-400 border-b border-cyan-500/30 pb-3">
+                    <span className="font-bold tracking-widest flex items-center gap-2">
+                      <Ruler className="w-4 h-4" /> 2D ARCHITECTURAL CAD SKETCH
+                    </span>
+                    <span className="text-[10px] bg-cyan-500/10 px-2.5 py-0.5 rounded text-cyan-300 border border-cyan-500/20">
+                      SCALE 1:50
+                    </span>
+                  </div>
+
+                  {/* Wireframe Furniture Vectors */}
+                  <div className="my-auto space-y-4">
+                    {/* Sofa Wireframe Vector Box */}
+                    <div className="p-4 border-2 border-dashed border-cyan-400/80 rounded-xl relative flex justify-between items-center text-cyan-300 text-xs font-mono bg-cyan-950/20">
+                      <span className="font-bold">[SOFA_MODULE] W:240cm D:95cm</span>
+                      <span className="text-[10px] text-cyan-400">VECTOR MESH #01</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-3 border border-dashed border-cyan-500/60 rounded-lg text-[11px] font-mono text-cyan-400 bg-cyan-950/10">
+                        [COFFEE_TABLE] R:42cm
+                      </div>
+                      <div className="p-3 border border-dashed border-cyan-500/60 rounded-lg text-[11px] font-mono text-cyan-400 bg-cyan-950/10">
+                        [ACCENT_PLANT] H:60cm
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center text-[10px] font-mono text-cyan-500 pt-3 border-t border-cyan-500/20">
+                    <span>RAW CAD SKETCH</span>
+                    <span>AI READY • 100% PRECISION</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* LAYER 2: 4K PHOTOREALISTIC AI RENDERED INTERIOR (RIGHT SIDE, CLIPPED) */}
+              <div 
+                className="absolute inset-0"
+                style={{ clipPath: `polygon(${scanPos}% 0, 100% 0, 100% 100%, ${scanPos}% 100%)` }}
+              >
+                <img 
+                  src={stylePresets[activePreset].img} 
+                  alt="4K Render Preview" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
+                
+                {/* 4K Render Tag Badge */}
+                <div className="absolute top-6 right-6 bg-neutral-900/90 border border-white/20 px-4 py-2 rounded-2xl shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs font-bold text-white">
+                  <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                  <span>{stylePresets[activePreset].badge}</span>
+                </div>
+              </div>
+
+              {/* LAYER 3: GLOWING NEON LASER BEAM DIVIDER LINE */}
+              <div 
+                className="absolute top-0 bottom-0 z-30 pointer-events-none"
+                style={{ left: `${scanPos}%` }}
+              >
+                {/* Vertical Laser Beam Glow Line */}
+                <div className="w-1 h-full bg-gradient-to-b from-cyan-300 via-indigo-400 to-amber-300 shadow-[0_0_25px_rgba(56,189,248,1)]"></div>
+
+                {/* Center Laser Handle Control Indicator */}
+                <div className="absolute top-1/2 -left-4 -translate-y-1/2 w-9 h-9 rounded-full bg-cyan-500 border-2 border-white shadow-[0_0_20px_rgba(6,182,212,0.9)] flex items-center justify-center text-white pointer-events-auto cursor-ew-resize hover:scale-110 transition-transform">
+                  <SlidersHorizontal className="w-4 h-4" />
+                </div>
+              </div>
+
+              {/* MULTIPLAYER CURSORS ON SCANNED BLUEPRINT */}
+              <div 
+                className="absolute z-40 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah"
+                style={{ top: '35%', left: '25%' }}
+              >
                 <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
-                <div className="bg-purple-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-purple-400/40 whitespace-nowrap flex items-center gap-1">
-                  <span>Sarah</span>
-                  <span className="text-[7px] opacity-80 font-mono">X:2.4m</span>
+                <div className="bg-purple-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-purple-400/40 whitespace-nowrap">
+                  Sarah (CAD Lead)
                 </div>
               </div>
 
-              <div className="absolute top-[55%] right-[28%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
+              <div 
+                className="absolute z-40 pointer-events-none flex items-center gap-1.5 animate-cursor-alex"
+                style={{ top: '60%', left: '70%' }}
+              >
                 <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
-                <div className="bg-emerald-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-emerald-400/40 whitespace-nowrap flex items-center gap-1">
-                  <span>Alex (Architect)</span>
-                  <span className="text-[7px] opacity-80 font-mono">Y:1.8m</span>
-                </div>
-              </div>
-
-              {/* LEFT SIDEBAR PANEL (Clean Catalogue & Layers) */}
-              <div className="hidden md:flex w-1/5 bg-neutral-950/90 border-r border-white/10 p-3.5 flex-col justify-between text-neutral-400 text-[10px] select-none z-20">
-                <div>
-                  <div className="text-white font-bold mb-3 tracking-wider uppercase text-[9px] flex items-center justify-between border-b border-white/10 pb-2">
-                    <span className="flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-indigo-400" /> SpaceCraft Kataloq
-                    </span>
-                    <span className="text-indigo-400 font-mono text-[8px]">10k+</span>
-                  </div>
-
-                  <div className="space-y-1.5 mb-4">
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-white font-semibold">
-                      <span className="flex items-center gap-2">
-                        <span>🛋️</span> <span className="truncate">Royal Blue Divan</span>
-                      </span>
-                      <span className="text-[8px] font-mono text-indigo-300">240cm</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
-                      <span className="flex items-center gap-2">
-                        <span>🪵</span> <span className="truncate">Carrara Mərmər Masa</span>
-                      </span>
-                      <span className="text-[8px] font-mono opacity-50">85cm</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
-                      <span className="flex items-center gap-2">
-                        <span>🪴</span> <span className="truncate">Dekorativ Bitki</span>
-                      </span>
-                      <span className="text-[8px] font-mono opacity-50">60cm</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
-                      <span className="flex items-center gap-2">
-                        <span>💡</span> <span className="truncate">Warm Floor Lamp</span>
-                      </span>
-                      <span className="text-[8px] font-mono opacity-50">180cm</span>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-white/10 pt-3">
-                    <div className="text-neutral-400 font-bold uppercase tracking-wider text-[8px] mb-2 flex items-center justify-between">
-                      <span>Səhnə Layları (Layers)</span>
-                      <span className="text-emerald-400 font-mono">Active</span>
-                    </div>
-                    <div className="space-y-1 text-[9px]">
-                      <div className="p-1.5 rounded bg-white/5 text-white flex items-center justify-between">
-                        <span>🏠 Qonaq Otağı (18.5 m²)</span>
-                        <Lock className="w-3 h-3 text-neutral-500" />
-                      </div>
-                      <div className="p-1.5 rounded bg-indigo-500/10 text-indigo-300 flex items-center justify-between border border-indigo-500/20">
-                        <span>🛋️ Lüks Royal Blue Divan</span>
-                        <Eye className="w-3 h-3 text-indigo-400" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-white/10 flex justify-between items-center text-[9px] font-mono">
-                  <span className="text-neutral-400">WebGL 2.0 GPU</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                </div>
-              </div>
-
-              {/* CENTER CANVAS VIEWPORT: REAL LIVE THREE.JS 3D RENDER CANVAS */}
-              <div className="flex-1 relative flex items-center justify-center overflow-hidden">
-                
-                {/* Floating Gemini AI Prompt Chat Overlay */}
-                <div 
-                  className="absolute top-6 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/40 rounded-2xl px-5 py-2.5 flex items-center gap-3 shadow-2xl backdrop-blur-md z-20 text-white text-[11px]"
-                  style={{
-                    transform: `translate3d(-50%, ${animationStep === 1 ? '0px' : '-10px'}, 0) scale(${animationStep === 1 ? 1 : 0.95})`,
-                    opacity: animationStep === 1 ? 1 : 0,
-                    transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-out',
-                  }}
-                >
-                  <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-                  <span className="font-semibold">Gemini AI: "Lüks modern otaq konsepti animasiya olunur..."</span>
-                </div>
-
-                {/* REAL LIVE THREE.JS WEBGL RENDER CANVAS */}
-                <div className="w-full h-full">
-                  <Canvas shadows camera={{ position: [4.5, 3.8, 5.2], fov: 44 }}>
-                    <ambientLight intensity={1.9} color="#F8FAFC" />
-                    <directionalLight position={[6, 9, 6]} intensity={2.5} color="#FFFFFF" castShadow shadow-mapSize={[1024, 1024]} />
-                    <directionalLight position={[-4, 5, -4]} intensity={1.2} color="#E0E7FF" />
-                    
-                    <HeroEditor3DScene />
-
-                    <OrbitControls enableZoom={false} minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2.2} rotateSpeed={0.6} />
-                  </Canvas>
-                </div>
-
-                {/* Bottom Canvas Stats Bar */}
-                <div className="absolute bottom-4 left-4 right-4 pointer-events-none flex justify-between items-center text-[9px] font-mono text-neutral-300 z-10">
-                  <span className="bg-neutral-950/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-emerald-400">
-                    FPS: 120 (Smooth WebGL)
-                  </span>
-                  <span className="bg-neutral-950/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-indigo-300">
-                    Latency: 8ms • Raytracing: ON
-                  </span>
-                </div>
-
-              </div>
-
-              {/* RIGHT SIDEBAR PANEL (Clean Object Inspector) */}
-              <div className="hidden lg:flex w-1/5 bg-neutral-950/90 border-l border-white/10 p-3.5 flex-col justify-between text-neutral-300 text-[10px] select-none z-20">
-                <div>
-                  <div className="text-white font-bold mb-3 tracking-wider uppercase text-[9px] flex items-center gap-1.5 border-b border-white/10 pb-2">
-                    <Sliders className="w-3.5 h-3.5 text-indigo-400" /> Parametrlər Inspector
-                  </div>
-
-                  <div className="space-y-3">
-                    <div>
-                      <span className="text-[8px] font-mono text-neutral-400 uppercase">Seçilmiş Obyekt</span>
-                      <div className="text-xs font-bold text-white mt-0.5">🛋️ Royal Blue Velvet Divan</div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 text-[9px]">
-                      <div className="bg-neutral-900 p-2 rounded-xl border border-white/5">
-                        <span className="text-neutral-400">En (W)</span>
-                        <div className="font-bold text-white font-mono mt-0.5">240 cm</div>
-                      </div>
-                      <div className="bg-neutral-900 p-2 rounded-xl border border-white/5">
-                        <span className="text-neutral-400">Dərinlik (D)</span>
-                        <div className="font-bold text-white font-mono mt-0.5">95 cm</div>
-                      </div>
-                    </div>
-
-                    <div className="bg-neutral-900 p-2.5 rounded-xl border border-white/5 space-y-1">
-                      <span className="text-[8px] font-mono text-neutral-400 uppercase">Pozisiya Koordinatları</span>
-                      <div className="flex justify-between font-mono text-indigo-300 text-[9px]">
-                        <span>X: 2.40m</span>
-                        <span>Y: 1.80m</span>
-                        <span>Z: 0.00m</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <span className="text-[8px] font-mono text-neutral-400 uppercase">Material Vurğusu</span>
-                      <div className="flex items-center gap-2 mt-1.5">
-                        <span className="w-4 h-4 rounded-full bg-blue-600 border border-white/40"></span>
-                        <span className="text-xs font-bold text-white">Royal Blue Velvet</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-white/10 space-y-2">
-                  <button className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                    <Paintbrush className="w-3 h-3" /> Materialı Dəyiş
-                  </button>
+                <div className="bg-emerald-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-emerald-400/40 whitespace-nowrap">
+                  Alex (Render Engine)
                 </div>
               </div>
 
