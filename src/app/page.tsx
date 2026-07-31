@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Float, ContactShadows } from "@react-three/drei";
+import * as THREE from "three";
 import { 
   ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, 
   Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download,
@@ -13,6 +16,129 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import HeroVideoModal from "@/components/HeroVideoModal";
 import Interactive3DPreview from "@/components/Interactive3DPreview";
+
+// Real 3D WebGL Room Scene inside the Hero Editor Window
+function HeroEditor3DScene() {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.08;
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[0, -0.5, 0]}>
+      {/* Light Marble Floor */}
+      <mesh position={[0, -0.05, 0]} receiveShadow>
+        <boxGeometry args={[4.8, 0.1, 4.8]} />
+        <meshStandardMaterial color="#E5E7EB" roughness={0.12} metalness={0.15} />
+      </mesh>
+
+      {/* Rug */}
+      <mesh position={[0, 0.01, 0.3]} receiveShadow>
+        <boxGeometry args={[3.0, 0.02, 2.4]} />
+        <meshStandardMaterial color="#4B5563" roughness={0.85} />
+      </mesh>
+
+      {/* Back Wall & Slats */}
+      <mesh position={[0, 1.75, -2.35]} receiveShadow castShadow>
+        <boxGeometry args={[4.8, 3.5, 0.1]} />
+        <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
+      </mesh>
+
+      {[-1.6, -1.2, -0.8, -0.4, 0, 0.4, 0.8, 1.2, 1.6].map((xPos, i) => (
+        <mesh key={i} position={[xPos, 1.75, -2.28]} castShadow receiveShadow>
+          <boxGeometry args={[0.15, 3.5, 0.04]} />
+          <meshStandardMaterial color="#B45309" roughness={0.35} />
+        </mesh>
+      ))}
+
+      {/* OLED TV Display (Fixed Glossy Black) */}
+      <group position={[0, 2.2, -2.22]}>
+        <mesh castShadow>
+          <boxGeometry args={[1.9, 1.1, 0.04]} />
+          <meshStandardMaterial color="#020617" metalness={0.95} roughness={0.1} />
+        </mesh>
+        <mesh position={[0, 0, 0.023]}>
+          <planeGeometry args={[1.82, 1.02]} />
+          <meshStandardMaterial color="#09090B" roughness={0.03} metalness={0.95} />
+        </mesh>
+      </group>
+
+      {/* Royal Blue Sofa */}
+      <group position={[0, 0.45, -0.6]}>
+        <mesh position={[0, 0, 0]} castShadow receiveShadow>
+          <boxGeometry args={[2.6, 0.35, 1.2]} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
+        </mesh>
+        {[-0.8, 0, 0.8].map((cx, i) => (
+          <mesh key={i} position={[cx, 0.22, 0.05]} castShadow receiveShadow>
+            <boxGeometry args={[0.8, 0.2, 1.1]} />
+            <meshStandardMaterial color="#2563EB" roughness={0.55} />
+          </mesh>
+        ))}
+        <mesh position={[0, 0.55, -0.45]} castShadow receiveShadow>
+          <boxGeometry args={[2.6, 0.6, 0.3]} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
+        </mesh>
+        {[-1.2, 1.2].map((lx, i) =>
+          [-0.45, 0.45].map((lz, j) => (
+            <mesh key={`${i}-${j}`} position={[lx, -0.2, lz]} castShadow>
+              <cylinderGeometry args={[0.03, 0.02, 0.25, 16]} />
+              <meshStandardMaterial color="#F59E0B" metalness={0.95} roughness={0.1} />
+            </mesh>
+          ))
+        )}
+      </group>
+
+      {/* Marble Coffee Table */}
+      <group position={[0, 0.2, 0.8]}>
+        <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.8, 0.8, 0.06, 32]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.05} metalness={0.1} />
+        </mesh>
+        <mesh position={[0, 0.07, 0]} castShadow>
+          <cylinderGeometry args={[0.3, 0.45, 0.14, 32]} />
+          <meshStandardMaterial color="#D97706" metalness={0.9} roughness={0.15} />
+        </mesh>
+      </group>
+
+      {/* Floor Lamp */}
+      <group position={[1.7, 1.2, -1.7]}>
+        <mesh position={[0, -1.15, 0]} castShadow>
+          <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
+          <meshStandardMaterial color="#1E293B" metalness={0.9} />
+        </mesh>
+        <mesh position={[0, 0, 0]} castShadow>
+          <cylinderGeometry args={[0.025, 0.025, 2.3, 16]} />
+          <meshStandardMaterial color="#F59E0B" metalness={0.9} roughness={0.2} />
+        </mesh>
+        <mesh position={[0, 1.1, 0]} castShadow>
+          <cylinderGeometry args={[0.28, 0.38, 0.42, 32]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.2} emissive="#FEF08A" emissiveIntensity={0.6} />
+        </mesh>
+        <pointLight position={[0, 1, 0]} intensity={4.5} color="#FEF08A" distance={5} />
+      </group>
+
+      {/* Plant */}
+      <group position={[-1.7, 0.6, -1.5]}>
+        <mesh position={[0, -0.2, 0]} castShadow>
+          <cylinderGeometry args={[0.22, 0.18, 0.45, 32]} />
+          <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
+        </mesh>
+        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
+          <mesh position={[0, 0.25, 0]} castShadow>
+            <dodecahedronGeometry args={[0.32, 1]} />
+            <meshStandardMaterial color="#10B981" roughness={0.3} />
+          </mesh>
+        </Float>
+      </group>
+
+      <ContactShadows position={[0, 0.02, 0]} opacity={0.6} scale={6} blur={2.0} far={4} />
+    </group>
+  );
+}
 
 export default function LandingPage() {
   const [animationStep, setAnimationStep] = useState(0);
@@ -156,7 +282,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* ULTRA-CLEAN, CONTINUOUSLY ANIMATED PREMIUM EDITOR SHOWCASE MOCKUP FRAME */}
+          {/* MASTERPIECE HERO EDITOR SHOWCASE MOCKUP WITH REAL LIVE 3D CANVAS */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -260,12 +386,11 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* 3. MAIN CLEAN EDITOR WORKSPACE */}
-            <div className="aspect-[16/9] bg-[#08090e] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
+            {/* 3. MAIN EDITOR WORKSPACE WITH REAL LIVE 3D CANVAS */}
+            <div className="aspect-[16/9] bg-[#0c0e17] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
               
-              {/* CONTINUOUS 60FPS SMOOTH MULTIPLAYER CURSORS (No freezing/lagging!) */}
-              {/* Sarah Cursor (Purple) */}
-              <div className="absolute top-[40%] left-[25%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
+              {/* CONTINUOUS 60FPS SMOOTH MULTIPLAYER CURSORS */}
+              <div className="absolute top-[35%] left-[22%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
                 <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
@@ -275,8 +400,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Alex Cursor (Green) */}
-              <div className="absolute top-[60%] right-[30%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
+              <div className="absolute top-[55%] right-[28%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
                 <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
@@ -296,7 +420,6 @@ export default function LandingPage() {
                     <span className="text-indigo-400 font-mono text-[8px]">10k+</span>
                   </div>
 
-                  {/* Clean Furniture Items List */}
                   <div className="space-y-1.5 mb-4">
                     <div className="flex items-center justify-between p-2 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-white font-semibold">
                       <span className="flex items-center gap-2">
@@ -327,7 +450,6 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  {/* Active Room Layer Tree */}
                   <div className="border-t border-white/10 pt-3">
                     <div className="text-neutral-400 font-bold uppercase tracking-wider text-[8px] mb-2 flex items-center justify-between">
                       <span>Səhnə Layları (Layers)</span>
@@ -352,20 +474,9 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* CENTER CANVAS VIEWPORT (CLEAN, SPACIOUS ARCHITECTURAL BLUEPRINT) */}
-              <div className="flex-1 relative flex items-center justify-center p-6 overflow-hidden">
-                {/* Architectural Grid Background */}
-                <div className="absolute inset-0 bg-[#07080d]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+              {/* CENTER CANVAS VIEWPORT: REAL LIVE THREE.JS 3D RENDER CANVAS */}
+              <div className="flex-1 relative flex items-center justify-center overflow-hidden">
                 
-                {/* Top Dimension Rulers */}
-                <div className="absolute top-3 left-8 right-8 flex justify-between text-[9px] font-mono text-white/30 pointer-events-none">
-                  <span>0.0m</span>
-                  <span>1.5m</span>
-                  <span>3.0m</span>
-                  <span>4.5m</span>
-                  <span>6.0m</span>
-                </div>
-
                 {/* Floating Gemini AI Prompt Chat Overlay */}
                 <div 
                   className="absolute top-6 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/40 rounded-2xl px-5 py-2.5 flex items-center gap-3 shadow-2xl backdrop-blur-md z-20 text-white text-[11px]"
@@ -379,43 +490,27 @@ export default function LandingPage() {
                   <span className="font-semibold">Gemini AI: "Lüks modern otaq konsepti animasiya olunur..."</span>
                 </div>
 
-                {/* CLEAN, SPACIOUS ROOM BOUNDARY */}
-                <div className="relative w-[360px] h-[300px] flex items-center justify-center z-10">
-                  
-                  {/* Clean Room Box */}
-                  <div className="w-full h-full rounded-2xl border-2 border-indigo-500/50 bg-neutral-950/90 p-5 shadow-2xl relative flex flex-col justify-between backdrop-blur-xl">
+                {/* REAL LIVE THREE.JS WEBGL RENDER CANVAS */}
+                <div className="w-full h-full">
+                  <Canvas shadows camera={{ position: [4.5, 3.8, 5.2], fov: 44 }}>
+                    <ambientLight intensity={1.9} color="#F8FAFC" />
+                    <directionalLight position={[6, 9, 6]} intensity={2.5} color="#FFFFFF" castShadow shadow-mapSize={[1024, 1024]} />
+                    <directionalLight position={[-4, 5, -4]} intensity={1.2} color="#E0E7FF" />
                     
-                    {/* Room Header Info */}
-                    <div className="flex justify-between items-center text-xs font-bold text-neutral-200 border-b border-white/10 pb-2.5">
-                      <div className="flex items-center gap-2">
-                        <Box className="w-4 h-4 text-indigo-400" />
-                        <span>Qonaq Otağı Planı</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-0.5 rounded-full border border-emerald-500/20">
-                        18.5 m² • 60 FPS
-                      </span>
-                    </div>
+                    <HeroEditor3DScene />
 
-                    {/* Single Sleek Selected Object Card (Royal Blue Sofa) */}
-                    <div className="my-auto p-4 rounded-2xl bg-indigo-950/60 border-2 border-indigo-500 shadow-xl relative">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="font-bold text-white flex items-center gap-2">
-                          <span>🛋️</span> Royal Blue Velvet Divan
-                        </span>
-                        <span className="text-[9px] font-mono text-indigo-300 bg-indigo-500/20 px-2.5 py-0.5 rounded-full border border-indigo-500/30">
-                          240 × 95 cm
-                        </span>
-                      </div>
-                    </div>
+                    <OrbitControls enableZoom={false} minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2.2} rotateSpeed={0.6} />
+                  </Canvas>
+                </div>
 
-                    {/* Floorplan Footer Status */}
-                    <div className="flex items-center justify-between text-[9px] text-neutral-400 pt-2 border-t border-white/10 font-mono">
-                      <span>FPS: 120 (Smooth)</span>
-                      <span>Latency: 8ms</span>
-                      <span className="text-emerald-400">Cloud Sync: Active</span>
-                    </div>
-
-                  </div>
+                {/* Bottom Canvas Stats Bar */}
+                <div className="absolute bottom-4 left-4 right-4 pointer-events-none flex justify-between items-center text-[9px] font-mono text-neutral-300 z-10">
+                  <span className="bg-neutral-950/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-emerald-400">
+                    FPS: 120 (Smooth WebGL)
+                  </span>
+                  <span className="bg-neutral-950/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-indigo-300">
+                    Latency: 8ms • Raytracing: ON
+                  </span>
                 </div>
 
               </div>
