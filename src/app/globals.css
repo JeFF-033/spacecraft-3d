@@ -70,3 +70,50 @@ html, body {
   background-size: 200% 200%;
   animation: gradientX 6s ease infinite;
 }
+
+/* CONTINUOUS 60FPS CURSOR MOTION LOOPS */
+@keyframes cursorSarahInfinity {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  25% {
+    transform: translate(120px, -40px);
+  }
+  50% {
+    transform: translate(240px, 50px);
+  }
+  75% {
+    transform: translate(90px, 80px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+@keyframes cursorAlexInfinity {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  25% {
+    transform: translate(-140px, 60px);
+  }
+  50% {
+    transform: translate(-200px, -30px);
+  }
+  75% {
+    transform: translate(-70px, -60px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+.animate-cursor-sarah {
+  animation: cursorSarahInfinity 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-cursor-alex {
+  animation: cursorAlexInfinity 14s ease-in-out infinite;
+  will-change: transform;
+}

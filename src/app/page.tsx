@@ -156,7 +156,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* MASTERPIECE HIGH-END REALISTIC EDITOR SHOWCASE MOCKUP FRAME */}
+          {/* ULTRA-CLEAN, CONTINUOUSLY ANIMATED PREMIUM EDITOR SHOWCASE MOCKUP FRAME */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -171,18 +171,18 @@ export default function LandingPage() {
                 <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 <div className="ml-4 text-xs font-mono text-neutral-400 hidden sm:inline flex items-center gap-2">
                   <Box className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>spacecraft-3d.com/editor/project-104</span>
+                  <span>spacecraft-3d.com/editor/room-104</span>
                 </div>
               </div>
 
               {/* Active Step Indicator Pill */}
               <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-200 bg-neutral-950 px-3.5 py-1 rounded-full border border-white/15 whitespace-nowrap shrink-0 shadow-inner">
                 <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-                {animationStep === 0 && "Addım 1: Səhnə Hazırlığı & Divarlar"}
+                {animationStep === 0 && "Addım 1: Səhnə Planı & Ölçülər"}
                 {animationStep === 1 && "Addım 2: Gemini AI Generasiyası"}
-                {animationStep === 2 && "Addım 3: Mebel Yerləşimi (Layout)"}
-                {animationStep === 3 && "Addım 4: Rəng və Materiallar (Shading)"}
-                {animationStep === 4 && "Addım 5: Magic Erase (Ağıllı Silmə)"}
+                {animationStep === 2 && "Addım 3: Mebel Layout Seçimi"}
+                {animationStep === 3 && "Addım 4: Rəng Və Material Shading"}
+                {animationStep === 4 && "Addım 5: Magic Erase (Silmə)"}
               </div>
             </div>
 
@@ -192,40 +192,35 @@ export default function LandingPage() {
               <div className="flex items-center gap-1.5 bg-neutral-950/80 p-1 rounded-xl border border-white/10">
                 <button 
                   onClick={() => setActiveTool("select")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold ${activeTool === "select" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                  title="Seç Və Sürüşdür"
+                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "select" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   <MousePointer className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Seç</span>
                 </button>
                 <button 
                   onClick={() => setActiveTool("wall")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold ${activeTool === "wall" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                  title="Divar Çək"
+                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "wall" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   <Ruler className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Divar</span>
                 </button>
                 <button 
                   onClick={() => setActiveTool("furniture")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold ${activeTool === "furniture" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                  title="Mebel Kataloqu"
+                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "furniture" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   <Box className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Mebel</span>
                 </button>
                 <button 
                   onClick={() => setActiveTool("material")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold ${activeTool === "material" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                  title="Material Fırçası"
+                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "material" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   <Paintbrush className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Material</span>
                 </button>
                 <button 
                   onClick={() => setActiveTool("ai")}
-                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold ${activeTool === "ai" ? "bg-purple-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
-                  title="Gemini AI Assist"
+                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 font-bold cursor-pointer ${activeTool === "ai" ? "bg-purple-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                   <span className="hidden sm:inline">AI Assist</span>
@@ -236,19 +231,19 @@ export default function LandingPage() {
               <div className="flex items-center gap-1 bg-neutral-950/80 p-1 rounded-xl border border-white/10">
                 <button 
                   onClick={() => setActiveViewMode("2d")}
-                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all ${activeViewMode === "2d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "2d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   2D Plan
                 </button>
                 <button 
                   onClick={() => setActiveViewMode("3d")}
-                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all ${activeViewMode === "3d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "3d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   3D Səhnə
                 </button>
                 <button 
                   onClick={() => setActiveViewMode("vr")}
-                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all ${activeViewMode === "vr" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "vr" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
                   VR Gəzinti
                 </button>
@@ -265,55 +260,23 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* 3. MAIN EDITOR WORKSPACE (3-COLUMN LAYOUT) */}
-            <div className="aspect-[16/9] bg-[#07080c] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
+            {/* 3. MAIN CLEAN EDITOR WORKSPACE */}
+            <div className="aspect-[16/9] bg-[#08090e] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
               
-              {/* COLLABORATIVE MULTIPLAYER CURSORS */}
+              {/* CONTINUOUS 60FPS SMOOTH MULTIPLAYER CURSORS (No freezing/lagging!) */}
               {/* Sarah Cursor (Purple) */}
-              <div 
-                className="absolute z-30 pointer-events-none flex items-center gap-1.5"
-                style={{
-                  top: 
-                    animationStep === 0 ? '48%' :
-                    animationStep === 1 ? '38%' :
-                    animationStep === 2 ? '62%' :
-                    animationStep === 3 ? '72%' : '44%',
-                  left: 
-                    animationStep === 0 ? '58%' :
-                    animationStep === 1 ? '55%' :
-                    animationStep === 2 ? '42%' :
-                    animationStep === 3 ? '78%' : '52%',
-                  transition: 'top 1.2s cubic-bezier(0.25, 1, 0.5, 1), left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
-                  willChange: 'top, left'
-                }}
-              >
+              <div className="absolute top-[40%] left-[25%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
                 <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
                 <div className="bg-purple-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-purple-400/40 whitespace-nowrap flex items-center gap-1">
-                  <span>Sarah (Interior Lead)</span>
+                  <span>Sarah</span>
                   <span className="text-[7px] opacity-80 font-mono">X:2.4m</span>
                 </div>
               </div>
 
               {/* Alex Cursor (Green) */}
-              <div 
-                className="absolute z-30 pointer-events-none flex items-center gap-1.5"
-                style={{
-                  top: 
-                    animationStep === 0 ? '64%' :
-                    animationStep === 1 ? '68%' :
-                    animationStep === 2 ? '48%' :
-                    animationStep === 3 ? '48%' : '58%',
-                  left: 
-                    animationStep === 0 ? '28%' :
-                    animationStep === 1 ? '30%' :
-                    animationStep === 2 ? '48%' :
-                    animationStep === 3 ? '48%' : '70%',
-                  transition: 'top 1.2s cubic-bezier(0.25, 1, 0.5, 1), left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
-                  willChange: 'top, left'
-                }}
-              >
+              <div className="absolute top-[60%] right-[30%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
                 <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
@@ -323,40 +286,40 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* LEFT SIDEBAR PANEL (Catalogue & Layer Tree) */}
+              {/* LEFT SIDEBAR PANEL (Clean Catalogue & Layers) */}
               <div className="hidden md:flex w-1/5 bg-neutral-950/90 border-r border-white/10 p-3.5 flex-col justify-between text-neutral-400 text-[10px] select-none z-20">
                 <div>
                   <div className="text-white font-bold mb-3 tracking-wider uppercase text-[9px] flex items-center justify-between border-b border-white/10 pb-2">
                     <span className="flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-indigo-400" /> Kataloq & Laylar
+                      <Layers className="w-3.5 h-3.5 text-indigo-400" /> SpaceCraft Kataloq
                     </span>
                     <span className="text-indigo-400 font-mono text-[8px]">10k+</span>
                   </div>
 
-                  {/* Furniture Items List */}
+                  {/* Clean Furniture Items List */}
                   <div className="space-y-1.5 mb-4">
-                    <div className={`flex items-center justify-between p-2 rounded-xl transition-all font-semibold cursor-pointer ${animationStep === 2 ? 'bg-indigo-600/30 text-white border border-indigo-500/40 shadow' : 'hover:bg-white/5 text-neutral-400'}`}>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-white font-semibold">
                       <span className="flex items-center gap-2">
                         <span>🛋️</span> <span className="truncate">Royal Blue Divan</span>
                       </span>
-                      <span className="text-[8px] font-mono text-indigo-400">240cm</span>
+                      <span className="text-[8px] font-mono text-indigo-300">240cm</span>
                     </div>
 
-                    <div className={`flex items-center justify-between p-2 rounded-xl transition-all font-semibold cursor-pointer ${animationStep === 3 ? 'bg-amber-600/30 text-white border border-amber-500/40 shadow' : 'hover:bg-white/5 text-neutral-400'}`}>
+                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
                       <span className="flex items-center gap-2">
                         <span>🪵</span> <span className="truncate">Carrara Mərmər Masa</span>
                       </span>
-                      <span className="text-[8px] font-mono text-amber-400">85cm</span>
+                      <span className="text-[8px] font-mono opacity-50">85cm</span>
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400 cursor-pointer">
+                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
                       <span className="flex items-center gap-2">
                         <span>🪴</span> <span className="truncate">Dekorativ Bitki</span>
                       </span>
                       <span className="text-[8px] font-mono opacity-50">60cm</span>
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400 cursor-pointer">
+                    <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
                       <span className="flex items-center gap-2">
                         <span>💡</span> <span className="truncate">Warm Floor Lamp</span>
                       </span>
@@ -367,16 +330,16 @@ export default function LandingPage() {
                   {/* Active Room Layer Tree */}
                   <div className="border-t border-white/10 pt-3">
                     <div className="text-neutral-400 font-bold uppercase tracking-wider text-[8px] mb-2 flex items-center justify-between">
-                      <span>Səhnə Ağacı (Layers)</span>
-                      <span className="text-emerald-400 font-mono">4 Obyekt</span>
+                      <span>Səhnə Layları (Layers)</span>
+                      <span className="text-emerald-400 font-mono">Active</span>
                     </div>
                     <div className="space-y-1 text-[9px]">
                       <div className="p-1.5 rounded bg-white/5 text-white flex items-center justify-between">
-                        <span>🏠 Qonaq Otağı Planı</span>
+                        <span>🏠 Qonaq Otağı (18.5 m²)</span>
                         <Lock className="w-3 h-3 text-neutral-500" />
                       </div>
                       <div className="p-1.5 rounded bg-indigo-500/10 text-indigo-300 flex items-center justify-between border border-indigo-500/20">
-                        <span>🛋️ Lüks Divan Dəsti</span>
+                        <span>🛋️ Lüks Royal Blue Divan</span>
                         <Eye className="w-3 h-3 text-indigo-400" />
                       </div>
                     </div>
@@ -384,18 +347,18 @@ export default function LandingPage() {
                 </div>
 
                 <div className="pt-3 border-t border-white/10 flex justify-between items-center text-[9px] font-mono">
-                  <span className="text-neutral-400">Engine: WebGL 2.0</span>
+                  <span className="text-neutral-400">WebGL 2.0 GPU</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 </div>
               </div>
 
-              {/* CENTER CANVAS VIEWPORT (REAL ARCHITECTURAL FLOORPLAN SIMULATION) */}
+              {/* CENTER CANVAS VIEWPORT (CLEAN, SPACIOUS ARCHITECTURAL BLUEPRINT) */}
               <div className="flex-1 relative flex items-center justify-center p-6 overflow-hidden">
                 {/* Architectural Grid Background */}
                 <div className="absolute inset-0 bg-[#07080d]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
                 
-                {/* Top/Side Measurement Dimension Rulers */}
-                <div className="absolute top-2 left-8 right-8 flex justify-between text-[8px] font-mono text-white/30 pointer-events-none">
+                {/* Top Dimension Rulers */}
+                <div className="absolute top-3 left-8 right-8 flex justify-between text-[9px] font-mono text-white/30 pointer-events-none">
                   <span>0.0m</span>
                   <span>1.5m</span>
                   <span>3.0m</span>
@@ -403,7 +366,7 @@ export default function LandingPage() {
                   <span>6.0m</span>
                 </div>
 
-                {/* Floating Gemini AI Chat Prompt Overlay */}
+                {/* Floating Gemini AI Prompt Chat Overlay */}
                 <div 
                   className="absolute top-6 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/40 rounded-2xl px-5 py-2.5 flex items-center gap-3 shadow-2xl backdrop-blur-md z-20 text-white text-[11px]"
                   style={{
@@ -413,75 +376,43 @@ export default function LandingPage() {
                   }}
                 >
                   <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-                  <span className="font-semibold">Gemini AI: "Lüks modern otaq konsepti generasiya olunur..."</span>
+                  <span className="font-semibold">Gemini AI: "Lüks modern otaq konsepti animasiya olunur..."</span>
                 </div>
 
-                {/* REAL 2D/3D FLOORPLAN ROOM ARCHITECTURE GRAPHIC */}
-                <div className="relative w-[340px] h-[340px] flex items-center justify-center z-10">
+                {/* CLEAN, SPACIOUS ROOM BOUNDARY */}
+                <div className="relative w-[360px] h-[300px] flex items-center justify-center z-10">
                   
-                  {/* Outer Wall Boundary Box */}
-                  <div className="w-[320px] h-[280px] rounded-2xl border-4 border-neutral-700 bg-neutral-950/80 p-4 shadow-2xl relative flex flex-col justify-between backdrop-blur-xl">
+                  {/* Clean Room Box */}
+                  <div className="w-full h-full rounded-2xl border-2 border-indigo-500/50 bg-neutral-950/90 p-5 shadow-2xl relative flex flex-col justify-between backdrop-blur-xl">
                     
-                    {/* Wall Door Swing Cutout Indicator */}
-                    <div className="absolute -left-1.5 top-12 w-3 h-10 bg-neutral-900 border-y border-r border-indigo-500/60 rounded-r flex items-center justify-center text-[7px] font-mono text-indigo-400">
-                      Qapı
-                    </div>
-
-                    {/* Window Opening Indicator */}
-                    <div className="absolute -right-1.5 top-20 w-3 h-16 bg-sky-500/20 border-y border-l border-sky-400 rounded-l flex items-center justify-center text-[7px] font-mono text-sky-300">
-                      Pəncərə
-                    </div>
-
                     {/* Room Header Info */}
-                    <div className="flex justify-between items-center text-xs font-bold text-neutral-200 border-b border-white/10 pb-2">
+                    <div className="flex justify-between items-center text-xs font-bold text-neutral-200 border-b border-white/10 pb-2.5">
                       <div className="flex items-center gap-2">
                         <Box className="w-4 h-4 text-indigo-400" />
                         <span>Qonaq Otağı Planı</span>
                       </div>
-                      <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                        18.5 m² • Active 3D
+                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-0.5 rounded-full border border-emerald-500/20">
+                        18.5 m² • 60 FPS
                       </span>
                     </div>
 
-                    {/* Interior Furniture Layout Grid Boxes */}
-                    <div className="relative my-3 flex-1 flex flex-col justify-between">
-                      
-                      {/* Active Furniture Selection Box (Royal Blue Sofa) */}
-                      <div className={`p-3 rounded-2xl border-2 transition-all relative ${animationStep >= 2 ? 'bg-indigo-950/70 border-indigo-500 shadow-xl scale-102' : 'bg-neutral-900/60 border-white/10'}`}>
-                        {/* Selection Transform Handles */}
-                        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 rounded-full bg-indigo-500 border border-white"></div>
-                        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-indigo-500 border border-white"></div>
-                        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 rounded-full bg-indigo-500 border border-white"></div>
-                        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 rounded-full bg-indigo-500 border border-white"></div>
-
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="font-bold text-white flex items-center gap-1.5">
-                            <span>🛋️</span> Royal Blue Velvet Divan
-                          </span>
-                          <span className="text-[8px] font-mono text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded">240 × 95 cm</span>
-                        </div>
+                    {/* Single Sleek Selected Object Card (Royal Blue Sofa) */}
+                    <div className="my-auto p-4 rounded-2xl bg-indigo-950/60 border-2 border-indigo-500 shadow-xl relative">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-bold text-white flex items-center gap-2">
+                          <span>🛋️</span> Royal Blue Velvet Divan
+                        </span>
+                        <span className="text-[9px] font-mono text-indigo-300 bg-indigo-500/20 px-2.5 py-0.5 rounded-full border border-indigo-500/30">
+                          240 × 95 cm
+                        </span>
                       </div>
-
-                      {/* Coffee Table & Plant Grid Row */}
-                      <div className="grid grid-cols-2 gap-3 mt-2">
-                        <div className={`p-2.5 rounded-xl border transition-all ${animationStep >= 3 ? 'bg-amber-950/60 border-amber-500/50 shadow-lg' : 'bg-neutral-900/50 border-white/10'}`}>
-                          <div className="text-[9px] font-bold text-amber-300">🪵 Carrara Masa</div>
-                          <div className="text-[8px] text-neutral-400 font-mono mt-0.5">85cm Diameter</div>
-                        </div>
-
-                        <div className="p-2.5 rounded-xl bg-neutral-900/50 border border-white/10">
-                          <div className="text-[9px] font-bold text-emerald-400">🪴 Otaq Bitkisi</div>
-                          <div className="text-[8px] text-neutral-400 font-mono mt-0.5">60cm Height</div>
-                        </div>
-                      </div>
-
                     </div>
 
                     {/* Floorplan Footer Status */}
                     <div className="flex items-center justify-between text-[9px] text-neutral-400 pt-2 border-t border-white/10 font-mono">
-                      <span>FPS: 120</span>
+                      <span>FPS: 120 (Smooth)</span>
                       <span>Latency: 8ms</span>
-                      <span className="text-emerald-400">Raytracing: ON</span>
+                      <span className="text-emerald-400">Cloud Sync: Active</span>
                     </div>
 
                   </div>
@@ -489,11 +420,11 @@ export default function LandingPage() {
 
               </div>
 
-              {/* RIGHT SIDEBAR PANEL (Selected Object Properties Inspector) */}
+              {/* RIGHT SIDEBAR PANEL (Clean Object Inspector) */}
               <div className="hidden lg:flex w-1/5 bg-neutral-950/90 border-l border-white/10 p-3.5 flex-col justify-between text-neutral-300 text-[10px] select-none z-20">
                 <div>
                   <div className="text-white font-bold mb-3 tracking-wider uppercase text-[9px] flex items-center gap-1.5 border-b border-white/10 pb-2">
-                    <Sliders className="w-3.5 h-3.5 text-indigo-400" /> Obyekt Parametrləri
+                    <Sliders className="w-3.5 h-3.5 text-indigo-400" /> Parametrlər Inspector
                   </div>
 
                   <div className="space-y-3">
@@ -535,9 +466,6 @@ export default function LandingPage() {
                 <div className="pt-3 border-t border-white/10 space-y-2">
                   <button className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                     <Paintbrush className="w-3 h-3" /> Materialı Dəyiş
-                  </button>
-                  <button className="w-full py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-rose-400 font-bold text-[9px] transition-colors border border-rose-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                    <Trash2 className="w-3 h-3" /> Magic Erase (Sil)
                   </button>
                 </div>
               </div>
