@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, Box, ArrowRight, Loader2 } from "lucide-react";
+import { Check, Box, ArrowRight, Loader2, Sparkles, Shield, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 
 export default function PricingPage() {
@@ -32,163 +33,186 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-neutral-900 font-sans selection:bg-[#E5DCC5] selection:text-black">
+    <div className="min-h-screen bg-[#09090B] text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-6 pt-24 pb-32 flex flex-col items-center relative">
+      <main className="max-w-7xl mx-auto px-6 pt-24 pb-32 flex flex-col items-center relative z-10">
+        
         {/* Ambient Glows */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-indigo-400/8 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-        <div className="absolute top-40 right-1/4 w-96 h-96 bg-amber-400/6 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+        <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none -z-10 animate-ambient-glow"></div>
+        <div className="absolute top-40 right-1/4 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none -z-10 animate-ambient-glow"></div>
 
-        {/* Masked Grid Pattern Background */}
-        <div 
-          className="absolute inset-0 -z-20 opacity-30 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-            maskImage: 'linear-gradient(to bottom, black 50%, transparent 95%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 95%)'
-          }}
-        ></div>
-
-        <div className="text-center max-w-3xl mb-20">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight text-neutral-900 mb-6">
-            Ehtiyacınıza Uyğun <br className="hidden md:block"/> 
-            <span className="relative inline-block my-1">
-              <span className="relative z-10 italic font-serif font-light text-neutral-600 pr-1">Düzgün Paket</span>
-              <span className="absolute bottom-1.5 left-0 w-full h-3 bg-gradient-to-r from-amber-400/30 to-amber-500/10 -z-10 -rotate-1 rounded-sm"></span>
-            </span>{' '}
-            <span className="inline-block bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">Seçin</span>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-center max-w-3xl mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900 border border-white/10 text-indigo-400 text-xs font-semibold mb-6 shadow-2xl">
+            <Sparkles className="w-4 h-4" /> Şəffaf Qiymətləndirmə
+          </div>
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase">
+            Ehtiyacınıza Uyğun <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-amber-300">
+              Şəffaf Tariflər
+            </span>
           </h1>
-          <p className="text-lg md:text-xl text-neutral-500 max-w-2xl leading-relaxed">
-            Freelance dizaynerlərdən tutmuş böyük memarlıq bürolarına qədər hər kəs üçün ən optimal qiymətləndirmə.
+          <p className="text-neutral-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-light">
+            Heç bir gizli ödəniş yoxdur. İstədiyiniz planı seçin və 3D memarlıq imkanlarından tam istifadə edin.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl items-stretch">
-          {/* Starter Plan */}
-          <div className="bg-white border border-neutral-200 rounded-3xl p-8 flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all duration-300 shadow-sm relative">
-            <h3 className="text-2xl font-bold text-neutral-900 mb-2">Starter</h3>
-            <p className="text-neutral-500 mb-6 text-sm leading-relaxed">Sadəcə məhsulu sınaqdan keçirmək istəyənlər üçün.</p>
-            <div className="mb-8">
-              <span className="text-5xl font-black text-neutral-900">$0</span>
-              <span className="text-neutral-500 font-medium">/ aylıq</span>
+        {/* Pricing Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl items-stretch">
+          
+          {/* FREE PLAN */}
+          <motion.div 
+            whileHover={{ y: -6 }}
+            className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 flex flex-col justify-between shadow-2xl backdrop-blur-xl"
+          >
+            <div>
+              <div className="text-xs font-mono text-neutral-400 uppercase tracking-widest mb-2">Başlanğıc</div>
+              <h3 className="text-2xl font-bold text-white mb-2">Həvəskar</h3>
+              <p className="text-xs text-neutral-400 mb-6">Fərdi istifadə və sınaq dizaynları üçün</p>
+              
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-4xl font-black text-white">₼0</span>
+                <span className="text-xs text-neutral-400 font-mono">/ həmişə pulsuz</span>
+              </div>
+
+              <ul className="space-y-3.5 text-xs text-neutral-300 border-t border-white/10 pt-6">
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>3 Aktiv 3D Səhnə Layihəsi</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>1080p Standart Render</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Əsas Mebel Kataloqu (1,000+ obyekt)</span>
+                </li>
+              </ul>
             </div>
-            
-            <ul className="space-y-4 mb-10 flex-1">
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                Maksimum 1 Layihə (Otaq)
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                Əsas 3D Mebellər (10 ədəd)
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                Şəkil kimi (Render) yükləmə
-              </li>
-            </ul>
-            
-            <Link href="/editor" className="block w-full text-center py-3.5 rounded-xl font-bold border border-neutral-300 text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-300 text-sm shadow-sm hover:shadow-md">
+
+            <Link 
+              href="/editor" 
+              className="mt-10 w-full py-3.5 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors text-center border border-white/10"
+            >
               Pulsuz Başla
             </Link>
-          </div>
+          </motion.div>
 
-          {/* Pro Plan */}
-          <div className="bg-white border-2 border-indigo-500 rounded-3xl p-8 flex flex-col hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/15 transition-all duration-300 shadow-xl shadow-indigo-500/10 relative scale-105 z-10">
-            <div 
-              className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-1.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase shadow-md whitespace-nowrap"
-              style={{ backgroundColor: '#4f46e5', color: '#ffffff' }}
-            >
-              Ən Çox Seçilən
+          {/* PRO PLAN - HIGHLIGHTED */}
+          <motion.div 
+            whileHover={{ y: -8 }}
+            className="p-8 rounded-3xl bg-neutral-900/90 border-2 border-indigo-500 shadow-2xl shadow-indigo-600/20 backdrop-blur-xl relative flex flex-col justify-between"
+          >
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-[10px] uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
+              ən populyar • pro memar
             </div>
-            <h3 className="text-2xl font-bold text-neutral-900 mb-2">Pro</h3>
-            <p className="text-neutral-500 mb-6 text-sm leading-relaxed">Peşəkar fərdlər və freelance dizaynerlər üçün ideal.</p>
-            <div className="mb-8">
-              <span className="text-5xl font-black text-neutral-900">$19</span>
-              <span className="text-neutral-500 font-medium">/ aylıq</span>
+
+            <div>
+              <div className="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2 mt-2">Peşəkar</div>
+              <h3 className="text-2xl font-bold text-white mb-2">PRO Memar</h3>
+              <p className="text-xs text-neutral-400 mb-6">Frilans memarlar və studiyalar üçün</p>
+              
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-5xl font-black text-white">₼39</span>
+                <span className="text-xs text-neutral-400 font-mono">/ aylıq</span>
+              </div>
+
+              <ul className="space-y-3.5 text-xs text-neutral-200 border-t border-white/10 pt-6">
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span>Sonsuz 3D Layihələr Və Səhnələr</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span>4K Photorealistic Real-Time Render</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span>Sonsuz Gemini AI Generasiya</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span>Canlı Multiplayer Kollaborasiya</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <span>Avtomatik Smeta Və PDF Export</span>
+                </li>
+              </ul>
             </div>
-            
-            <ul className="space-y-4 mb-10 flex-1">
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" style={{ color: '#4f46e5' }} />
-                Limitsiz Layihə Yaradılması
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" style={{ color: '#4f46e5' }} />
-                Bütün Mebellər və Kataloq
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" style={{ color: '#4f46e5' }} />
-                Ağıllı Smeta Çıxarışı (PDF)
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" style={{ color: '#4f46e5' }} />
-                Süni İntellekt (Gemini) Dizayner
-              </li>
-            </ul>
-            
-            <button 
+
+            <button
               onClick={() => handleCheckout("PRO")}
-              disabled={loadingPlan !== null}
-              className="w-full text-center py-3.5 rounded-xl font-bold hover:scale-[1.01] transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-lg hover:shadow-xl"
-              style={{ width: '100%', background: 'linear-gradient(to right, #4f46e5, #7c3aed)', color: '#ffffff' }}
+              disabled={loadingPlan === "PRO"}
+              className="mt-10 w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
             >
               {loadingPlan === "PRO" ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin text-white" /> Yüklənir...
-                </>
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                "Pro Paketə Keçid"
+                <>
+                  <span>PRO Plana Keç</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
               )}
             </button>
-          </div>
+          </motion.div>
 
-          {/* Enterprise Plan */}
-          <div className="bg-white border border-neutral-200 rounded-3xl p-8 flex flex-col hover:-translate-y-1 hover:shadow-xl transition-all duration-300 shadow-sm relative">
-            <h3 className="text-2xl font-bold text-neutral-900 mb-2">Enterprise</h3>
-            <p className="text-neutral-500 mb-6 text-sm leading-relaxed">Memarlıq büroları və böyük komandalar üçün tam idarəetmə.</p>
-            <div className="mb-8">
-              <span className="text-5xl font-black text-neutral-900">$49</span>
-              <span className="text-neutral-500 font-medium">/ aylıq</span>
+          {/* ENTERPRISE PLAN */}
+          <motion.div 
+            whileHover={{ y: -6 }}
+            className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 flex flex-col justify-between shadow-2xl backdrop-blur-xl"
+          >
+            <div>
+              <div className="text-xs font-mono text-neutral-400 uppercase tracking-widest mb-2">Korporativ</div>
+              <h3 className="text-2xl font-bold text-white mb-2">Enterprise</h3>
+              <p className="text-xs text-neutral-400 mb-6">Böyük tikinti və dizayn şirkətləri üçün</p>
+              
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-4xl font-black text-white">₼129</span>
+                <span className="text-xs text-neutral-400 font-mono">/ aylıq</span>
+              </div>
+
+              <ul className="space-y-3.5 text-xs text-neutral-300 border-t border-white/10 pt-6">
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Bütün PRO Xüsusiyyətlər</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Xüsusi Şirkət Breandinqi Və Logo</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Xüsusi API Və Server Dəstəyi</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>7/24 Şəxsi Menecer Dəstəyi</span>
+                </li>
+              </ul>
             </div>
-            
-            <ul className="space-y-4 mb-10 flex-1">
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                Pro Paketdəki Bütün Özəlliklər
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                Canlı Kollaborasiya (Multiplayer)
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                3D Model Yükləmə (Export GLB)
-              </li>
-              <li className="flex gap-3 text-neutral-700 font-medium text-sm">
-                <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                7/24 Prioritet Dəstək
-              </li>
-            </ul>
-            
-            <button 
+
+            <button
               onClick={() => handleCheckout("ENTERPRISE")}
-              disabled={loadingPlan !== null}
-              className="w-full text-center py-3.5 rounded-xl font-bold bg-neutral-900 text-white hover:bg-neutral-800 transition-colors cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-sm hover:shadow-md"
-              style={{ width: '100%' }}
+              disabled={loadingPlan === "ENTERPRISE"}
+              className="mt-10 w-full py-3.5 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors border border-white/10 flex items-center justify-center gap-2"
             >
               {loadingPlan === "ENTERPRISE" ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Yüklənir...
-                </>
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                "Bizimlə Əlaqə"
+                <span>Korporativ Sifariş Et</span>
               )}
             </button>
-          </div>
+          </motion.div>
+
         </div>
+
       </main>
     </div>
   );

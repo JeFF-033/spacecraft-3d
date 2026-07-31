@@ -2,105 +2,106 @@
 
 import React from "react";
 import Link from "next/link";
-import { Box, ArrowRight } from "lucide-react";
+import { Box, ArrowRight, Sparkles, Layers, Wand2, Shield, Play } from "lucide-react";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 
 export default function HowItWorksPage() {
+  const steps = [
+    {
+      number: "01",
+      title: "Otaq Ölçülərini Və ya 2D Planı Daxil Edin",
+      description: "Otağınızın kvadratını daxil edin və ya mövcud 2D plan şəklini yükləyin. SpaceCraft avtomatik olaraq 3D divarları və döşəməni formalaşdırır.",
+      accent: "from-indigo-500 to-purple-500"
+    },
+    {
+      number: "02",
+      title: "AI Və Ya Kataloqdan Mebelləri Seçin",
+      description: "Gemini AI Asistentindən 'Modern Japandi stili' istəyin və ya 10,000+ peşəkar 3D mebel kataloqundan istədiyiniz parçaları səhnəyə sürüşdürüb yerləşdirin.",
+      accent: "from-amber-400 to-orange-500"
+    },
+    {
+      number: "03",
+      title: "Material, Rəng Və İşıqlandırmanı Tənzimləyin",
+      description: "Mərmər, ceviz ağacı, velvet parçalar və spetral işıqlandırma rejimləri ilə otağın atmosferini tam arzuladığınız formaya gətirin.",
+      accent: "from-emerald-400 to-teal-500"
+    },
+    {
+      number: "04",
+      title: "Canlı Nümayiş Və 4K Render Alın",
+      description: "Müştərinizə canlı 3D linki göndərin və ya tək bir kliklə 4K fotorealistik render şəkillərini və smeta PDF hesabatını çıxarın.",
+      accent: "from-cyan-400 to-blue-500"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-neutral-900 font-sans selection:bg-[#E5DCC5] selection:text-black">
+    <div className="min-h-screen bg-[#09090B] text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
       <Navbar />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 pt-24 pb-32 flex flex-col items-center relative">
+      <main className="max-w-7xl mx-auto px-6 pt-24 pb-32 flex flex-col items-center relative z-10">
+        
         {/* Ambient Glows */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-indigo-400/8 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-        <div className="absolute top-40 right-1/4 w-96 h-96 bg-amber-400/6 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+        <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none -z-10 animate-ambient-glow"></div>
+        <div className="absolute top-40 right-1/4 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none -z-10 animate-ambient-glow"></div>
 
-        {/* Masked Grid Pattern Background */}
-        <div 
-          className="absolute inset-0 -z-20 opacity-30 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-            maskImage: 'linear-gradient(to bottom, black 50%, transparent 95%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 95%)'
-          }}
-        ></div>
-
-        <div className="text-center max-w-3xl mb-20">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight text-neutral-900 mb-6">
-            Dizayn Prosesi
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-center max-w-3xl mb-20"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900 border border-white/10 text-indigo-400 text-xs font-semibold mb-6 shadow-2xl">
+            <Wand2 className="w-4 h-4" /> 4 Sadə Addımda Dizayn
+          </div>
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase">
+            SpaceCraft 3D <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-amber-300">
+              Necə İşləyir?
+            </span>
           </h1>
-          <p className="text-neutral-500 text-lg leading-relaxed max-w-2xl mx-auto">
-            Mürəkkəb interyer proqramlarını öyrənməyə günlər sərf etməyin. Hər şey sadə, sürətli və asandır.
+          <p className="text-neutral-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-light">
+            Mürəkkəb 3D proqramlarını öyrənməyə aylar xərcləməyin. Brauzerinizdə dəqiqələr içində ilk peşəkar dizaynınızı tamamlayın.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-12 w-full max-w-6xl">
-          {/* Step 1 */}
-          <div className="p-8 rounded-3xl bg-white border border-[#E5DCC5] hover:shadow-xl transition-all duration-300 flex flex-col items-start relative overflow-hidden">
-            <div className="text-7xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent opacity-20 mb-4 select-none">01</div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-3">Səhnəni Hazırlayın</h3>
-            <p className="text-neutral-600 text-sm leading-relaxed">
-              Otağınızın ölçülərini daxil edin və ya divarları sərbəst şəkildə çəkin. Divarlara asanlıqla qapı və pəncərələr əlavə edin.
-            </p>
-          </div>
+        {/* Step Timeline */}
+        <div className="space-y-12 w-full max-w-4xl">
+          {steps.map((step, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: idx * 0.15 }}
+              className="p-8 sm:p-10 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-white/20 transition-all shadow-2xl backdrop-blur-xl relative flex flex-col md:flex-row items-start md:items-center gap-8 group"
+            >
+              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-tr ${step.accent} flex items-center justify-center text-white text-2xl font-black shrink-0 shadow-lg shadow-black/50 group-hover:scale-105 transition-transform`}>
+                {step.number}
+              </div>
 
-          {/* Step 2 */}
-          <div className="p-8 rounded-3xl bg-white border border-[#E5DCC5] hover:shadow-xl transition-all duration-300 flex flex-col items-start relative overflow-hidden">
-            <div className="text-7xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent opacity-20 mb-4 select-none">02</div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-3">AI Generasiya və Materiallar</h3>
-            <p className="text-neutral-600 text-sm leading-relaxed">
-              Süni intellekt (Gemini) bir saniyədə ideal mebel düzülüşünü təklif etsin. Mebellərin rəngini və materiallarını zövqünüzə görə seçin.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div className="p-8 rounded-3xl bg-white border border-[#E5DCC5] hover:shadow-xl transition-all duration-300 flex flex-col items-start relative overflow-hidden">
-            <div className="text-7xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent opacity-20 mb-4 select-none">03</div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-3">Render və Canlı Gəzinti</h3>
-            <p className="text-neutral-600 text-sm leading-relaxed">
-              Bulud render texnologiyası ilə real işıqlandırmalı şəkillər çıxarın. Virtual Reallıq (VR) dəstəyi ilə dizaynınızın daxilində addımlayın.
-            </p>
-          </div>
+              <div className="flex-1">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-neutral-400 text-sm sm:text-base leading-relaxed font-light">
+                  {step.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* CTA Section */}
-        <div className="w-full max-w-6xl mt-24">
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-900 text-white p-12 md:p-16 text-center border border-white/10 shadow-2xl">
-            <div className="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            
-            <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-6">
-              İlk Layihənizi İndi Yaradın
-            </h2>
-            <p className="text-neutral-400 max-w-2xl mx-auto mb-10 text-base md:text-lg leading-relaxed">
-              Otaq ölçülərinizi daxil edin və cəmi 3 sadə addımda xəyallarınızdakı dizaynı yaradın.
-            </p>
-            <div className="flex justify-center">
-              <Link 
-                href="/editor" 
-                className="bg-white hover:bg-neutral-100 text-neutral-900 px-8 py-4 rounded-full text-base font-bold transition-all flex items-center gap-2 shadow-xl hover:-translate-y-0.5 hover:shadow-white/10"
-              >
-                Dizayna Başla <ArrowRight className="w-5 h-5 text-neutral-900" />
-              </Link>
-            </div>
-          </div>
+        <div className="mt-20 text-center">
+          <Link
+            href="/editor"
+            className="inline-flex items-center gap-3 px-9 py-4 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-base transition-all shadow-xl shadow-indigo-600/30 hover:scale-105"
+          >
+            <span>Dərhal Dizayna Başla</span>
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
-      </main>
 
-      {/* Footer */}
-      <footer className="bg-neutral-900 text-neutral-400 py-12 border-t border-neutral-800">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
-              <Box className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold text-white">SpaceCraft 3D</span>
-          </div>
-          <p className="text-sm">© 2026 SpaceCraft 3D. Bütün hüquqlar qorunur.</p>
-        </div>
-      </footer>
+      </main>
     </div>
   );
 }
