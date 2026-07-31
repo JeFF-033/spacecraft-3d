@@ -50,7 +50,7 @@ function CameraController({ activeZone }: { activeZone: string }) {
   return null;
 }
 
-// 140 m² Multi-Room Penthouse Architectural 3D Scene with Pool & Style Themes
+// 140 m² Multi-Room Penthouse 3D Scene with LOW CUTAWAY WALLS & ULTRA-DETAILED FURNITURE
 function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lightingMood }: { 
   activeZone: string; 
   setActiveZone: (zone: string) => void;
@@ -69,13 +69,13 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
   const themeColors = React.useMemo(() => {
     switch (materialStyle) {
       case "japandi":
-        return { sofa: "#B45309", cushions: "#FDE68A", headboard: "#9A3412", table: "#F59E0B" };
+        return { sofa: "#B45309", cushions: "#FDE68A", headboard: "#9A3412", table: "#F59E0B", rug: "#D97706" };
       case "emerald":
-        return { sofa: "#047857", cushions: "#34D399", headboard: "#065F46", table: "#27272A" };
+        return { sofa: "#047857", cushions: "#34D399", headboard: "#065F46", table: "#27272A", rug: "#064E3B" };
       case "obsidian":
-        return { sofa: "#18181B", cushions: "#52525B", headboard: "#27272A", table: "#09090B" };
+        return { sofa: "#18181B", cushions: "#52525B", headboard: "#27272A", table: "#09090B", rug: "#27272A" };
       default: // royal
-        return { sofa: "#1E3A8A", cushions: "#3B82F6", headboard: "#059669", table: "#FFFFFF" };
+        return { sofa: "#1E3A8A", cushions: "#3B82F6", headboard: "#059669", table: "#FFFFFF", rug: "#374151" };
     }
   }, [materialStyle]);
 
@@ -87,43 +87,109 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
         <meshStandardMaterial color="#E5E7EB" roughness={0.12} metalness={0.15} />
       </mesh>
 
-      {/* Exterior & Partition Walls */}
-      <mesh position={[0, 1.5, -3.05]} receiveShadow castShadow>
-        <boxGeometry args={[7.2, 3.0, 0.1]} />
-        <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
-      </mesh>
-      <mesh position={[-3.55, 1.5, 0]} receiveShadow castShadow>
-        <boxGeometry args={[0.1, 3.0, 6.2]} />
-        <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
-      </mesh>
-      {/* Middle Divider Wall */}
-      <mesh position={[0.2, 1.2, 0]} receiveShadow castShadow>
-        <boxGeometry args={[0.1, 2.4, 6.0]} />
+      {/* LOW CUTAWAY WALLS (Height: 0.45m — DOLLHOUSE ARCHITECTURAL VIEW MODE) */}
+      {/* Back Low Wall */}
+      <mesh position={[0, 0.22, -3.05]} receiveShadow castShadow>
+        <boxGeometry args={[7.2, 0.45, 0.1]} />
         <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
       </mesh>
+      {/* Left Low Wall */}
+      <mesh position={[-3.55, 0.22, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 0.45, 6.2]} />
+        <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
+      </mesh>
+      {/* Right Low Wall */}
+      <mesh position={[3.55, 0.22, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 0.45, 6.2]} />
+        <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
+      </mesh>
+      {/* Middle Partition Low Divider Wall */}
+      <mesh position={[0.2, 0.22, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 0.45, 6.0]} />
+        <meshStandardMaterial color="#6B7280" roughness={0.3} />
+      </mesh>
 
-      {/* ZONE 1: LIVING ROOM MODULE (Top Left) */}
+      {/* ZONE 1: DETAILED LIVING ROOM MODULE (Top Left) */}
       <group position={[-1.7, 0, -1.3]}>
+        {/* Woven Rug */}
         <mesh position={[0, 0.01, 0]} receiveShadow>
           <boxGeometry args={[2.8, 0.02, 2.2]} />
-          <meshStandardMaterial color="#4B5563" roughness={0.85} />
+          <meshStandardMaterial color={themeColors.rug} roughness={0.85} />
         </mesh>
-        {/* Sofa */}
-        <mesh position={[0, 0.35, -0.6]} castShadow receiveShadow>
-          <boxGeometry args={[2.4, 0.4, 1.1]} />
-          <meshStandardMaterial color={themeColors.sofa} roughness={0.6} />
-        </mesh>
-        <mesh position={[0, 0.75, -1.05]} castShadow receiveShadow>
-          <boxGeometry args={[2.4, 0.5, 0.25]} />
-          <meshStandardMaterial color={themeColors.cushions} roughness={0.55} />
-        </mesh>
-        {/* Coffee Table */}
-        <mesh position={[0, 0.2, 0.4]} castShadow receiveShadow>
-          <cylinderGeometry args={[0.7, 0.7, 0.06, 32]} />
-          <meshStandardMaterial color={themeColors.table} roughness={0.05} metalness={0.1} />
-        </mesh>
+        
+        {/* L-Shaped Sectional Sofa */}
+        <group position={[0, 0, -0.4]}>
+          {/* Main Seat */}
+          <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.4, 0.25, 0.9]} />
+            <meshStandardMaterial color={themeColors.sofa} roughness={0.6} />
+          </mesh>
+          {/* L-Extension */}
+          <mesh position={[-0.85, 0.25, 0.7]} castShadow receiveShadow>
+            <boxGeometry args={[0.7, 0.25, 0.8]} />
+            <meshStandardMaterial color={themeColors.sofa} roughness={0.6} />
+          </mesh>
+          {/* Backrest */}
+          <mesh position={[0, 0.55, -0.38]} castShadow receiveShadow>
+            <boxGeometry args={[2.4, 0.4, 0.2]} />
+            <meshStandardMaterial color={themeColors.cushions} roughness={0.55} />
+          </mesh>
+          {/* Throw Pillows */}
+          {[-0.6, 0.2, 0.7].map((px, i) => (
+            <mesh key={i} position={[px, 0.45, -0.2]} rotation={[0, 0.2 * i, 0.1]} castShadow>
+              <boxGeometry args={[0.35, 0.3, 0.15]} />
+              <meshStandardMaterial color="#F59E0B" roughness={0.4} />
+            </mesh>
+          ))}
+          {/* Gold Legs */}
+          {[-1.1, 1.1].map((lx, i) =>
+            [-0.35, 0.35].map((lz, j) => (
+              <mesh key={`${i}-${j}`} position={[lx, 0.07, lz]} castShadow>
+                <cylinderGeometry args={[0.025, 0.015, 0.14, 16]} />
+                <meshStandardMaterial color="#F59E0B" metalness={0.9} roughness={0.1} />
+              </mesh>
+            ))
+          )}
+        </group>
 
-        <Html position={[0, 1.1, 0]} center>
+        {/* Marble Coffee Table with Glass Vase */}
+        <group position={[0.2, 0.18, 0.6]}>
+          <mesh castShadow receiveShadow>
+            <cylinderGeometry args={[0.6, 0.6, 0.06, 32]} />
+            <meshStandardMaterial color={themeColors.table} roughness={0.05} metalness={0.1} />
+          </mesh>
+          <mesh position={[0, -0.07, 0]} castShadow>
+            <cylinderGeometry args={[0.25, 0.4, 0.12, 32]} />
+            <meshStandardMaterial color="#1E293B" metalness={0.8} />
+          </mesh>
+          {/* Glass Vase */}
+          <mesh position={[0.15, 0.18, 0]} castShadow>
+            <cylinderGeometry args={[0.08, 0.06, 0.2, 16]} />
+            <meshStandardMaterial color="#38BDF8" opacity={0.7} transparent roughness={0.1} />
+          </mesh>
+        </group>
+
+        {/* Slatted TV Console Wall */}
+        <group position={[0, 0.4, -1.65]}>
+          {[-0.8, -0.4, 0, 0.4, 0.8].map((xPos, i) => (
+            <mesh key={i} position={[xPos, 0.4, 0]} castShadow>
+              <boxGeometry args={[0.12, 1.2, 0.04]} />
+              <meshStandardMaterial color="#B45309" roughness={0.35} />
+            </mesh>
+          ))}
+          {/* Floating Media Console */}
+          <mesh position={[0, 0.15, 0.1]} castShadow>
+            <boxGeometry args={[1.8, 0.2, 0.35]} />
+            <meshStandardMaterial color="#1E293B" roughness={0.2} />
+          </mesh>
+          {/* OLED TV Panel */}
+          <mesh position={[0, 0.6, 0.03]} castShadow>
+            <boxGeometry args={[1.4, 0.75, 0.03]} />
+            <meshStandardMaterial color="#09090B" metalness={0.95} roughness={0.05} />
+          </mesh>
+        </group>
+
+        <Html position={[0, 0.9, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("living"); }}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "living" ? "bg-indigo-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
@@ -134,24 +200,43 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
         </Html>
       </group>
 
-      {/* ZONE 2: KITCHEN & ISLAND MODULE (Top Right) */}
+      {/* ZONE 2: DETAILED KITCHEN & ISLAND MODULE (Top Right) */}
       <group position={[1.8, 0, -1.4]}>
-        <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
-          <boxGeometry args={[2.2, 0.9, 1.0]} />
+        {/* Kitchen Island Base */}
+        <mesh position={[0, 0.4, 0]} castShadow receiveShadow>
+          <boxGeometry args={[2.2, 0.8, 0.95]} />
           <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.2} />
         </mesh>
-        <mesh position={[0, 0.92, 0]} castShadow receiveShadow>
-          <boxGeometry args={[2.3, 0.05, 1.05]} />
+        {/* Waterfall Marble Top */}
+        <mesh position={[0, 0.82, 0]} castShadow receiveShadow>
+          <boxGeometry args={[2.3, 0.05, 1.0]} />
           <meshStandardMaterial color={themeColors.table} roughness={0.05} />
         </mesh>
-        {[-0.6, 0, 0.6].map((sx, i) => (
-          <mesh key={i} position={[sx, 0.35, 0.8]} castShadow>
-            <cylinderGeometry args={[0.18, 0.18, 0.7, 16]} />
-            <meshStandardMaterial color="#F59E0B" metalness={0.9} />
-          </mesh>
+        {/* Bar Stools with Backrest */}
+        {[-0.65, 0, 0.65].map((sx, i) => (
+          <group key={i} position={[sx, 0.35, 0.75]}>
+            <mesh castShadow>
+              <cylinderGeometry args={[0.18, 0.18, 0.05, 16]} />
+              <meshStandardMaterial color="#F59E0B" metalness={0.9} />
+            </mesh>
+            <mesh position={[0, 0.15, -0.15]} castShadow>
+              <boxGeometry args={[0.32, 0.25, 0.04]} />
+              <meshStandardMaterial color="#D97706" />
+            </mesh>
+            <mesh position={[0, -0.18, 0]} castShadow>
+              <cylinderGeometry args={[0.02, 0.02, 0.4, 16]} />
+              <meshStandardMaterial color="#1E293B" metalness={0.9} />
+            </mesh>
+          </group>
         ))}
 
-        <Html position={[0, 1.2, 0]} center>
+        {/* Back Wall Cabinets */}
+        <mesh position={[0, 0.6, -1.25]} castShadow>
+          <boxGeometry args={[2.4, 1.2, 0.4]} />
+          <meshStandardMaterial color="#374151" roughness={0.3} />
+        </mesh>
+
+        <Html position={[0, 1.0, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("kitchen"); }}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "kitchen" ? "bg-amber-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
@@ -162,22 +247,45 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
         </Html>
       </group>
 
-      {/* ZONE 3: MASTER BEDROOM MODULE (Bottom Right) */}
+      {/* ZONE 3: DETAILED MASTER BEDROOM MODULE (Bottom Right) */}
       <group position={[1.8, 0, 1.4]}>
-        <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
-          <boxGeometry args={[1.9, 0.4, 2.0]} />
-          <meshStandardMaterial color="#374151" roughness={0.7} />
+        {/* Bed Wooden Platform Base */}
+        <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
+          <boxGeometry args={[1.95, 0.2, 2.05]} />
+          <meshStandardMaterial color="#B45309" roughness={0.4} />
         </mesh>
-        <mesh position={[0, 0.5, 0.1]} castShadow receiveShadow>
-          <boxGeometry args={[1.8, 0.25, 1.7]} />
+        {/* Thick Mattress */}
+        <mesh position={[0, 0.32, 0.05]} castShadow receiveShadow>
+          <boxGeometry args={[1.8, 0.22, 1.8]} />
           <meshStandardMaterial color="#F9FAFB" roughness={0.3} />
         </mesh>
-        <mesh position={[0, 0.85, -0.8]} castShadow receiveShadow>
-          <boxGeometry args={[2.0, 0.8, 0.2]} />
+        {/* Duvet / Blanket Layer */}
+        <mesh position={[0, 0.38, 0.35]} castShadow receiveShadow>
+          <boxGeometry args={[1.82, 0.14, 1.2]} />
+          <meshStandardMaterial color="#E0E7FF" roughness={0.5} />
+        </mesh>
+        {/* Plush Headboard */}
+        <mesh position={[0, 0.65, -0.85]} castShadow receiveShadow>
+          <boxGeometry args={[2.0, 0.8, 0.18]} />
           <meshStandardMaterial color={themeColors.headboard} roughness={0.3} />
         </mesh>
 
-        <Html position={[0, 1.1, 0]} center>
+        {/* Twin Nightstands */}
+        {[-1.2, 1.2].map((nx, i) => (
+          <group key={i} position={[nx, 0.2, -0.7]}>
+            <mesh castShadow>
+              <boxGeometry args={[0.4, 0.35, 0.4]} />
+              <meshStandardMaterial color="#1E293B" roughness={0.3} />
+            </mesh>
+            {/* Lamp */}
+            <mesh position={[0, 0.3, 0]} castShadow>
+              <cylinderGeometry args={[0.08, 0.12, 0.25, 16]} />
+              <meshStandardMaterial color="#FDE68A" emissive="#FEF08A" emissiveIntensity={0.5} />
+            </mesh>
+          </group>
+        ))}
+
+        <Html position={[0, 0.9, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("bedroom"); }}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "bedroom" ? "bg-emerald-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
@@ -190,23 +298,31 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
 
       {/* ZONE 4: OUTDOOR POOL & TERRACE DECK (Bottom Left) */}
       <group position={[-1.7, 0, 1.4]}>
-        {/* Teak Wood Decking */}
+        {/* Teak Wood Decking Planks */}
         <mesh position={[0, 0.01, 0]} receiveShadow>
           <boxGeometry args={[2.8, 0.02, 2.2]} />
           <meshStandardMaterial color="#B45309" roughness={0.4} />
         </mesh>
         {/* Glass Infinity Pool Water */}
-        <mesh position={[-0.3, -0.08, 0]} receiveShadow>
-          <boxGeometry args={[1.8, 0.2, 1.6]} />
-          <meshStandardMaterial color="#06B6D4" roughness={0.05} metalness={0.8} opacity={0.85} transparent />
+        <mesh position={[-0.3, -0.06, 0]} receiveShadow>
+          <boxGeometry args={[1.8, 0.15, 1.6]} />
+          <meshStandardMaterial color="#06B6D4" roughness={0.05} metalness={0.8} opacity={0.75} transparent />
         </mesh>
-        {/* Pool Loungers */}
-        <mesh position={[0.8, 0.2, 0]} castShadow>
-          <boxGeometry args={[0.6, 0.25, 1.4]} />
-          <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
-        </mesh>
+        {/* Dual Sun Loungers */}
+        {[-0.3, 0.4].map((lx, i) => (
+          <group key={i} position={[lx, 0.12, 0.7]}>
+            <mesh castShadow>
+              <boxGeometry args={[0.45, 0.12, 1.1]} />
+              <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
+            </mesh>
+            <mesh position={[0, 0.12, -0.35]} rotation={[0.3, 0, 0]} castShadow>
+              <boxGeometry args={[0.45, 0.1, 0.4]} />
+              <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
+            </mesh>
+          </group>
+        ))}
 
-        <Html position={[0, 0.9, 0]} center>
+        <Html position={[0, 0.8, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("pool"); }}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "pool" ? "bg-cyan-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
@@ -237,11 +353,11 @@ export default function LandingPage() {
   ];
 
   const zoneDetails = {
-    all: { title: "Bütün Penthouse Layihəsi", area: "140 m²", desc: "4 Zonadan ibarət lüks penthouse: Qonaq Otağı (45 m²), Açıq Mətbəx (28 m²), Yataq Otağı (32 m²) Və Teras Hovuz Deki (35 m²)." },
-    living: { title: "Lüks Qonaq Otağı Zonası", area: "45 m²", desc: "Royal Blue Velvet Divan dəsti, İtalyan Carrara Mərmər Kofe Masası Və Qızılı Ceviz Taxta Slats TV Divarı." },
-    kitchen: { title: "Mətbəx Və Ada Zonası", area: "28 m²", desc: "Qara mərmər ada masası, parıldayan brass metal bar stulları Və daxili işıqlandırmalı şkaf modulları." },
-    bedroom: { title: "Master Yataq Otağı Zonası", area: "32 m²", desc: "King size çarpayı, Zümrüd parça başlıq, gizli ambient LED-lər Və panoramik pəncərə kəsiyi." },
-    pool: { title: "Outdoor Teras Və Hovuz Deki", area: "35 m²", desc: "Təbii teak ağacından teras döşəməsi, kristal şüşə infinity hovuz suyu Və lüks şezlonqlar." }
+    all: { title: "Bütün Penthouse Layihəsi (Dollhouse View)", area: "140 m²", desc: "Alçaq kəsik divarlar vasitəsilə 4 zonanın (Qonaq otağı, Mətbəx, Yataq otağı Və Hovuz) içi maneesiz aydın görünür." },
+    living: { title: "Lüks Qonaq Otağı Zonası", area: "45 m²", desc: "Sectional L-divan dəsti, Carrara Mərmər Kofe Masası, Glass Vaza Və OLED TV Paneli." },
+    kitchen: { title: "Mətbəx Və Ada Zonası", area: "28 m²", desc: "Waterfall Mərmər island masası, metal bar stulları Və divar şkafları." },
+    bedroom: { title: "Master Yataq Otağı Zonası", area: "32 m²", desc: "King platform çarpayı, yumşaq yorğan qatı, lüks baş tərəf paneli Və komodlar." },
+    pool: { title: "Outdoor Teras Və Hovuz Deki", area: "35 m²", desc: "Teak ağac döşəməsi, kristal şəffaf infinity hovuz suyu Və dual şezlonqlar." }
   };
 
   useEffect(() => {
@@ -537,7 +653,7 @@ export default function LandingPage() {
 
               {/* Stats Badge */}
               <div className="absolute bottom-4 right-4 pointer-events-none bg-neutral-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-xs font-mono text-emerald-400 shadow-2xl">
-                FPS: 120 (Raytracing 4K) • WebGL 2.0
+                Dollhouse Cutaway Mode • 120 FPS
               </div>
             </div>
 
