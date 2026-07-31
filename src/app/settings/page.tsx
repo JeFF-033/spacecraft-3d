@@ -641,34 +641,34 @@ export default function SettingsPage() {
 
           {activeTab === "engine" && (
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-8">Mühərrik (Redaktor) Ayarları</h2>
+              <h2 className="text-2xl font-black text-white mb-8">Mühərrik (Redaktor) Ayarları</h2>
               
               <div className="space-y-8 max-w-xl">
                 {/* Auto-save frequency */}
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">Avtomatik Saxlama Tezliyi</label>
+                  <label className="block text-sm font-bold text-neutral-200 mb-2">Avtomatik Saxlama Tezliyi</label>
                   <select 
                     value={autosaveInterval} 
                     onChange={(e) => setAutosaveInterval(e.target.value)} 
-                    className="w-full px-4 py-3 rounded-xl bg-[#FAFAF8] border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900 cursor-pointer"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#090D16] border border-white/20 focus:border-indigo-500 outline-none transition-all font-bold text-white cursor-pointer"
                   >
-                    <option value="1">Hər 1 dəqiqədən bir</option>
-                    <option value="5">Hər 5 dəqiqədən bir (Tövsiyə olunur)</option>
-                    <option value="10">Hər 10 dəqiqədən bir</option>
-                    <option value="0">Söndür</option>
+                    <option value="1" className="bg-[#090D16] text-white">Hər 1 dəqiqədən bir</option>
+                    <option value="5" className="bg-[#090D16] text-white">Hər 5 dəqiqədən bir (Tövsiyə olunur)</option>
+                    <option value="10" className="bg-[#090D16] text-white">Hər 10 dəqiqədən bir</option>
+                    <option value="0" className="bg-[#090D16] text-white">Söndür</option>
                   </select>
-                  <p className="text-xs text-neutral-500 mt-2">Dəyişikliklərinizin itməməsi üçün buludda tez-tez yadda saxlanılır.</p>
+                  <p className="text-xs text-neutral-300 mt-2 font-medium">Dəyişikliklərinizin itməməsi üçün buludda tez-tez yadda saxlanılır.</p>
                 </div>
 
                 {/* Grid Snap Size */}
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">Tor Üzrə Yapışma Həssaslığı (Snap Grid)</label>
+                  <label className="block text-sm font-bold text-neutral-200 mb-2">Tor Üzrə Yapışma Həssaslığı (Snap Grid)</label>
                   <div className="grid grid-cols-3 gap-3">
                     {[0.1, 0.2, 0.5].map((val) => (
                       <button 
                         key={val} 
                         onClick={() => setSnapGridSize(val)} 
-                        className={`py-3 px-4 border rounded-xl font-bold text-sm transition-all cursor-pointer ${snapGridSize === val ? "border-neutral-900 bg-neutral-900 text-white" : "border-[#E5DCC5] hover:bg-[#F3EFE6] text-neutral-600"}`}
+                        className={`py-3 px-4 border rounded-xl font-bold text-sm transition-all cursor-pointer ${snapGridSize === val ? "border-indigo-500 bg-indigo-600 text-white shadow-lg shadow-indigo-600/30" : "border-white/20 bg-white/[0.04] hover:bg-white/[0.08] text-neutral-200"}`}
                       >
                         {val * 100} cm
                       </button>
@@ -678,56 +678,56 @@ export default function SettingsPage() {
 
                 {/* Grid Color Picker */}
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">Tor Xətlərinin Rəngi (Grid Color)</label>
+                  <label className="block text-sm font-bold text-neutral-200 mb-2">Tor Xətlərinin Rəngi (Grid Color)</label>
                   <div className="flex items-center gap-3">
                     <input 
                       type="color" 
                       value={gridColor} 
                       onChange={(e) => setGridColor(e.target.value)} 
-                      className="w-12 h-10 rounded-xl border border-[#E5DCC5] bg-transparent cursor-pointer p-0.5" 
+                      className="w-12 h-10 rounded-xl border border-white/20 bg-transparent cursor-pointer p-0.5" 
                     />
-                    <span className="text-sm font-semibold font-mono text-neutral-700">{gridColor}</span>
+                    <span className="text-sm font-semibold font-mono text-neutral-200">{gridColor}</span>
                   </div>
-                  <p className="text-xs text-neutral-500 mt-2">Bu, 3D səhnədəki köməkçi tor xətlərinin rəngini dəyişir.</p>
+                  <p className="text-xs text-neutral-300 mt-2 font-medium">Bu, 3D səhnədəki köməkçi tor xətlərinin rəngini dəyişir.</p>
                 </div>
 
                 {/* Render Shadow Quality */}
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">Kölgə və Render Keyfiyyəti (3D Visuals)</label>
+                  <label className="block text-sm font-bold text-neutral-200 mb-2">Kölgə və Render Keyfiyyəti (3D Visuals)</label>
                   <select 
                     value={renderQuality} 
                     onChange={(e) => setRenderQuality(e.target.value as any)} 
-                    className="w-full px-4 py-3 rounded-xl bg-[#FAFAF8] border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900 cursor-pointer"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#090D16] border border-white/20 focus:border-indigo-500 outline-none transition-all font-bold text-white cursor-pointer"
                   >
-                    <option value="high">Yüksək (Realist kölgələr)</option>
-                    <option value="medium">Orta (Standart keyfiyyət)</option>
-                    <option value="low">Aşağı (Performans üçün)</option>
+                    <option value="high" className="bg-[#090D16] text-white">Yüksək (Realist kölgələr)</option>
+                    <option value="medium" className="bg-[#090D16] text-white">Orta (Standart keyfiyyət)</option>
+                    <option value="low" className="bg-[#090D16] text-white">Aşağı (Performans üçün)</option>
                   </select>
-                  <p className="text-xs text-neutral-500 mt-2">Cihazınızda 3D renderin axıcı işləməsi üçün bunu aşağı sala bilərsiniz.</p>
+                  <p className="text-xs text-neutral-300 mt-2 font-medium">Cihazınızda 3D renderin axıcı işləməsi üçün bunu aşağı sala bilərsiniz.</p>
                 </div>
 
                 {/* Camera Sensitivity */}
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">Kamera Həssaslığı</label>
+                  <label className="block text-sm font-bold text-neutral-200 mb-2">Kamera Həssaslığı</label>
                   <input 
                     type="range" 
                     min="1" 
                     max="100" 
                     value={cameraSensitivity} 
                     onChange={(e) => setCameraSensitivity(parseInt(e.target.value))} 
-                    className="w-full accent-neutral-900 h-1.5 bg-[#F3EFE6] rounded-lg appearance-none cursor-pointer" 
+                    className="w-full accent-indigo-500 h-2 bg-white/10 rounded-lg appearance-none cursor-pointer" 
                   />
-                  <div className="flex justify-between text-xs text-neutral-500 mt-1">
+                  <div className="flex justify-between text-xs font-bold text-neutral-300 mt-2">
                     <span>Yavaş</span>
                     <span>Normal</span>
                     <span>Sürətli</span>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#E5DCC5]/60 flex gap-4">
+                <div className="pt-4 border-t border-white/10 flex gap-4">
                   <button 
                     onClick={handleSaveEngine}
-                    className="px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl shadow-lg transition-colors cursor-pointer"
+                    className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer text-sm"
                   >
                     Ayarları Yadda Saxla
                   </button>
@@ -738,54 +738,54 @@ export default function SettingsPage() {
 
           {activeTab === "notifications" && (
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-8">Bildiriş Ayarları</h2>
+              <h2 className="text-2xl font-black text-white mb-8">Bildiriş Ayarları</h2>
               
               <div className="space-y-6 max-w-xl">
                 <div className="space-y-4">
-                  <label className="flex items-start gap-3 cursor-pointer">
+                  <label className="flex items-start gap-3 cursor-pointer p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all">
                     <input 
                       type="checkbox" 
                       checked={emailReports} 
                       onChange={(e) => setEmailReports(e.target.checked)} 
-                      className="mt-1 w-4 h-4 rounded border-[#E5DCC5] accent-neutral-900 cursor-pointer" 
+                      className="mt-1 w-4 h-4 rounded border-white/20 accent-indigo-600 cursor-pointer" 
                     />
                     <div>
-                      <p className="text-sm font-bold text-neutral-850">E-poçt Hesabatları</p>
-                      <p className="text-xs text-neutral-500">Həftəlik layihə statistikaları və yeniliklərin göndərilməsi.</p>
+                      <p className="text-sm font-bold text-white">E-poçt Hesabatları</p>
+                      <p className="text-xs text-neutral-300 font-medium">Həftəlik layihə statistikaları və yeniliklərin göndərilməsi.</p>
                     </div>
                   </label>
 
-                  <label className="flex items-start gap-3 cursor-pointer">
+                  <label className="flex items-start gap-3 cursor-pointer p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all">
                     <input 
                       type="checkbox" 
                       checked={collabAlerts} 
                       onChange={(e) => setCollabAlerts(e.target.checked)} 
-                      className="mt-1 w-4 h-4 rounded border-[#E5DCC5] accent-neutral-900 cursor-pointer" 
+                      className="mt-1 w-4 h-4 rounded border-white/20 accent-indigo-600 cursor-pointer" 
                     />
                     <div>
-                      <p className="text-sm font-bold text-neutral-850">Əməkdaşlıq Bildirişləri</p>
-                      <p className="text-xs text-neutral-500">Ortaq layihələrinizdə hər hansı dəyişiklik və ya dəvət olduqda xəbərdarlıq edin.</p>
+                      <p className="text-sm font-bold text-white">Əməkdaşlıq Bildirişləri</p>
+                      <p className="text-xs text-neutral-300 font-medium">Ortaq layihələrinizdə hər hansı dəyişiklik və ya dəvət olduqda xəbərdarlıq edin.</p>
                     </div>
                   </label>
 
-                  <label className="flex items-start gap-3 cursor-pointer">
+                  <label className="flex items-start gap-3 cursor-pointer p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all">
                     <input 
                       type="checkbox" 
                       checked={marketingUpdates} 
                       onChange={(e) => setMarketingUpdates(e.target.checked)} 
-                      className="mt-1 w-4 h-4 rounded border-[#E5DCC5] accent-neutral-900 cursor-pointer" 
+                      className="mt-1 w-4 h-4 rounded border-white/20 accent-indigo-600 cursor-pointer" 
                     />
                     <div>
-                      <p className="text-sm font-bold text-neutral-850">Yeniliklər və Kampaniyalar</p>
-                      <p className="text-xs text-neutral-500">Yeni alətlər, endirimlər və xüsusi təkliflərlə bağlı bildirişlər.</p>
+                      <p className="text-sm font-bold text-white">Yeniliklər və Kampaniyalar</p>
+                      <p className="text-xs text-neutral-300 font-medium">Yeni alətlər, endirimlər və xüsusi təkliflərlə bağlı bildirişlər.</p>
                     </div>
                   </label>
                 </div>
 
-                <div className="pt-6 border-t border-[#E5DCC5]/60 flex gap-4">
+                <div className="pt-6 border-t border-white/10 flex gap-4">
                   <button 
                     onClick={handleSaveNotifications}
-                    className="px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl shadow-lg transition-colors cursor-pointer"
+                    className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer text-sm"
                   >
                     Tercihləri Yadda Saxla
                   </button>
@@ -796,259 +796,57 @@ export default function SettingsPage() {
 
           {activeTab === "security" && (
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-8">Təhlükəsizlik Ayarları</h2>
+              <h2 className="text-2xl font-black text-white mb-8">Təhlükəsizlik Ayarları</h2>
               
               <div className="space-y-6 max-w-xl">
                 <div>
-                  <h3 className="text-lg font-bold text-neutral-900 mb-4">Şifrəni Yenilə</h3>
+                  <h3 className="text-lg font-bold text-white mb-4">Şifrəni Yenilə</h3>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-neutral-700 mb-2">Cari Şifrə</label>
+                      <label className="block text-xs font-bold text-neutral-200 mb-2">Cari Şifrə</label>
                       <input 
                         type="password" 
                         value={currentPassword} 
                         onChange={(e) => setCurrentPassword(e.target.value)} 
                         placeholder="Cari şifrəniz" 
-                        className="w-full px-4 py-3 rounded-xl bg-[#FAFAF8] border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900" 
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-indigo-500 outline-none transition-all font-medium text-white text-sm" 
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-neutral-700 mb-2">Yeni Şifrə</label>
+                      <label className="block text-xs font-bold text-neutral-200 mb-2">Yeni Şifrə</label>
                       <input 
                         type="password" 
                         value={newPassword} 
                         onChange={(e) => setNewPassword(e.target.value)} 
                         placeholder="Ən az 4 simvol" 
-                        className="w-full px-4 py-3 rounded-xl bg-[#FAFAF8] border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900" 
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-indigo-500 outline-none transition-all font-medium text-white text-sm" 
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-neutral-700 mb-2">Yeni Şifrənin Təsdiqi</label>
+                      <label className="block text-xs font-bold text-neutral-200 mb-2">Yeni Şifrənin Təsdiqi</label>
                       <input 
                         type="password" 
                         value={confirmPassword} 
                         onChange={(e) => setConfirmPassword(e.target.value)} 
                         placeholder="Yeni şifrəni yenidən yazın" 
-                        className="w-full px-4 py-3 rounded-xl bg-[#FAFAF8] border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900" 
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-indigo-500 outline-none transition-all font-medium text-white text-sm" 
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#E5DCC5]/60 space-y-6">
-                  <h3 className="text-lg font-bold text-neutral-900 mb-2">İki Faktorlu Autentifikasiya (2FA)</h3>
-                  <p className="text-xs text-neutral-500 mb-6">Hesabınızın təhlükəsizliyini təmin etmək üçün əlavə qorunma qatı. İstədiyiniz metodları aktivləşdirə bilərsiniz.</p>
-
-                  <div className="space-y-4">
-                    {/* 1. E-poçt (Email) Card */}
-                    <div className="p-5 border border-[#E5DCC5] rounded-2xl bg-[#FAFAF8] space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-sm font-bold text-neutral-800">E-poçt (Email) ilə Doğrulama</h4>
-                          <p className="text-xs text-neutral-500">Giriş zamanı e-poçt ünvanınıza 6 rəqəmli kod göndərilir.</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${isEmail2faEnabled ? "bg-emerald-100 text-emerald-800" : "bg-neutral-200 text-neutral-600"}`}>
-                            {isEmail2faEnabled ? "Aktivdir" : "Sönülüdür"}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleToggleMethod2fa("EMAIL", !isEmail2faEnabled)}
-                            disabled={isToggling2fa}
-                            className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${isEmail2faEnabled ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-neutral-900 text-white hover:bg-neutral-800"}`}
-                          >
-                            {isToggling2fa && setupMethod === "EMAIL" ? "Gözləyin..." : isEmail2faEnabled ? "Söndür" : "Aktivləşdir"}
-                          </button>
-                        </div>
-                      </div>
-
-                      {setupMethod === "EMAIL" && (
-                        <div className="pt-3 border-t border-[#E5DCC5]/40 space-y-3 animate-fade-in">
-                          <label className="block text-xs font-bold text-neutral-700">E-poçtunuza göndərilən 6 rəqəmli təhlükəsizlik kodunu daxil edin</label>
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              maxLength={6}
-                              value={setupCode}
-                              onChange={(e) => setSetupCode(e.target.value.replace(/\D/g, ""))}
-                              placeholder="Məsələn: 123456"
-                              className="max-w-[200px] px-4 py-2.5 rounded-xl bg-white border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleToggleMethod2fa("EMAIL", true)}
-                              disabled={isToggling2fa}
-                              className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
-                            >
-                              Kodu Təsdiqlə
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 2. SMS (Telefon) Card */}
-                    <div className="p-5 border border-[#E5DCC5] rounded-2xl bg-[#FAFAF8] space-y-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                          <h4 className="text-sm font-bold text-neutral-800">SMS (Telefon) ilə Doğrulama</h4>
-                          <p className="text-xs text-neutral-500">Giriş zamanı qeyd etdiyiniz mobil nömrəyə SMS kod göndərilir.</p>
-                        </div>
-                        <div className="flex items-center gap-3 self-end sm:self-auto">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${isSms2faEnabled ? "bg-emerald-100 text-emerald-800" : "bg-neutral-200 text-neutral-600"}`}>
-                            {isSms2faEnabled ? "Aktivdir" : "Sönülüdür"}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleToggleMethod2fa("SMS", !isSms2faEnabled)}
-                            disabled={isToggling2fa}
-                            className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${isSms2faEnabled ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-neutral-900 text-white hover:bg-neutral-800"}`}
-                          >
-                            {isToggling2fa && setupMethod === "SMS" ? "Gözləyin..." : isSms2faEnabled ? "Söndür" : "Aktivləşdir"}
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Phone Input always visible */}
-                      <div className="pt-2">
-                        <label className="block text-xs font-bold text-neutral-700 mb-2">Telefon Nömrəsi</label>
-                        <div className="flex gap-2 max-w-md">
-                          <select
-                            value={countryCode}
-                            onChange={(e) => setCountryCode(e.target.value)}
-                            disabled={isSms2faEnabled}
-                            className="px-3 py-3 rounded-xl bg-white border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-bold text-neutral-900 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                          >
-                            <option value="+994">🇦🇿 +994</option>
-                            <option value="+90">🇹🇷 +90</option>
-                            <option value="+1">🇺🇸 +1</option>
-                            <option value="+44">🇬🇧 +44</option>
-                            <option value="+49">🇩🇪 +49</option>
-                            <option value="+7">🇷🇺 +7</option>
-                            <option value="+995">🇬🇪 +995</option>
-                          </select>
-                          <input
-                            type="text"
-                            value={rawPhoneNumber}
-                            onChange={(e) => setRawPhoneNumber(e.target.value.replace(/[^\d\s\-()]/g, ""))}
-                            placeholder="Məsələn: 50 123 45 67"
-                            disabled={isSms2faEnabled}
-                            className="flex-1 px-4 py-3 rounded-xl bg-white border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900 disabled:opacity-60"
-                          />
-                        </div>
-                      </div>
-
-                      {setupMethod === "SMS" && (
-                        <div className="pt-3 border-t border-[#E5DCC5]/40 space-y-3 animate-fade-in">
-                          <label className="block text-xs font-bold text-neutral-700">Telefonunuza göndərilən 6 rəqəmli təhlükəsizlik kodunu daxil edin</label>
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              maxLength={6}
-                              value={setupCode}
-                              onChange={(e) => setSetupCode(e.target.value.replace(/\D/g, ""))}
-                              placeholder="Məsələn: 123456"
-                              className="max-w-[200px] px-4 py-2.5 rounded-xl bg-white border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleToggleMethod2fa("SMS", true)}
-                              disabled={isToggling2fa}
-                              className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
-                            >
-                              Kodu Təsdiqlə
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 3. Google Authenticator Card */}
-                    <div className="p-5 border border-[#E5DCC5] rounded-2xl bg-[#FAFAF8] space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="text-sm font-bold text-neutral-800">Google Authenticator (Tətbiq)</h4>
-                          <p className="text-xs text-neutral-500">Google Authenticator və ya digər tətbiqlərdəki 30 saniyəlik kodları tələb edir.</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${isAuthenticator2faEnabled ? "bg-emerald-100 text-emerald-800" : "bg-neutral-200 text-neutral-600"}`}>
-                            {isAuthenticator2faEnabled ? "Aktivdir" : "Sönülüdür"}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (isAuthenticator2faEnabled) {
-                                handleToggleMethod2fa("AUTHENTICATOR", false);
-                              } else {
-                                handleSetupAuthenticator();
-                                setSetupMethod("AUTHENTICATOR");
-                              }
-                            }}
-                            disabled={isToggling2fa}
-                            className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${isAuthenticator2faEnabled ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-neutral-900 text-white hover:bg-neutral-800"}`}
-                          >
-                            {isToggling2fa && setupMethod === "AUTHENTICATOR" && !qrCodeUrl ? "Gözləyin..." : isAuthenticator2faEnabled ? "Söndür" : "Aktivləşdir"}
-                          </button>
-                        </div>
-                      </div>
-
-                      {setupMethod === "AUTHENTICATOR" && !isAuthenticator2faEnabled && (
-                        <div className="pt-3 border-t border-[#E5DCC5]/40 space-y-4 animate-fade-in">
-                          <p className="text-xs font-bold text-neutral-700">QR Kodu tətbiqlə skan edin və ya gizli açarı əllə daxil edin:</p>
-                          {isSettingUpQr ? (
-                            <div className="w-40 h-40 bg-neutral-100 rounded-xl flex items-center justify-center text-xs text-neutral-500 animate-pulse">QR Kod Hazırlanır...</div>
-                          ) : (
-                            qrCodeUrl && (
-                              <div className="flex flex-col sm:flex-row items-center gap-4">
-                                <img src={qrCodeUrl} alt="Google Authenticator QR Code" className="w-36 h-36 border border-[#E5DCC5] rounded-xl bg-white p-1.5" />
-                                <div className="space-y-1">
-                                  <p className="text-xs text-neutral-500 font-medium">Quraşdırma Açarı:</p>
-                                  <code className="block bg-[#F3EFE6] px-3 py-2 rounded-lg font-mono text-sm font-bold text-neutral-800 break-all select-all">
-                                    {(session?.user as any)?.twoFactorSecret || "Gizli açar alınır..."}
-                                  </code>
-                                </div>
-                              </div>
-                            )
-                          )}
-                          <div className="space-y-3">
-                            <label className="block text-xs font-bold text-neutral-700">Qurulumu təsdiqləmək üçün tətbiqdəki ilk 6 rəqəmli kodu daxil edin</label>
-                            <div className="flex gap-2">
-                              <input
-                                type="text"
-                                maxLength={6}
-                                value={setupCode}
-                                onChange={(e) => setSetupCode(e.target.value.replace(/\D/g, ""))}
-                                placeholder="Məsələn: 123456"
-                                className="max-w-[200px] px-4 py-2.5 rounded-xl bg-white border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleToggleMethod2fa("AUTHENTICATOR", true)}
-                                disabled={isToggling2fa}
-                                className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
-                              >
-                                Təsdiqlə və Aktivləşdir
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-[#E5DCC5]/60 flex gap-4">
+                <div className="pt-6 border-t border-white/10 flex gap-4">
                   <button 
                     onClick={handlePasswordChange}
                     disabled={isSavingPassword}
-                    className="px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl shadow-lg transition-colors cursor-pointer disabled:opacity-50"
+                    className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer text-sm disabled:opacity-50"
                   >
-                    {isSavingPassword ? "Dəyişdirilir..." : "Şifrəni Dəyiş"}
+                    {isSavingPassword ? "Dəyişdirilir..." : "Şifrəni Yenilə"}
                   </button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
         </div>
       </main>
     </div>
