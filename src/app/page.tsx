@@ -50,7 +50,7 @@ export default function LandingPage() {
             playsInline
             className="w-full h-full object-cover scale-105 filter blur-[2px] transition-opacity duration-1000"
             src="https://cdn.coverr.co/videos/coverr-modern-interior-architecture-design-6756/1080p.mp4"
-            poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+            poster="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
           />
           {/* Darkness Vignette overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#09090B]/90 via-[#09090B]/80 to-[#09090B]"></div>
@@ -157,7 +157,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* MASTERPIECE PROFESSIONAL 3D STUDIO EDITOR SHOWCASE MOCKUP */}
+          {/* MASTERPIECE REAL LUXURY INTERIOR 3D STUDIO EDITOR MOCKUP FRAME */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,7 +172,7 @@ export default function LandingPage() {
                 <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 <div className="ml-4 text-xs font-mono text-neutral-400 hidden sm:inline flex items-center gap-2">
                   <Box className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>spacecraft-3d.com/editor/living-room-project-104</span>
+                  <span>spacecraft-3d.com/editor/luxury-living-room-104</span>
                 </div>
               </div>
 
@@ -227,7 +227,7 @@ export default function LandingPage() {
               </Link>
             </div>
 
-            {/* 3. MAIN EDITOR WORKSPACE WITH FULL-BLEED PHOTOREALISTIC RENDER & GIZMO OVERLAYS */}
+            {/* 3. MAIN EDITOR WORKSPACE WITH REAL PHOTOREALISTIC LUXURY INTERIOR ROOM */}
             <div className="aspect-[16/9] md:aspect-[21/9] bg-[#0c0e17] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
               
               {/* LEFT VERTICAL DOCK TOOLBAR */}
@@ -280,54 +280,50 @@ export default function LandingPage() {
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mb-2"></div>
               </div>
 
-              {/* CENTER VIEWPORT: HIGH-DEFINITION PHOTOREALISTIC INTERIOR SCENE WITH 3D TRANSFORM GIZMO */}
+              {/* CENTER VIEWPORT: PHOTOREALISTIC LUXURY MODERN LIVING ROOM INTERIOR */}
               <div className="flex-1 relative overflow-hidden flex items-center justify-center">
                 
-                {/* Photorealistic High-Res Interior Scene Image */}
+                {/* REAL HIGH-RESOLUTION LUXURY LIVING ROOM INTERIOR IMAGE */}
                 <img 
-                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" 
-                  alt="3D Studio Interior Render" 
+                  src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80" 
+                  alt="Modern Luxury Living Room Interior" 
                   className="w-full h-full object-cover"
                 />
 
-                {/* Dark Vignette Ambient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+                {/* Dark Vignette Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
 
-                {/* 3D TRANSFORM GIZMO & SELECTION BOUNDING BOX OVERLAY */}
-                <div className="absolute top-[42%] left-[45%] -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                  
-                  {/* Glowing Selection Frame Around Furniture */}
-                  <div className="w-64 h-32 rounded-2xl border-2 border-indigo-400 bg-indigo-500/10 shadow-[0_0_30px_rgba(99,102,241,0.5)] relative flex items-center justify-center backdrop-blur-[2px]">
-                    
-                    {/* Bounding Box Corner Handles */}
+                {/* REALISTIC 3D BOUNDING BOX & OBJECT PINS ALIGNED ON LIVING ROOM FURNITURE */}
+                
+                {/* Sofa Bounding Box Pin */}
+                <div className="absolute bottom-[28%] left-[46%] -translate-x-1/2 z-20 pointer-events-none">
+                  <div className="w-72 h-36 rounded-2xl border-2 border-indigo-400 bg-indigo-500/10 shadow-[0_0_35px_rgba(99,102,241,0.6)] relative flex items-center justify-center backdrop-blur-[2px]">
                     <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
                     <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
                     <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
                     <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
 
-                    {/* Dimension Tag Callout */}
-                    <div className="absolute -top-7 bg-neutral-900/90 border border-indigo-400/60 px-3 py-1 rounded-full text-[10px] font-mono text-indigo-300 shadow-xl flex items-center gap-1.5">
-                      <span>W: 240cm • D: 95cm • H: 85cm</span>
+                    <div className="absolute -top-7 bg-neutral-900/90 border border-indigo-400/60 px-3 py-1 rounded-full text-[10px] font-mono text-indigo-300 shadow-xl">
+                      Ölçülər: W: 240cm • D: 95cm • H: 85cm
                     </div>
 
-                    {/* Object Hotspot Pin */}
-                    <div className="bg-indigo-600 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow-2xl border border-white/30 flex items-center gap-1.5">
+                    <div className="bg-indigo-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-2xl border border-white/30 flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
                       <span>🛋️ Royal Blue Velvet Divan</span>
                     </div>
+                  </div>
+                </div>
 
-                    {/* 3D AXIS TRANSFORM GIZMO ARROWS */}
-                    <div className="absolute -bottom-10 right-4 flex items-center gap-2 pointer-events-none">
-                      <span className="text-[10px] font-mono font-bold text-red-400 bg-black/60 px-1.5 py-0.5 rounded border border-red-500/40">X Axis</span>
-                      <span className="text-[10px] font-mono font-bold text-emerald-400 bg-black/60 px-1.5 py-0.5 rounded border border-emerald-500/40">Y Axis</span>
-                      <span className="text-[10px] font-mono font-bold text-sky-400 bg-black/60 px-1.5 py-0.5 rounded border border-sky-500/40">Z Axis</span>
-                    </div>
-
+                {/* Coffee Table Hotspot Pin */}
+                <div className="absolute bottom-[16%] left-[30%] z-20 pointer-events-none">
+                  <div className="bg-neutral-900/90 hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>🪵 İtalyan Carrara Mərmər Masa</span>
                   </div>
                 </div>
 
                 {/* ANIMATED MULTIPLAYER CURSORS */}
-                <div className="absolute top-[30%] left-[28%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
+                <div className="absolute top-[32%] left-[24%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
                   <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                     <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                   </svg>
@@ -336,7 +332,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="absolute top-[65%] right-[25%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
+                <div className="absolute top-[60%] right-[22%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
                   <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                     <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                   </svg>
@@ -345,7 +341,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                {/* Bottom Viewport Info Bar */}
+                {/* Bottom Viewport Status Bar */}
                 <div className="absolute bottom-4 left-4 right-4 pointer-events-none flex justify-between items-center text-[10px] font-mono text-neutral-200 z-10">
                   <span className="bg-neutral-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15 text-emerald-400 shadow-xl">
                     FPS: 120 (Raytracing 4K)
@@ -366,7 +362,7 @@ export default function LandingPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <span className="text-[9px] font-mono text-neutral-400 uppercase">Seçilmiş 3D Obyekt</span>
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase">Seçilmiş Obyekt</span>
                       <div className="text-xs font-bold text-white mt-1 flex items-center gap-1.5">
                         <span>🛋️</span> Royal Blue Velvet Divan
                       </div>
