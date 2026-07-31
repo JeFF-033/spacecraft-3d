@@ -127,7 +127,10 @@ export const authOptions = {
       return session;
     }
   },
-  secret: process.env.NEXTAUTH_SECRET || "supersecret"
+  secret: process.env.NEXTAUTH_SECRET || "supersecret",
+  pages: {
+    signIn: "/auth/signin",
+  }
 };
 
 const handler = NextAuth(authOptions);
