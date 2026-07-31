@@ -81,7 +81,7 @@ export default function Navbar() {
             )}
 
             <Link
-              href="/editor"
+              href={session ? "/editor" : "/auth/signin"}
               className="relative group overflow-hidden rounded-full p-[1px] font-bold text-xs"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-400 rounded-full animate-gradient-x"></span>

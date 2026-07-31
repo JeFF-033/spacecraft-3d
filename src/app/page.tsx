@@ -331,6 +331,7 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
 }
 
 export default function LandingPage() {
+  const { data: session } = useSession();
   const [animationStep, setAnimationStep] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeZone, setActiveZone] = useState<string>("all");
@@ -442,7 +443,7 @@ export default function LandingPage() {
             className="flex flex-col sm:flex-row items-center gap-5"
           >
             <Link 
-              href="/editor" 
+              href={session ? "/editor" : "/auth/signin"} 
               className="relative group overflow-hidden rounded-full p-[1.5px] w-full sm:w-auto font-bold text-base shadow-2xl shadow-indigo-600/30"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-400 rounded-full animate-gradient-x"></span>

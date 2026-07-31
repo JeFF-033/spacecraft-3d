@@ -153,7 +153,7 @@ export default function EditorPage() {
   // Qorunma və 2FA yoxlanışı
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/");
+      router.push("/auth/signin");
     } else if (status === "authenticated" && (session?.user as any)?.twoFactorEnabled) {
       const isVerified = sessionStorage.getItem("spacecraft_2fa_verified") === "true";
       if (!isVerified) {
