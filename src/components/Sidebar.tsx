@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useStore } from "@/store/useStore";
 import * as THREE from "three";
-import { Download, Upload, Undo, Redo, Map, Sun, Moon, Layers, Camera, Cloud, FolderOpen, Wand2, Sparkles, User, LogOut, Magnet, Link as LinkIcon, Ruler, FileText, Plus, Trash2, Lightbulb, Play, Home, Search } from "lucide-react";
+import { Download, Upload, Undo, Redo, Map, Sun, Moon, Layers, Camera, Cloud, FolderOpen, Wand2, Sparkles, User, LogOut, Magnet, Link as LinkIcon, Ruler, FileText, Plus, Trash2, Lightbulb, Play, Home, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useMultiplayer } from "@/hooks/useMultiplayer";
 import Link from "next/link";
@@ -121,6 +121,14 @@ export default function Sidebar() {
   const [showSmeta, setShowSmeta] = useState(false);
   const [selectedCatalogCategory, setSelectedCatalogCategory] = useState<string>("Hamısı");
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollCategories = (direction: "left" | "right") => {
+    if (categoryScrollRef.current) {
+      const scrollAmount = direction === "left" ? -150 : 150;
+      categoryScrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
 
   // Xüsusi Smeta Əşyaları üçün Form State
   const [newCustomName, setNewCustomName] = useState("");
@@ -1015,24 +1023,48 @@ export default function Sidebar() {
             </div>
           </div>
           
-          {/* Category Selector Tabs */}
-          <div 
-            className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {["Hamısı", "Salon", "Yataq Otağı", "Ofis", "İşıqlandırma", "Digər"].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCatalogCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-xl text-[10px] font-bold tracking-wider uppercase whitespace-nowrap transition-all border shadow-sm ${
-                  selectedCatalogCategory === cat
-                    ? "bg-indigo-600 text-white border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]"
-                    : "bg-white/5 text-neutral-400 border-white/5 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Category Selector Tabs with Slide Controls */}
+          <div className="relative flex items-center gap-1 bg-white/[0.02] p-1 rounded-2xl border border-white/5">
+            <button 
+              onClick={() => scrollCategories("left")}
+              className="p-1.5 bg-white/5 hover:bg-white/15 text-neutral-300 rounded-xl border border-white/10 shrink-0 transition-all active:scale-90"
+              title="Geriyə sürüşdür"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+
+            <div 
+              ref={categoryScrollRef}
+              onWheel={(e) => {
+                if (categoryScrollRef.current) {
+                  categoryScrollRef.current.scrollLeft += e.deltaY;
+                }
+              }}
+              className="flex-1 flex gap-2 overflow-x-auto py-0.5 scroll-smooth custom-scrollbar"
+              style={{ scrollbarWidth: 'thin' }}
+            >
+              {["Hamısı", "Salon", "Yataq Otağı", "Ofis", "İşıqlandırma", "Digər"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCatalogCategory(cat)}
+                  className={`px-3.5 py-1.5 rounded-xl text-[10px] font-bold tracking-wider uppercase whitespace-nowrap transition-all border shadow-sm shrink-0 ${
+                    selectedCatalogCategory === cat
+                      ? "bg-indigo-600 text-white border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]"
+                      : "bg-white/5 text-neutral-400 border-white/5 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <button 
+              onClick={() => scrollCategories("right")}
+              className="p-1.5 bg-white/5 hover:bg-white/15 text-neutral-300 rounded-xl border border-white/10 shrink-0 transition-all active:scale-90"
+              title="İrəliyə sürüşdür"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           <div className="relative">
