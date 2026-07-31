@@ -2,27 +2,35 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, Box, ArrowRight, Loader2, Sparkles, Shield, Zap } from "lucide-react";
+import { Check, Box, ArrowRight, Loader2, Sparkles, Shield, Zap, HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { signIn, useSession } from "next-auth/react";
 import Navbar from "@/components/Navbar";
 
 export default function PricingPage() {
+  const { data: session } = useSession();
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const handleCheckout = async (plan: "PRO" | "ENTERPRISE") => {
+    if (!session) {
+      signIn();
+      return;
+    }
+
     setLoadingPlan(plan);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, billingCycle }),
       });
       const data = await res.json();
 
       if (data.success && data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.error || "Ödəniş sessiyası yaradıla bilmədi.");
+        alert(data.error || "Ödəniş sessiyası yaradıla bilmədi. Zəhmət olmasa təkrarlayın.");
       }
     } catch (err) {
       console.error(err);
@@ -46,10 +54,10 @@ export default function PricingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="text-center max-w-3xl mb-16"
+          className="text-center max-w-3xl mb-12"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900 border border-white/10 text-indigo-400 text-xs font-semibold mb-6 shadow-2xl">
-            <Sparkles className="w-4 h-4" /> Şəffaf Qiymətləndirmə
+            <Sparkles className="w-4 h-4" /> Şəffaf Və Sərfəli Qiymətlər
           </div>
           <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase">
             Ehtiyacınıza Uyğun <br />
@@ -62,8 +70,35 @@ export default function PricingPage() {
           </p>
         </motion.div>
 
-        {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl items-stretch">
+        {/* MONTHLY / YEARLY BILLING TOGGLE */}
+        <div className="flex items-center gap-4 bg-neutral-900/90 p-1.5 rounded-full border border-white/15 mb-16 shadow-2xl backdrop-blur-md">
+          <button
+            onClick={() => setBillingCycle("monthly")}
+            className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
+              billingCycle === "monthly"
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
+                : "text-neutral-400 hover:text-white"
+            }`}
+          >
+            Aylıq Ödəniş
+          </button>
+          <button
+            onClick={() => setBillingCycle("yearly")}
+            className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
+              billingCycle === "yearly"
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
+                : "text-neutral-400 hover:text-white"
+            }`}
+          >
+            <span>İllik Ödəniş</span>
+            <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold">
+              20% Qənaət
+            </span>
+          </button>
+        </div>
+
+        {/* PRICING CARDS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl items-stretch mb-24">
           
           {/* FREE PLAN */}
           <motion.div 
@@ -98,7 +133,7 @@ export default function PricingPage() {
 
             <Link 
               href="/editor" 
-              className="mt-10 w-full py-3.5 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors text-center border border-white/10"
+              className="mt-10 w-full py-3.5 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors text-center border border-white/10 block"
             >
               Pulsuz Başla
             </Link>
@@ -107,7 +142,7 @@ export default function PricingPage() {
           {/* PRO PLAN - HIGHLIGHTED */}
           <motion.div 
             whileHover={{ y: -8 }}
-            className="p-8 rounded-3xl bg-neutral-900/90 border-2 border-indigo-500 shadow-2xl shadow-indigo-600/20 backdrop-blur-xl relative flex flex-col justify-between"
+            className="p-8 rounded-3xl bg-neutral-900/90 border-2 border-indigo-500 shadow-2xl shadow-indigo-600/25 backdrop-blur-xl relative flex flex-col justify-between"
           >
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-[10px] uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
               ən populyar • pro memar
@@ -119,7 +154,9 @@ export default function PricingPage() {
               <p className="text-xs text-neutral-400 mb-6">Frilans memarlar və studiyalar üçün</p>
               
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-5xl font-black text-white">₼39</span>
+                <span className="text-5xl font-black text-white">
+                  {billingCycle === "monthly" ? "₼39" : "₼31"}
+                </span>
                 <span className="text-xs text-neutral-400 font-mono">/ aylıq</span>
               </div>
 
@@ -150,13 +187,13 @@ export default function PricingPage() {
             <button
               onClick={() => handleCheckout("PRO")}
               disabled={loadingPlan === "PRO"}
-              className="mt-10 w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
+              className="mt-10 w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer"
             >
               {loadingPlan === "PRO" ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <>
-                  <span>PRO Plana Keç</span>
+                  <span>{session ? "PRO Plana Keç" : "Giriş Et Və Sifariş Et"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -174,7 +211,9 @@ export default function PricingPage() {
               <p className="text-xs text-neutral-400 mb-6">Böyük tikinti və dizayn şirkətləri üçün</p>
               
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black text-white">₼129</span>
+                <span className="text-4xl font-black text-white">
+                  {billingCycle === "monthly" ? "₼129" : "₼99"}
+                </span>
                 <span className="text-xs text-neutral-400 font-mono">/ aylıq</span>
               </div>
 
@@ -201,7 +240,7 @@ export default function PricingPage() {
             <button
               onClick={() => handleCheckout("ENTERPRISE")}
               disabled={loadingPlan === "ENTERPRISE"}
-              className="mt-10 w-full py-3.5 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors border border-white/10 flex items-center justify-center gap-2"
+              className="mt-10 w-full py-3.5 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors border border-white/10 flex items-center justify-center gap-2 cursor-pointer"
             >
               {loadingPlan === "ENTERPRISE" ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -211,6 +250,56 @@ export default function PricingPage() {
             </button>
           </motion.div>
 
+        </div>
+
+        {/* DETAILED FEATURE COMPARISON MATRIX TABLE */}
+        <div className="w-full max-w-5xl rounded-3xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl p-8 shadow-2xl">
+          <h3 className="text-xl font-bold text-white mb-6 text-center">Planların Müqayisə Cədvəli</h3>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-white/10 text-neutral-400 font-mono uppercase text-[10px]">
+                  <th className="py-3 px-4">Xüsusiyyətlər</th>
+                  <th className="py-3 px-4 text-center">Həvəskar</th>
+                  <th className="py-3 px-4 text-center text-indigo-400 font-bold">PRO Memar</th>
+                  <th className="py-3 px-4 text-center">Enterprise</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5 text-neutral-300 font-light">
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">3D Səhnə Limiti</td>
+                  <td className="py-3.5 px-4 text-center">3 Səhnə</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Sonsuz</td>
+                  <td className="py-3.5 px-4 text-center">Sonsuz</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Render Keyfiyyəti</td>
+                  <td className="py-3.5 px-4 text-center">1080p</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">4K Ultra HD</td>
+                  <td className="py-3.5 px-4 text-center">8K Max UHD</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Gemini AI Dəstəyi</td>
+                  <td className="py-3.5 px-4 text-center">Məhdud (5/gün)</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Sonsuz</td>
+                  <td className="py-3.5 px-4 text-center">Sonsuz + Custom AI</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Smeta Və PDF İxracı</td>
+                  <td className="py-3.5 px-4 text-center">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Multiplayer Canlı İş</td>
+                  <td className="py-3.5 px-4 text-center">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </main>

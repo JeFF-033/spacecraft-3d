@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight, Eye, Download, Filter } from "lucide-react";
-import { motion } from "framer-motion";
+import { Sparkles, ArrowRight, Eye, Download, X, Heart, Share2, Layers } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 
 export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
 
   const projects = [
     {
@@ -16,7 +17,9 @@ export default function GalleryPage() {
       category: "bedroom",
       image: "/images/gallery_bedroom.png",
       designer: "Sarah Jenkins",
-      likes: "1.2k"
+      likes: 1240,
+      renderRes: "4K UHD (3840x2160)",
+      description: "Təbii ağac teksturları, gizli LED işıqlandırma və yapon minimalizmindən ilhamlanmış yataq otağı interyeri."
     },
     {
       id: 2,
@@ -24,7 +27,9 @@ export default function GalleryPage() {
       category: "japandi",
       image: "/images/gallery_japandi.png",
       designer: "Alex Rivera",
-      likes: "2.4k"
+      likes: 2430,
+      renderRes: "4K UHD (3840x2160)",
+      description: "Skandinaviya funksionallığı və Yapon estetikasının vəhdəti. Təbii çınqıl və ceviz tonları."
     },
     {
       id: 3,
@@ -32,23 +37,29 @@ export default function GalleryPage() {
       category: "kitchen",
       image: "/images/gallery_kitchen.png",
       designer: "Elena Rostova",
-      likes: "3.1k"
+      likes: 3120,
+      renderRes: "4K UHD (3840x2160)",
+      description: "Carrara mərmər adası, mat qara kran vurğuları və daxili işıqlandırmalı şüşə vitrinlər."
     },
     {
       id: 4,
-      title: "Modern Lofts & Studio",
-      category: "bedroom",
+      title: "Modern Loft & Studio",
+      category: "loft",
       image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
       designer: "Marco Polo",
-      likes: "980"
+      likes: 980,
+      renderRes: "4K UHD (3840x2160)",
+      description: "Hündür tavanlı loft interyeri, sənaye üslubunda kərpic divarlar və dəri mebel kombinasiyaları."
     },
     {
       id: 5,
       title: "Cyberpunk Night Penthouse",
-      category: "japandi",
+      category: "loft",
       image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
       designer: "Devon Chen",
-      likes: "1.8k"
+      likes: 1840,
+      renderRes: "8K Ultra Render",
+      description: "Şəhər mənzərəli lüks penthouse, neon ambians və ultra-müasir futuristik mebel dəsti."
     },
     {
       id: 6,
@@ -56,7 +67,9 @@ export default function GalleryPage() {
       category: "kitchen",
       image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80",
       designer: "Astrid Lindgren",
-      likes: "4.2k"
+      likes: 4210,
+      renderRes: "4K UHD (3840x2160)",
+      description: "Geniş pəncərəli günəşli qonaq otağı, açıq meşə ağacı mebelləri və neytral parça rəngləri."
     }
   ];
 
@@ -90,52 +103,31 @@ export default function GalleryPage() {
             </span>
           </h1>
           <p className="text-neutral-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-light">
-            Dünyanın dörd bir yanından memarlar tərəfindən SpaceCraft platformasında yaradılmış canlı 3D layihələr.
+            Dünyanın dörd bir yanından memarlar tərəfindən SpaceCraft platformasında yaradılmış canlı 3D layihələr. Şəkillərə klikləyərək böyük ölçüdə baxın və ya editor-da açın.
           </p>
         </motion.div>
 
-        {/* Category Filters */}
+        {/* Category Filter Pills */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-16">
-          <button
-            onClick={() => setActiveCategory("all")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border ${
-              activeCategory === "all"
-                ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30"
-                : "bg-neutral-900 text-neutral-400 border-white/10 hover:text-white"
-            }`}
-          >
-            Bütün Layihələr
-          </button>
-          <button
-            onClick={() => setActiveCategory("bedroom")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border ${
-              activeCategory === "bedroom"
-                ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30"
-                : "bg-neutral-900 text-neutral-400 border-white/10 hover:text-white"
-            }`}
-          >
-            Yataq Otağı
-          </button>
-          <button
-            onClick={() => setActiveCategory("japandi")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border ${
-              activeCategory === "japandi"
-                ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30"
-                : "bg-neutral-900 text-neutral-400 border-white/10 hover:text-white"
-            }`}
-          >
-            Japandi & Minimalist
-          </button>
-          <button
-            onClick={() => setActiveCategory("kitchen")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border ${
-              activeCategory === "kitchen"
-                ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30"
-                : "bg-neutral-900 text-neutral-400 border-white/10 hover:text-white"
-            }`}
-          >
-            Mətbəx & Qonaq Otağı
-          </button>
+          {[
+            { id: "all", label: "Bütün Layihələr" },
+            { id: "bedroom", label: "Yataq Otağı" },
+            { id: "japandi", label: "Japandi & Minimalist" },
+            { id: "kitchen", label: "Mətbəx & Qonaq Otağı" },
+            { id: "loft", label: "Loft & Penthouse" },
+          ].map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border ${
+                activeCategory === cat.id
+                  ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30 scale-105"
+                  : "bg-neutral-900/80 text-neutral-400 border-white/10 hover:text-white hover:border-white/25"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
         </div>
 
         {/* Gallery Grid */}
@@ -147,25 +139,30 @@ export default function GalleryPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               whileHover={{ y: -6 }}
-              className="group relative rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl aspect-[4/3]"
+              onClick={() => setSelectedProject(item)}
+              className="group relative rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl aspect-[4/3] cursor-pointer"
             >
               <img 
                 src={item.image} 
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
               />
+              
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-6 flex flex-col justify-end">
-                <span className="text-xs font-mono text-indigo-400">Dizayner: {item.designer}</span>
-                <h4 className="text-xl font-bold text-white mt-1">{item.title}</h4>
+                <div className="flex items-center gap-2 text-xs font-mono text-indigo-300 mb-1">
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Dizayner: {item.designer}</span>
+                </div>
+                <h4 className="text-xl font-bold text-white">{item.title}</h4>
+                
                 <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10 text-xs text-neutral-400">
-                  <span>❤️ {item.likes} bəyənmə</span>
-                  <Link 
-                    href="/editor" 
-                    className="text-white hover:text-indigo-300 font-bold flex items-center gap-1"
-                  >
-                    <span>Remix Et</span>
+                  <span className="flex items-center gap-1 text-rose-400 font-semibold">
+                    <Heart className="w-3.5 h-3.5 fill-current" /> {item.likes}
+                  </span>
+                  <span className="text-indigo-400 font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    <span>Böyük Bax</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -173,6 +170,82 @@ export default function GalleryPage() {
         </div>
 
       </main>
+
+      {/* 4K LIGHTBOX PREVIEW MODAL */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-xl"
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-5xl rounded-3xl bg-neutral-900 border border-white/15 overflow-hidden shadow-2xl flex flex-col md:flex-row"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Left Image Canvas */}
+              <div className="w-full md:w-3/5 aspect-[4/3] md:aspect-auto relative bg-black flex items-center justify-center">
+                <img 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title}
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+
+              {/* Right Sidebar Details */}
+              <div className="w-full md:w-2/5 p-6 sm:p-8 flex flex-col justify-between bg-neutral-950/90 border-l border-white/10">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                      {selectedProject.renderRes}
+                    </span>
+                    <button
+                      onClick={() => setSelectedProject(null)}
+                      className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-white flex items-center justify-center border border-white/10"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-white mb-2">{selectedProject.title}</h3>
+                  <p className="text-xs font-mono text-neutral-400 mb-4">Dizayner: {selectedProject.designer}</p>
+                  
+                  <p className="text-xs text-neutral-300 leading-relaxed mb-6 font-light border-t border-white/10 pt-4">
+                    {selectedProject.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <Link
+                    href="/editor"
+                    className="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
+                  >
+                    <span>SpaceCraft Editor-da Aç & Remix Et</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <a
+                    href={selectedProject.image}
+                    download
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-3 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors border border-white/10 flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4 text-emerald-400" />
+                    <span>4K Render Şəklini Yüklə</span>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -12,16 +12,17 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "#features", label: "Özəlliklər" },
-    { href: "#how-it-works", label: "Necə İşləyir?" },
-    { href: "#showcase", label: "3D Önizləmə" },
+    { href: "/features", label: "Özəlliklər" },
+    { href: "/how-it-works", label: "Necə İşləyir?" },
+    { href: "/#showcase", label: "3D Önizləmə" },
     { href: "/gallery", label: "Qalereya" },
+    { href: "/testimonials", label: "Rəylər" },
     { href: "/pricing", label: "Qiymətlər" },
   ];
 
   return (
     <header className="sticky top-4 z-50 w-full px-3 sm:px-6">
-      <nav className="max-w-6xl mx-auto rounded-3xl sm:rounded-full border border-white/10 bg-neutral-950/80 backdrop-blur-xl shadow-2xl shadow-black/50 transition-all duration-300">
+      <nav className="max-w-6xl mx-auto rounded-3xl sm:rounded-full border border-white/10 bg-neutral-950/85 backdrop-blur-xl shadow-2xl shadow-black/60 transition-all duration-300">
         <div className="px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Logo with Ambient Glow */}
           <Link href="/" className="flex items-center gap-3 group">
@@ -41,7 +42,7 @@ export default function Navbar() {
           </Link>
 
           {/* Nav Links */}
-          <div className="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-neutral-400 flex-shrink-0">
+          <div className="hidden md:flex items-center gap-6 text-xs font-semibold uppercase tracking-wider text-neutral-400 flex-shrink-0">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
