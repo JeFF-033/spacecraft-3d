@@ -1040,8 +1040,8 @@ export default function Sidebar() {
                   categoryScrollRef.current.scrollLeft += e.deltaY;
                 }
               }}
-              className="flex-1 flex gap-2 overflow-x-auto py-0.5 scroll-smooth custom-scrollbar"
-              style={{ scrollbarWidth: 'thin' }}
+              className="flex-1 flex gap-2 overflow-x-auto py-1 scroll-smooth no-scrollbar [&::-webkit-scrollbar]:hidden"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {["Hamısı", "Salon", "Yataq Otağı", "Ofis", "İşıqlandırma", "Digər"].map((cat) => (
                 <button
