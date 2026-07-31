@@ -4,10 +4,10 @@ import React, { useState, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Float, ContactShadows, Html } from "@react-three/drei";
 import * as THREE from "three";
-import { Sun, Moon, Sparkles, Layers, RefreshCw, Info, Check } from "lucide-react";
+import { Sun, Moon, Sparkles, Layers, RefreshCw, Check } from "lucide-react";
 
-// Detailed Photorealistic Architectural Room Component
-function DetailedArchitecturalRoom({ materialType, lightingMood, activeHotspot, setActiveHotspot }: { 
+// Bright, Ultra-Vivid Architectural Room Component
+function BrightArchitecturalRoom({ materialType, lightingMood, activeHotspot, setActiveHotspot }: { 
   materialType: string; 
   lightingMood: string; 
   activeHotspot: string | null;
@@ -25,93 +25,93 @@ function DetailedArchitecturalRoom({ materialType, lightingMood, activeHotspot, 
   const materialProps = React.useMemo(() => {
     switch (materialType) {
       case "marble":
-        return { color: "#F0F0F3", roughness: 0.05, metalness: 0.1 };
+        return { color: "#FFFFFF", roughness: 0.05, metalness: 0.1 };
       case "obsidian":
-        return { color: "#16161B", roughness: 0.15, metalness: 0.85 };
+        return { color: "#27272A", roughness: 0.2, metalness: 0.85 };
       case "gold":
-        return { color: "#D4AF37", roughness: 0.2, metalness: 0.9 };
+        return { color: "#F59E0B", roughness: 0.25, metalness: 0.9 };
       case "emerald":
-        return { color: "#059669", roughness: 0.25, metalness: 0.3 };
+        return { color: "#059669", roughness: 0.2, metalness: 0.3 };
       default: // wood / walnut
-        return { color: "#6B4423", roughness: 0.55, metalness: 0.05 };
+        return { color: "#9A3412", roughness: 0.5, metalness: 0.05 };
     }
   }, [materialType]);
 
   return (
     <group ref={groupRef} position={[0, -0.6, 0]}>
       
-      {/* 1. MAIN FLOOR (Polished Tile Floor) */}
+      {/* 1. BRIGHT MARBLE FLOOR (Light Polished Tile) */}
       <mesh position={[0, -0.05, 0]} receiveShadow>
-        <boxGeometry args={[5, 0.1, 5]} />
-        <meshStandardMaterial color="#111116" roughness={0.2} metalness={0.6} />
+        <boxGeometry args={[5.2, 0.1, 5.2]} />
+        <meshStandardMaterial color="#E5E7EB" roughness={0.12} metalness={0.15} />
       </mesh>
 
-      {/* Modern Floor Rug / Carpet */}
+      {/* Modern Accent Rug */}
       <mesh position={[0, 0.01, 0.3]} receiveShadow>
         <boxGeometry args={[3.2, 0.02, 2.6]} />
-        <meshStandardMaterial color="#1f2029" roughness={0.9} />
+        <meshStandardMaterial color="#4B5563" roughness={0.85} />
       </mesh>
 
-      {/* 2. BACK WALL WITH WOOD SLATS */}
+      {/* 2. LIGHT STUDIO BACK WALL WITH WALNUT WOOD SLATS */}
       <mesh position={[0, 1.75, -2.45]} receiveShadow castShadow>
-        <boxGeometry args={[5, 3.5, 0.1]} />
-        <meshStandardMaterial color="#181820" roughness={0.6} />
+        <boxGeometry args={[5.2, 3.5, 0.1]} />
+        <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
       </mesh>
 
-      {/* Slatted Wood Panels Accent */}
+      {/* Natural Walnut Slatted Wood Panels */}
       {[-1.8, -1.5, -1.2, -0.9, -0.6, -0.3, 0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8].map((xPos, i) => (
         <mesh key={i} position={[xPos, 1.75, -2.38]} castShadow receiveShadow>
           <boxGeometry args={[0.15, 3.5, 0.04]} />
-          <meshStandardMaterial color="#3d2a1d" roughness={0.4} />
+          <meshStandardMaterial color="#B45309" roughness={0.35} />
         </mesh>
       ))}
 
-      {/* Decorative Wall Artwork Frame */}
+      {/* Decorative Vivid Artwork Canvas */}
       <group position={[0, 2.3, -2.32]}>
         <mesh castShadow>
           <boxGeometry args={[1.8, 1.2, 0.05]} />
-          <meshStandardMaterial color="#111" metalness={0.8} roughness={0.2} />
+          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Canvas artwork texture */}
+        {/* Canvas painting with selected material highlight */}
         <mesh position={[0, 0, 0.03]}>
           <planeGeometry args={[1.7, 1.1]} />
           <meshStandardMaterial {...materialProps} />
         </mesh>
       </group>
 
-      {/* 3. LUXURY MODERN SOFA */}
+      {/* 3. VIVID LUXURY ROYAL BLUE SOFA */}
       <group position={[0, 0.45, -0.6]} onClick={(e) => { e.stopPropagation(); setActiveHotspot("sofa"); }}>
-        {/* Base Seat Frame */}
+        {/* Base Frame */}
         <mesh position={[0, 0, 0]} castShadow receiveShadow>
           <boxGeometry args={[2.8, 0.35, 1.3]} />
-          <meshStandardMaterial color="#262733" roughness={0.7} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
         </mesh>
         
-        {/* Cushions (3 Seat Cushions) */}
+        {/* Seat Cushions */}
         {[-0.9, 0, 0.9].map((cx, i) => (
           <mesh key={i} position={[cx, 0.22, 0.05]} castShadow receiveShadow>
             <boxGeometry args={[0.86, 0.2, 1.15]} />
-            <meshStandardMaterial color="#313342" roughness={0.65} />
+            <meshStandardMaterial color="#2563EB" roughness={0.55} />
           </mesh>
         ))}
 
         {/* Backrest */}
         <mesh position={[0, 0.55, -0.5]} castShadow receiveShadow>
           <boxGeometry args={[2.8, 0.6, 0.3]} />
-          <meshStandardMaterial color="#262733" roughness={0.7} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
         </mesh>
 
         {/* Armrests */}
         <mesh position={[-1.3, 0.35, 0]} castShadow receiveShadow>
           <boxGeometry args={[0.25, 0.45, 1.3]} />
-          <meshStandardMaterial color="#262733" roughness={0.7} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
         </mesh>
         <mesh position={[1.3, 0.35, 0]} castShadow receiveShadow>
           <boxGeometry args={[0.25, 0.45, 1.3]} />
-          <meshStandardMaterial color="#262733" roughness={0.7} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
         </mesh>
 
-        {/* Accent Decorative Pillows */}
+        {/* Accent Pillows */}
         <mesh position={[-0.8, 0.45, -0.3]} rotation={[0, 0.2, 0.1]} castShadow>
           <boxGeometry args={[0.45, 0.4, 0.18]} />
           <meshStandardMaterial {...materialProps} />
@@ -121,114 +121,115 @@ function DetailedArchitecturalRoom({ materialType, lightingMood, activeHotspot, 
           <meshStandardMaterial {...materialProps} />
         </mesh>
 
-        {/* Metallic Legs */}
+        {/* Polished Gold Legs */}
         {[-1.3, 1.3].map((lx, i) =>
           [-0.5, 0.5].map((lz, j) => (
             <mesh key={`${i}-${j}`} position={[lx, -0.2, lz]} castShadow>
-              <cylinderGeometry args={[0.03, 0.02, 0.25, 16]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
+              <cylinderGeometry args={[0.035, 0.025, 0.25, 16]} />
+              <meshStandardMaterial color="#F59E0B" metalness={0.95} roughness={0.1} />
             </mesh>
           ))
         )}
 
-        {/* Hotspot Pin */}
-        <Html position={[0, 0.9, 0]} center>
+        {/* Hotspot Badge Pin */}
+        <Html position={[0, 0.95, 0]} center>
           <button 
             onClick={() => setActiveHotspot(activeHotspot === "sofa" ? null : "sofa")}
-            className="px-2.5 py-1 rounded-full bg-indigo-600/90 hover:bg-indigo-500 text-white text-[10px] font-bold border border-indigo-400/50 shadow-xl backdrop-blur-md flex items-center gap-1 transition-transform hover:scale-110"
+            className="px-3 py-1.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
-            <span>Divan: Velvet Sofistike</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span>Divan: Royal Blue Velvet</span>
           </button>
         </Html>
       </group>
 
-      {/* 4. MODERN GLASS & MARBLE COFFEE TABLE */}
+      {/* 4. CRISP WHITE MARBLE COFFEE TABLE */}
       <group position={[0, 0.2, 0.9]} onClick={(e) => { e.stopPropagation(); setActiveHotspot("table"); }}>
-        {/* Table Top Surface */}
+        {/* Marble Table Surface */}
         <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.85, 0.85, 0.06, 32]} />
           <meshStandardMaterial {...materialProps} />
         </mesh>
-        {/* Table Metal Base Structure */}
+
+        {/* Table Brass Pedestal Base */}
         <mesh position={[0, 0.07, 0]} castShadow>
           <cylinderGeometry args={[0.3, 0.5, 0.14, 32]} />
-          <meshStandardMaterial color="#222" metalness={0.95} roughness={0.1} />
+          <meshStandardMaterial color="#D97706" metalness={0.9} roughness={0.15} />
         </mesh>
 
-        {/* Decorative Vase on Table */}
+        {/* Decorative Vase */}
         <mesh position={[0.2, 0.3, 0.1]} castShadow>
           <cylinderGeometry args={[0.08, 0.12, 0.25, 16]} />
-          <meshStandardMaterial color="#fff" roughness={0.1} />
+          <meshStandardMaterial color="#38BDF8" roughness={0.1} />
         </mesh>
 
-        {/* Hotspot Pin */}
+        {/* Hotspot Badge Pin */}
         <Html position={[0, 0.45, 0]} center>
           <button 
             onClick={() => setActiveHotspot(activeHotspot === "table" ? null : "table")}
-            className="px-2.5 py-1 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-white text-[10px] font-bold border border-white/20 shadow-xl backdrop-blur-md flex items-center gap-1 transition-transform hover:scale-110"
+            className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Masa: Modern Mərmər</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Masa: İtalyan Carrara</span>
           </button>
         </Html>
       </group>
 
-      {/* 5. AMBIENT FLOOR LAMP */}
+      {/* 5. BRIGHT AMBIENT FLOOR LAMP */}
       <group position={[1.8, 1.2, -1.8]}>
         {/* Base */}
         <mesh position={[0, -1.15, 0]} castShadow>
           <cylinderGeometry args={[0.25, 0.25, 0.05, 32]} />
-          <meshStandardMaterial color="#111" metalness={0.9} />
+          <meshStandardMaterial color="#1E293B" metalness={0.9} />
         </mesh>
-        {/* Pole */}
+        {/* Gold Pole */}
         <mesh position={[0, 0, 0]} castShadow>
-          <cylinderGeometry args={[0.02, 0.02, 2.3, 16]} />
-          <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.2} />
+          <cylinderGeometry args={[0.025, 0.025, 2.3, 16]} />
+          <meshStandardMaterial color="#F59E0B" metalness={0.9} roughness={0.2} />
         </mesh>
-        {/* Shade */}
+        {/* White Lamp Shade */}
         <mesh position={[0, 1.1, 0]} castShadow>
           <cylinderGeometry args={[0.3, 0.4, 0.45, 32]} />
-          <meshStandardMaterial color="#fafafa" roughness={0.3} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.2} emissive="#FEF08A" emissiveIntensity={0.6} />
         </mesh>
-        {/* Warm Point Light */}
-        <pointLight position={[0, 1, 0]} intensity={3} color="#fbbf24" distance={4} />
+        {/* Warm Point Light Glow */}
+        <pointLight position={[0, 1, 0]} intensity={4.5} color="#FEF08A" distance={5} />
       </group>
 
-      {/* 6. INDOOR POTTED PLANT */}
+      {/* 6. VIVID EMERALD POTTED PLANT */}
       <group position={[-1.8, 0.6, -1.6]}>
-        {/* Pot */}
+        {/* White Ceramic Pot */}
         <mesh position={[0, -0.2, 0]} castShadow>
           <cylinderGeometry args={[0.25, 0.2, 0.5, 32]} />
-          <meshStandardMaterial color="#1f1f26" roughness={0.3} />
+          <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
         </mesh>
-        {/* Plant Foliage (Spheres) */}
+        {/* Bright Foliage */}
         <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
           <mesh position={[0, 0.25, 0]} castShadow>
             <dodecahedronGeometry args={[0.35, 1]} />
-            <meshStandardMaterial color="#10b981" roughness={0.4} />
+            <meshStandardMaterial color="#10B981" roughness={0.3} />
           </mesh>
           <mesh position={[0.15, 0.45, 0.1]} castShadow>
             <dodecahedronGeometry args={[0.25, 1]} />
-            <meshStandardMaterial color="#059669" roughness={0.4} />
+            <meshStandardMaterial color="#34D399" roughness={0.3} />
           </mesh>
         </Float>
       </group>
 
-      {/* Soft Contact Shadows on Floor */}
-      <ContactShadows position={[0, 0.02, 0]} opacity={0.75} scale={6} blur={2.2} far={4} />
+      {/* Realistic Soft Contact Shadows on Floor */}
+      <ContactShadows position={[0, 0.02, 0]} opacity={0.6} scale={6} blur={2.0} far={4} />
     </group>
   );
 }
 
 export default function Interactive3DPreview() {
   const [materialType, setMaterialType] = useState<string>("marble");
-  const [lightingMood, setLightingMood] = useState<string>("sunset");
+  const [lightingMood, setLightingMood] = useState<string>("day");
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
   const materials = [
-    { id: "marble", label: "İtalyan Mərmər", color: "bg-neutral-100" },
-    { id: "obsidian", label: "Qara Obsidian", color: "bg-neutral-900 border border-white/20" },
+    { id: "marble", label: "İtalyan Mərmər", color: "bg-white border border-neutral-300" },
+    { id: "obsidian", label: "Qara Obsidian", color: "bg-neutral-800 border border-white/20" },
     { id: "gold", label: "Qızıl Metallik", color: "bg-amber-400" },
     { id: "emerald", label: "Zümrüd Velvet", color: "bg-emerald-500" },
     { id: "wood", label: "Ceviz Ağacı", color: "bg-amber-800" },
@@ -237,8 +238,8 @@ export default function Interactive3DPreview() {
   return (
     <div className="w-full max-w-6xl mx-auto rounded-3xl border border-white/15 bg-neutral-900/90 backdrop-blur-xl shadow-2xl p-6 relative overflow-hidden">
       {/* Ambient Background Lights */}
-      <div className="absolute top-0 right-1/3 w-96 h-96 bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-amber-500/15 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-0 right-1/3 w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-amber-500/20 rounded-full blur-[120px] pointer-events-none"></div>
 
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10 relative z-10">
@@ -255,67 +256,72 @@ export default function Interactive3DPreview() {
         <div className="flex items-center gap-2 bg-neutral-950/80 p-1.5 rounded-2xl border border-white/10 shadow-inner">
           <button
             onClick={() => setLightingMood("day")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               lightingMood === "day"
                 ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
                 : "text-neutral-400 hover:text-white"
             }`}
           >
-            <Sun className="w-3.5 h-3.5" /> Gündüz
+            <Sun className="w-3.5 h-3.5 text-amber-300" /> Parlaq Gündüz
           </button>
           <button
             onClick={() => setLightingMood("sunset")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               lightingMood === "sunset"
                 ? "bg-amber-600 text-white shadow-lg shadow-amber-600/30"
                 : "text-neutral-400 hover:text-white"
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" /> Günbatımı
+            <Sparkles className="w-3.5 h-3.5 text-amber-200" /> Günbatımı
           </button>
           <button
             onClick={() => setLightingMood("night")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               lightingMood === "night"
                 ? "bg-purple-600 text-white shadow-lg shadow-purple-600/30"
                 : "text-neutral-400 hover:text-white"
             }`}
           >
-            <Moon className="w-3.5 h-3.5" /> Gecə Cyber
+            <Moon className="w-3.5 h-3.5 text-indigo-300" /> Gecə Cyber
           </button>
         </div>
       </div>
 
-      {/* 3D Canvas Viewport */}
-      <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl bg-[#0a0b10] overflow-hidden border border-white/10 my-6 shadow-inner">
+      {/* 3D Canvas Viewport - Brightened Studio Backdrop */}
+      <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl bg-[#1e2029] overflow-hidden border border-white/15 my-6 shadow-2xl">
         
-        <Canvas shadows camera={{ position: [5, 4, 6], fov: 42 }}>
-          {/* Lighting Modes */}
+        <Canvas shadows camera={{ position: [5, 4.2, 5.8], fov: 42 }}>
+          {/* HIGH-INTENSITY STUDIO LIGHTING PRESETS */}
           {lightingMood === "day" && (
             <>
-              <ambientLight intensity={1.1} />
-              <directionalLight position={[6, 9, 6]} intensity={1.8} castShadow shadow-mapSize={[2048, 2048]} />
-              <directionalLight position={[-4, 5, -4]} intensity={0.5} color="#e0e7ff" />
+              {/* Strong High Ambient Light */}
+              <ambientLight intensity={1.9} color="#F8FAFC" />
+              {/* Primary Key Light */}
+              <directionalLight position={[7, 10, 7]} intensity={2.6} color="#FFFFFF" castShadow shadow-mapSize={[2048, 2048]} />
+              {/* Soft Fill Light */}
+              <directionalLight position={[-5, 6, -5]} intensity={1.3} color="#E0E7FF" />
+              {/* Warm Rim Backlight */}
+              <pointLight position={[0, 6, -4]} intensity={2.0} color="#FEF08A" />
             </>
           )}
           {lightingMood === "sunset" && (
             <>
-              <ambientLight intensity={0.6} color="#fdba74" />
-              <directionalLight position={[7, 4, 3]} intensity={2.8} color="#f97316" castShadow shadow-mapSize={[2048, 2048]} />
-              <pointLight position={[-4, 4, -2]} intensity={1.2} color="#a855f7" />
+              <ambientLight intensity={1.4} color="#FDBA74" />
+              <directionalLight position={[8, 5, 4]} intensity={3.5} color="#F97316" castShadow shadow-mapSize={[2048, 2048]} />
+              <pointLight position={[-4, 5, -3]} intensity={2.0} color="#C084FC" />
             </>
           )}
           {lightingMood === "night" && (
             <>
-              <ambientLight intensity={0.25} color="#818cf8" />
-              <directionalLight position={[5, 7, 5]} intensity={0.6} color="#4f46e5" />
-              <pointLight position={[0, 4, 0]} intensity={3.5} color="#6366f1" />
-              <pointLight position={[-2, 2, 2]} intensity={2.5} color="#ec4899" />
-              <pointLight position={[2, 1, -2]} intensity={2.5} color="#10b981" />
+              <ambientLight intensity={0.9} color="#93C5FD" />
+              <directionalLight position={[5, 7, 5]} intensity={1.5} color="#6366F1" />
+              <pointLight position={[0, 4, 0]} intensity={4.0} color="#818CF8" />
+              <pointLight position={[-2, 3, 2]} intensity={3.0} color="#F472B6" />
+              <pointLight position={[2, 2, -2]} intensity={3.0} color="#34D399" />
             </>
           )}
 
-          <DetailedArchitecturalRoom 
+          <BrightArchitecturalRoom 
             materialType={materialType} 
             lightingMood={lightingMood}
             activeHotspot={activeHotspot}
@@ -331,22 +337,22 @@ export default function Interactive3DPreview() {
         </Canvas>
 
         {/* Drag Guidance Badge */}
-        <div className="absolute bottom-4 left-4 pointer-events-none bg-neutral-950/80 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 text-xs font-medium text-neutral-300 flex items-center gap-2.5 shadow-xl">
-          <RefreshCw className="w-4 h-4 text-indigo-400 animate-spin" style={{ animationDuration: '8s' }} />
-          <span>Sıçranı sürüşdürərək 360° interaktiv baxın</span>
+        <div className="absolute bottom-4 left-4 pointer-events-none bg-neutral-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-xs font-semibold text-white flex items-center gap-2.5 shadow-2xl">
+          <RefreshCw className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
+          <span>Sıçranı sürüşdürərək 360° aydın baxın</span>
         </div>
 
         {/* Active Hotspot Info Overlay */}
         {activeHotspot && (
-          <div className="absolute top-4 right-4 bg-neutral-900/95 border border-indigo-500/40 p-4 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs text-xs text-white animate-fadeIn">
-            <div className="flex items-center justify-between font-bold text-indigo-400 mb-1">
-              <span>{activeHotspot === "sofa" ? "Velvet Sofistike Divan" : "Modern Mərmər Masa"}</span>
-              <span className="text-[10px] bg-indigo-500/20 px-2 py-0.5 rounded text-indigo-300">SpaceCraft 3D Object</span>
+          <div className="absolute top-4 right-4 bg-neutral-900/95 border border-indigo-500/50 p-4 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs text-xs text-white animate-fadeIn">
+            <div className="flex items-center justify-between font-bold text-indigo-300 mb-1">
+              <span>{activeHotspot === "sofa" ? "Royal Blue Velvet Divan" : "İtalyan Carrara Masa"}</span>
+              <span className="text-[10px] bg-indigo-500/20 px-2 py-0.5 rounded text-indigo-200">SpaceCraft 3D Object</span>
             </div>
             <p className="text-neutral-300 text-[11px] leading-relaxed">
               {activeHotspot === "sofa" 
-                ? "Dəbdəbəli velvet parça örtüyü, yüksək sıxlıqlı qubka və qızıl ayaq vurğuları ilə xüsusi hazırlanmış modern divan modulu."
-                : "Təbii İtalyan Carrara mərmər səthi və mat qara metal baza ayaqları ilə interyerə dinamika verən kofe masası."}
+                ? "Dəbdəbəli royal blue velvet parça örtüyü, yüksək sıxlıqlı qubka və parıldayan qızıl ayaq vurğuları ilə xüsusi hazırlanmış modern divan modulu."
+                : "Təbii İtalyan Carrara mərmər səthi və mat cilalanmış brass metal baza ayaqları ilə interyerə dinamika verən kofe masası."}
             </p>
           </div>
         )}
@@ -363,10 +369,10 @@ export default function Interactive3DPreview() {
             <button
               key={m.id}
               onClick={() => setMaterialType(m.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 border ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 border cursor-pointer ${
                 materialType === m.id
-                  ? "bg-white text-neutral-900 border-white shadow-xl scale-105"
-                  : "bg-neutral-800/80 text-neutral-300 border-white/10 hover:border-white/30"
+                  ? "bg-white text-neutral-900 border-white shadow-2xl scale-105"
+                  : "bg-neutral-800/90 text-neutral-300 border-white/15 hover:border-white/40"
               }`}
             >
               <span className={`w-3.5 h-3.5 rounded-full ${m.color}`}></span>
