@@ -135,18 +135,18 @@ export default function SettingsPage() {
 
   if (status === "unauthenticated" || status === "loading") {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-neutral-300 border-t-neutral-800 rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-[#030712] flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-neutral-800 border-t-indigo-500 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   const getTabButtonClass = (tab: typeof activeTab) => {
-    const base = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all cursor-pointer text-left ";
+    const base = "w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl font-bold transition-all duration-300 cursor-pointer text-left text-sm ";
     if (activeTab === tab) {
-      return base + "bg-neutral-900 text-white font-bold shadow-md";
+      return base + "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] border border-indigo-400/30 scale-[1.02]";
     }
-    return base + "text-neutral-600 hover:bg-[#F3EFE6] hover:text-neutral-900";
+    return base + "text-neutral-400 hover:bg-white/[0.04] hover:text-white border border-transparent";
   };
 
   // Profile Image Upload Handler
@@ -248,39 +248,33 @@ export default function SettingsPage() {
       localStorage.setItem("spacecraft_snap_grid", snapGridSize.toString());
       localStorage.setItem("spacecraft_render_quality", renderQuality);
       localStorage.setItem("spacecraft_camera_sensitivity", cameraSensitivity.toString());
-      localStorage.setItem("spacecraft_grid_color", gridColor);
 
-      // Zustand store update
-      useStore.getState().setGridSnapSize(snapGridSize);
-      useStore.getState().setShadowQuality(renderQuality);
-      useStore.getState().setCameraSensitivity(cameraSensitivity);
-      useStore.getState().setGridColor(gridColor);
-
-      showToast("Mühərrik ayarları uğurla yadda saxlanıldı!", "success");
+      setGridColor(gridColor);
+      
+      showToast("Mühərrik tənzimləmələri yadda saxlanıldı!", "success");
     }
   };
 
-  // Save Notifications
+  // Save Notification Preferences
   const handleSaveNotifications = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("spacecraft_notif_reports", emailReports.toString());
       localStorage.setItem("spacecraft_notif_collab", collabAlerts.toString());
       localStorage.setItem("spacecraft_notif_marketing", marketingUpdates.toString());
-
-      showToast("Bildiriş tercihləriniz yeniləndi!", "success");
+      showToast("Bildiriş tənzimləmələri yeniləndi!", "success");
     }
   };
 
-  // Handle Password Change (Actual Database Update)
+  // Change Password
   const handlePasswordChange = async () => {
-    if (!newPassword || !confirmPassword) {
-      return showToast("Zəhmət olmasa yeni şifrə sahələrini doldurun.", "error");
-    }
-    if (newPassword.length < 4) {
-      return showToast("Yeni şifrə ən az 4 simvoldan ibarət olmalıdır.", "error");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return showToast("Bütün şifrə xanalarını doldurun.", "error");
     }
     if (newPassword !== confirmPassword) {
-      return showToast("Yeni şifrə və təsdiq şifrəsi eyni deyil.", "error");
+      return showToast("Yeni şifrələr üst-üstə düşmür.", "error");
+    }
+    if (newPassword.length < 6) {
+      return showToast("Yeni şifrə ən azı 6 simvol olmalıdır.", "error");
     }
 
     setIsSavingPassword(true);
@@ -294,10 +288,10 @@ export default function SettingsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Şifrə dəyişdirilə bilmədi");
 
-      showToast("Şifrəniz uğurla yeniləndi! 🔐", "success");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      showToast("Şifrəniz uğurla yeniləndi! 🔐", "success");
     } catch (err: any) {
       showToast(err.message || "Xəta baş verdi", "error");
     } finally {
@@ -305,72 +299,74 @@ export default function SettingsPage() {
     }
   };
 
-  // Toggle 2FA (Actual Database Update)
-  // Google Authenticator QR kodunu və gizli açarını çəkirik
+  // Setup Authenticator
   const handleSetupAuthenticator = async () => {
     setIsSettingUpQr(true);
     try {
-      const res = await fetch("/api/user/2fa/setup", {
-        method: "POST"
-      });
+      const res = await fetch("/api/user/2fa/setup", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Qurulum baş tutmadı.");
-      
+      if (!res.ok) throw new Error(data.error || "Authenticator hazırlana bilmədi");
+
       setQrCodeUrl(data.qrCodeUrl);
+      if (data.secret) {
+        await update({ twoFactorSecret: data.secret });
+      }
     } catch (err: any) {
-      showToast(err.message || "Authenticator qoşularkən xəta baş verdi", "error");
+      showToast(err.message || "QR Kod yaradılarkən xəta baş verdi", "error");
     } finally {
       setIsSettingUpQr(false);
     }
   };
 
-  // 2FA metodunu aktivləşdirir/deaktiv edir (Baza yeniləməsi)
-  const handleToggleMethod2fa = async (method: "EMAIL" | "SMS" | "AUTHENTICATOR", enabled: boolean) => {
-    const cleanNumber = rawPhoneNumber.replace(/\D/g, "");
-    const fullPhoneNumber = countryCode + cleanNumber;
-
-    if (enabled) {
-      if (method === "SMS" && !cleanNumber) {
-        return showToast("Zəhmət olmasa telefon nömrənizi daxil edin.", "error");
+  // Send 2FA verification code
+  const handleSend2faCode = async (method: "EMAIL" | "SMS") => {
+    let fullPhone = "";
+    if (method === "SMS") {
+      const cleaned = rawPhoneNumber.trim();
+      if (!cleaned) {
+        showToast("Zəhmət olmasa telefon nömrənizi daxil edin.", "error");
+        return false;
       }
-      if (method === "AUTHENTICATOR" && !qrCodeUrl) {
-        return showToast("Zəhmət olmasa Google Authenticator tətbiqi ilə QR kodu skan edin.", "error");
-      }
+      fullPhone = `${countryCode}${cleaned}`;
+    }
 
-      // Əgər Email və ya SMS metodu seçilibsə və hələ doğrulama kodunu göndərməmişiksə, öncə göndəririk
-      if ((method === "EMAIL" || method === "SMS") && setupMethod !== method) {
-        setIsToggling2fa(true);
-        try {
-          const res = await fetch("/api/user/2fa/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              isSetup: true, 
-              method: method, 
-              phone: fullPhoneNumber 
-            })
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "Aktivləşdirmə kodu göndərilə bilmədi.");
+    try {
+      const res = await fetch("/api/user/2fa/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ method, phone: fullPhone }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Kod göndərilə bilmədi");
 
-          setSetupMethod(method);
-          showToast(data.message || "Doğrulama kodu göndərildi. 📱", "success");
-        } catch (err: any) {
-          showToast(err.message || "Xəta baş verdi", "error");
-        } finally {
-          setIsToggling2fa(false);
-        }
+      showToast(data.message || `Kod ${method === "EMAIL" ? "e-poçt ünvanınıza" : "telefonunuza"} göndərildi.`, "success");
+      return true;
+    } catch (err: any) {
+      showToast(err.message || "Xəta baş verdi", "error");
+      return false;
+    }
+  };
+
+  // Enable/Disable specific 2FA method
+  const handleToggleMethod2fa = async (method: "EMAIL" | "SMS" | "AUTHENTICATOR", enable: boolean) => {
+    let fullPhoneNumber = "";
+    if (method === "SMS" && enable) {
+      const cleaned = rawPhoneNumber.trim();
+      if (!cleaned) {
+        showToast("SMS 2FA üçün nömrə daxil etməlisiniz.", "error");
         return;
       }
+      fullPhoneNumber = `${countryCode}${cleaned}`;
     }
 
     setIsToggling2fa(true);
     try {
-      if (enabled) {
-        // Təsdiqləmə (Verify Setup)
-        const verifyCode = setupCode;
-        if (!verifyCode || verifyCode.length < 6) {
-          throw new Error("Zəhmət olmasa 6 rəqəmli doğrulama kodunu daxil edin.");
+      if (enable) {
+        const verifyCode = setupCode.trim();
+        if (!verifyCode) {
+          showToast("Doğrulama kodunu daxil edin.", "error");
+          setIsToggling2fa(false);
+          return;
         }
 
         const verifyRes = await fetch("/api/user/2fa/verify", {
@@ -451,15 +447,22 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-neutral-900 font-sans selection:bg-[#E5DCC5] relative">
+    <div className="min-h-screen bg-[#030712] text-white font-sans selection:bg-indigo-500/30 relative overflow-hidden">
+      {/* Background Lights */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-gradient-to-b from-indigo-600/15 via-purple-600/5 to-transparent rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute bottom-0 -right-40 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none"></div>
+      
+      {/* Subtle Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293710_1px,transparent_1px),linear-gradient(to_bottom,#1f293710_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+
       {/* Toast Notification */}
       {toast && (
-        <div className={`fixed top-6 right-6 z-[9999] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border transition-all animate-bounce ${
+        <div className={`fixed top-6 right-6 z-[9999] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl transition-all animate-bounce ${
           toast.type === "success" 
-            ? "bg-emerald-50 border-emerald-200 text-emerald-800" 
-            : "bg-red-50 border-red-200 text-red-800"
+            ? "bg-emerald-950/80 border-emerald-500/30 text-emerald-300" 
+            : "bg-red-950/80 border-red-500/30 text-red-300"
         }`}>
-          {toast.type === "success" ? <CheckCircle className="w-5 h-5 text-emerald-600" /> : <AlertCircle className="w-5 h-5 text-red-600" />}
+          {toast.type === "success" ? <CheckCircle className="w-5 h-5 text-emerald-400" /> : <AlertCircle className="w-5 h-5 text-red-400" />}
           <span className="text-sm font-bold">{toast.message}</span>
         </div>
       )}
@@ -467,8 +470,8 @@ export default function SettingsPage() {
       {/* Hidden file input for avatar uploading */}
       <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
 
-      {/* Navigation */}
-      <nav className="border-b border-[#E5DCC5]/60 bg-white sticky top-0 z-50">
+      {/* Header */}
+      <nav className="border-b border-white/10 bg-[#030712]/70 backdrop-blur-2xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -479,28 +482,28 @@ export default function SettingsPage() {
                   router.push("/dashboard");
                 }
               }}
-              className="w-10 h-10 bg-[#F3EFE6] hover:bg-[#E5DCC5] transition-colors rounded-xl flex items-center justify-center text-neutral-800 cursor-pointer"
+              className="w-10 h-10 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors rounded-xl flex items-center justify-center text-white cursor-pointer"
               title="Geri"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <span className="text-xl font-bold tracking-tight text-neutral-800">Tənzimləmələr</span>
+            <span className="text-xl font-black bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">Tənzimləmələr</span>
           </div>
           
           <div className="flex items-center gap-4">
-            <img src={image || "https://api.dicebear.com/7.x/avataaars/svg"} alt="User" className="w-10 h-10 rounded-full border-2 border-[#E5DCC5]" />
+            <img src={image || "https://api.dicebear.com/7.x/avataaars/svg"} alt="User" className="w-10 h-10 rounded-xl border border-indigo-500/40 object-cover" />
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-8">
+      <main className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-8 relative z-10">
         {/* Sidebar Menu */}
         <aside className="w-full md:w-64 space-y-2">
           <button onClick={() => setActiveTab("account")} className={getTabButtonClass("account")}>
             <User className="w-5 h-5" /> Hesabım
           </button>
           <button onClick={() => setActiveTab("billing")} className={getTabButtonClass("billing")}>
-            <CreditCard className="w-5 h-5" /> Ödənişlər (Stripe)
+            <CreditCard className="w-5 h-5" /> Ödənişlər
           </button>
           <button onClick={() => setActiveTab("engine")} className={getTabButtonClass("engine")}>
             <SettingsIcon className="w-5 h-5" /> Mühərrik Ayarları
@@ -514,18 +517,18 @@ export default function SettingsPage() {
         </aside>
 
         {/* Content Area */}
-        <div className="flex-1 bg-white border border-[#E5DCC5] rounded-3xl p-8 shadow-sm">
+        <div className="flex-1 bg-[#090D16]/80 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl">
           {activeTab === "account" && (
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-8">Şəxsi Məlumatlar</h2>
+              <h2 className="text-2xl font-black text-white mb-8">Şəxsi Məlumatlar</h2>
               
-              <div className="flex items-center gap-6 mb-10 pb-10 border-b border-[#E5DCC5]/60">
+              <div className="flex items-center gap-6 mb-10 pb-10 border-b border-white/10">
                 <div className="relative">
-                  <img src={image || "https://api.dicebear.com/7.x/avataaars/svg"} alt="User" className="w-24 h-24 rounded-full border-4 border-[#F3EFE6] object-cover" />
+                  <img src={image || "https://api.dicebear.com/7.x/avataaars/svg"} alt="User" className="w-24 h-24 rounded-2xl border-2 border-indigo-500/50 object-cover shadow-2xl" />
                   <button 
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploading}
-                    className="absolute bottom-0 right-0 bg-neutral-900 text-white p-2 rounded-full shadow-lg border-2 border-white hover:bg-neutral-700 transition-colors cursor-pointer flex items-center justify-center w-8 h-8"
+                    className="absolute -bottom-2 -right-2 bg-indigo-600 hover:bg-indigo-500 text-white p-2.5 rounded-xl shadow-lg border-2 border-[#030712] transition-colors cursor-pointer flex items-center justify-center"
                   >
                     {isUploading ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -535,9 +538,9 @@ export default function SettingsPage() {
                   </button>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-neutral-900">{name}</h3>
-                  <p className="text-neutral-500">{session?.user?.email}</p>
-                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">
+                  <h3 className="text-xl font-extrabold text-white">{name}</h3>
+                  <p className="text-sm text-neutral-400">{session?.user?.email}</p>
+                  <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 text-indigo-300 rounded-full text-xs font-bold uppercase tracking-wider">
                     {(session?.user as any)?.subscriptionStatus || "STARTER"} Paket
                   </div>
                 </div>
@@ -545,21 +548,21 @@ export default function SettingsPage() {
 
               <div className="space-y-6 max-w-xl">
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">Ad və Soyad</label>
+                  <label className="block text-xs font-bold text-neutral-300 mb-2">Ad və Soyad</label>
                   <input 
                     type="text" 
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
-                    className="w-full px-4 py-3 rounded-xl bg-[#FAFAF8] border border-[#E5DCC5] focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none transition-all font-medium text-neutral-900" 
+                    className="w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border border-white/10 focus:border-indigo-500 focus:bg-white/[0.07] outline-none transition-all font-medium text-white text-sm" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-neutral-700 mb-2">E-poçt Ünvanı</label>
+                  <label className="block text-xs font-bold text-neutral-300 mb-2">E-poçt Ünvanı</label>
                   <input 
                     type="email" 
                     defaultValue={session?.user?.email || ""} 
                     disabled 
-                    className="w-full px-4 py-3 rounded-xl bg-neutral-100 border border-neutral-200 outline-none font-medium text-neutral-500 cursor-not-allowed" 
+                    className="w-full px-4 py-3.5 rounded-xl bg-white/[0.02] border border-white/5 outline-none font-medium text-neutral-500 cursor-not-allowed text-sm" 
                   />
                   <p className="text-xs text-neutral-500 mt-2">E-poçt ünvanınızı dəyişmək üçün dəstək komandası ilə əlaqə saxlayın.</p>
                 </div>
@@ -567,11 +570,11 @@ export default function SettingsPage() {
                   <button 
                     onClick={handleSaveAccount}
                     disabled={isSavingProfile}
-                    className="px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl shadow-lg transition-colors cursor-pointer"
+                    className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition-all cursor-pointer text-sm"
                   >
                     {isSavingProfile ? "Yadda Saxlanılır..." : "Yadda Saxla"}
                   </button>
-                  <button onClick={() => signOut({ callbackUrl: "/" })} className="px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl transition-colors cursor-pointer">
+                  <button onClick={() => signOut({ callbackUrl: "/" })} className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold rounded-xl transition-all cursor-pointer text-sm">
                     Sistemdən Çıx
                   </button>
                 </div>
@@ -581,13 +584,14 @@ export default function SettingsPage() {
 
           {activeTab === "billing" && (
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-6">Ödənişlər və Abunəlik</h2>
+              <h2 className="text-2xl font-black text-white mb-6">Ödənişlər və Abunəlik</h2>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Plan Card */}
-                <div className="p-6 rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-800 text-white shadow-xl flex flex-col justify-between">
+                <div className="p-6 rounded-3xl bg-gradient-to-br from-indigo-950/60 via-neutral-900 to-purple-950/40 border border-indigo-500/30 text-white shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl"></div>
                   <div>
-                    <span className="text-xs font-bold tracking-widest text-[#E5DCC5] uppercase">Cari Plan</span>
+                    <span className="text-xs font-bold tracking-widest text-indigo-400 uppercase">Cari Plan</span>
                     <h3 className="text-3xl font-black mt-2 text-white">
                       {(session?.user as any)?.subscriptionStatus || "STARTER"} Paket
                     </h3>
@@ -600,12 +604,6 @@ export default function SettingsPage() {
                     <button 
                       onClick={handleStripePortal}
                       disabled={isBillingLoading}
-                      className="px-4 py-2 bg-[#E5DCC5] hover:bg-[#d6c9ac] text-neutral-900 text-xs font-bold rounded-xl transition-colors cursor-pointer"
-                    >
-                      {isBillingLoading ? "Yönləndirilir..." : "Stripe Portala Keç"}
-                    </button>
-                  </div>
-                </div>
 
                 {/* Payment Method Card */}
                 <div className="p-6 rounded-2xl border border-[#E5DCC5] bg-[#FAFAF8] flex flex-col justify-between">
