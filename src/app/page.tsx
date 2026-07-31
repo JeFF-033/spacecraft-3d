@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, 
-  Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download
+  Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download,
+  Maximize2, Move, RotateCcw, Ruler, Grid
 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
@@ -152,7 +153,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* Interactive Browser Mockup / Editor Preview Frame */}
+          {/* HEAVILY UPGRADED INTERACTIVE BROWSER EDITOR MOCKUP FRAME */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,9 +168,9 @@ export default function LandingPage() {
                 <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 <div className="ml-4 text-xs font-mono text-neutral-400 hidden sm:inline">spacecraft-3d.com/editor</div>
               </div>
-              
+
               {/* Active stage tracker */}
-              <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-300 bg-neutral-900 px-3 py-1 rounded-full border border-white/10 whitespace-nowrap shrink-0">
+              <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-200 bg-neutral-900 px-3.5 py-1 rounded-full border border-white/15 whitespace-nowrap shrink-0 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
                 {animationStep === 0 && "Addım 1: Səhnə Hazırlığı"}
                 {animationStep === 1 && "Addım 2: AI Generasiya"}
@@ -180,12 +181,12 @@ export default function LandingPage() {
             </div>
 
             {/* Interactive Mock Canvas Viewport */}
-            <div className="aspect-[16/9] bg-[#0c0c14] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
+            <div className="aspect-[16/9] bg-[#090a10] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
               
-              {/* Collaborative Multiplayer Cursors */}
-              {/* Sarah Cursor */}
+              {/* COLLABORATIVE MULTIPLAYER CURSORS */}
+              {/* Sarah Cursor (Purple) */}
               <div 
-                className="absolute z-20 pointer-events-none flex items-center gap-1.5"
+                className="absolute z-30 pointer-events-none flex items-center gap-1.5"
                 style={{
                   top: 
                     animationStep === 0 ? '48%' :
@@ -201,15 +202,18 @@ export default function LandingPage() {
                   willChange: 'top, left'
                 }}
               >
-                <svg className="w-3.5 h-3.5 text-purple-400 fill-current drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
-                <div className="bg-purple-600 text-white font-bold text-[8px] px-2 py-0.5 rounded-full shadow-lg border border-purple-400/40 whitespace-nowrap">Sarah</div>
+                <div className="bg-purple-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-lg border border-purple-400/40 whitespace-nowrap flex items-center gap-1">
+                  <span>Sarah</span>
+                  <span className="text-[7px] opacity-75 font-mono">X:2.4m</span>
+                </div>
               </div>
 
-              {/* Alex Cursor */}
+              {/* Alex Cursor (Green) */}
               <div 
-                className="absolute z-20 pointer-events-none flex items-center gap-1.5"
+                className="absolute z-30 pointer-events-none flex items-center gap-1.5"
                 style={{
                   top: 
                     animationStep === 0 ? '62%' :
@@ -225,18 +229,24 @@ export default function LandingPage() {
                   willChange: 'top, left'
                 }}
               >
-                <svg className="w-3.5 h-3.5 text-emerald-400 fill-current drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
                   <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
                 </svg>
-                <div className="bg-emerald-600 text-white font-bold text-[8px] px-2 py-0.5 rounded-full shadow-lg border border-emerald-400/40 whitespace-nowrap">Alex (Architect)</div>
+                <div className="bg-emerald-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-lg border border-emerald-400/40 whitespace-nowrap flex items-center gap-1">
+                  <span>Alex (Architect)</span>
+                  <span className="text-[7px] opacity-75 font-mono">Y:1.8m</span>
+                </div>
               </div>
 
               {/* Mock Sidebar Left */}
-              <div className="hidden md:flex w-1/5 bg-neutral-950 border-r border-white/10 p-4 flex-col justify-between text-neutral-400 text-[10px] select-none z-10">
+              <div className="hidden md:flex w-1/5 bg-neutral-950/90 border-r border-white/10 p-4 flex-col justify-between text-neutral-400 text-[10px] select-none z-20">
                 <div>
-                  <div className="text-white font-bold mb-4 tracking-wider uppercase text-[9px] opacity-80">SpaceCraft Kataloq</div>
+                  <div className="text-white font-bold mb-4 tracking-wider uppercase text-[9px] opacity-80 flex items-center justify-between">
+                    <span>SpaceCraft Kataloq</span>
+                    <span className="text-indigo-400 text-[8px] font-mono">10,000+</span>
+                  </div>
                   <div className="space-y-2">
-                    <div className={`flex items-center gap-2 p-2 rounded-xl transition-colors font-semibold ${animationStep === 2 ? 'bg-indigo-600/30 text-white border border-indigo-500/40' : 'hover:bg-white/5 text-neutral-400'}`}>
+                    <div className={`flex items-center gap-2 p-2 rounded-xl transition-all font-semibold ${animationStep === 2 ? 'bg-indigo-600/30 text-white border border-indigo-500/40 shadow-lg' : 'hover:bg-white/5 text-neutral-400'}`}>
                       <span>🛋️</span> <span className="truncate">Modern Divan</span>
                     </div>
                     <div className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
@@ -250,19 +260,29 @@ export default function LandingPage() {
                     </div>
                   </div>
                 </div>
+
                 <div className="pt-3 border-t border-white/10 flex justify-between items-center text-[9px]">
-                  <span>3D Memarlıq v2.5</span>
+                  <span className="font-mono text-neutral-400">3D Memarlıq v2.5</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 </div>
               </div>
 
-              {/* Main Canvas Area */}
+              {/* Main Canvas Center Grid */}
               <div className="flex-1 relative flex items-center justify-center p-6 overflow-hidden">
-                <div className="absolute inset-0 bg-[#0d0e15]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                {/* Architectural Grid & Ruler Lines */}
+                <div className="absolute inset-0 bg-[#090a10]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
                 
-                {/* Floating Gemini AI Prompt Overlay */}
+                {/* Measurement Rulers */}
+                <div className="absolute top-2 left-6 right-6 flex justify-between text-[8px] font-mono text-white/30 pointer-events-none">
+                  <span>0.0m</span>
+                  <span>1.5m</span>
+                  <span>3.0m</span>
+                  <span>4.5m</span>
+                </div>
+
+                {/* Floating Gemini AI Overlay */}
                 <div 
-                  className="absolute top-6 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/40 rounded-2xl px-5 py-2.5 flex items-center gap-3 shadow-2xl backdrop-blur-md z-10 text-white text-[11px]"
+                  className="absolute top-6 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/40 rounded-2xl px-5 py-2.5 flex items-center gap-3 shadow-2xl backdrop-blur-md z-20 text-white text-[11px]"
                   style={{
                     transform: `translate3d(-50%, ${animationStep === 1 ? '0px' : '-10px'}, 0) scale(${animationStep === 1 ? 1 : 0.95})`,
                     opacity: animationStep === 1 ? 1 : 0,
@@ -273,27 +293,31 @@ export default function LandingPage() {
                   <span className="font-semibold">Gemini AI: "Lüks modern otaq konsepti generasiya olunur..."</span>
                 </div>
 
-                {/* Isometric 3D Room Mock Graphics */}
-                <div className="relative w-72 h-72 flex items-center justify-center">
-                  <div className="w-64 h-64 rounded-3xl bg-neutral-900/90 border border-white/15 p-4 shadow-2xl flex flex-col justify-between relative overflow-hidden">
-                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl"></div>
-                    <div className="flex justify-between items-center text-xs font-bold text-neutral-300">
-                      <span>Otaq #104</span>
-                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Active 3D</span>
+                {/* 3D Room Interactive Card Graphics */}
+                <div className="relative w-80 h-80 flex items-center justify-center z-10">
+                  <div className="w-72 h-72 rounded-3xl bg-neutral-950/90 border border-white/15 p-5 shadow-2xl flex flex-col justify-between relative overflow-hidden backdrop-blur-xl">
+                    <div className="absolute -top-10 -right-10 w-36 h-36 bg-indigo-600/20 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div className="flex justify-between items-center text-xs font-bold text-neutral-200">
+                      <div className="flex items-center gap-2">
+                        <Box className="w-4 h-4 text-indigo-400" />
+                        <span>Otaq #104</span>
+                      </div>
+                      <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">Active 3D</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 my-4">
-                      <div className={`p-3 rounded-2xl border transition-all ${animationStep >= 2 ? 'bg-indigo-950/40 border-indigo-500/40' : 'bg-neutral-800/40 border-white/5'}`}>
-                        <div className="text-[10px] font-bold text-neutral-400">Divan Seçimi</div>
+                      <div className={`p-3 rounded-2xl border transition-all ${animationStep >= 2 ? 'bg-indigo-950/50 border-indigo-500/40 shadow-lg' : 'bg-neutral-900/50 border-white/5'}`}>
+                        <div className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">Divan Seçimi</div>
                         <div className="text-xs font-bold text-white mt-1">Velvet Sofistike</div>
                       </div>
-                      <div className={`p-3 rounded-2xl border transition-all ${animationStep >= 3 ? 'bg-emerald-950/40 border-emerald-500/40' : 'bg-neutral-800/40 border-white/5'}`}>
-                        <div className="text-[10px] font-bold text-neutral-400">İşıqlandırma</div>
+                      <div className={`p-3 rounded-2xl border transition-all ${animationStep >= 3 ? 'bg-amber-950/50 border-amber-500/40 shadow-lg' : 'bg-neutral-900/50 border-white/5'}`}>
+                        <div className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">İşıqlandırma</div>
                         <div className="text-xs font-bold text-white mt-1">Warm Ambient</div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[10px] text-neutral-400 pt-2 border-t border-white/10">
+                    <div className="flex items-center justify-between text-[9px] text-neutral-400 pt-3 border-t border-white/10 font-mono">
                       <span>FPS: 120</span>
                       <span>Latency: 12ms</span>
                     </div>
