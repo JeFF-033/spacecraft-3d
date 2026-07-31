@@ -6,7 +6,8 @@ import {
   ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, 
   Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download,
   Maximize2, Move, RotateCcw, Ruler, Grid, MousePointer, Paintbrush,
-  Sun, Settings, Trash2, Lock, Plus, Sliders, RefreshCw, Wand2, SlidersHorizontal
+  Sun, Settings, Trash2, Lock, Plus, Sliders, RefreshCw, Wand2, SlidersHorizontal,
+  Compass, Video
 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
@@ -17,52 +18,15 @@ import Interactive3DPreview from "@/components/Interactive3DPreview";
 export default function LandingPage() {
   const [animationStep, setAnimationStep] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  
-  // AI Laser Scanner Position (0 to 100%)
-  const [scanPos, setScanPos] = useState(55);
-  const [isAutoScanning, setIsAutoScanning] = useState(true);
-  const [activePreset, setActivePreset] = useState<"japandi" | "luxury" | "emerald" | "nordic">("luxury");
+  const [activeTool, setActiveTool] = useState<"select" | "wall" | "furniture" | "material" | "ai" | "light">("select");
+  const [activeViewMode, setActiveViewMode] = useState<"2d" | "3d" | "vr">("3d");
 
-  // Smooth Auto Scanning Effect
   useEffect(() => {
-    if (!isAutoScanning) return;
-    let direction = 1;
     const interval = setInterval(() => {
-      setScanPos((prev) => {
-        if (prev >= 85) direction = -1;
-        if (prev <= 15) direction = 1;
-        return prev + direction * 0.4;
-      });
-    }, 30);
+      setAnimationStep((prev) => (prev + 1) % 5);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isAutoScanning]);
-
-  const stylePresets = {
-    luxury: {
-      name: "Royal Velvet & Mərmər Lüks",
-      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
-      prompt: "✨ AI Prompt: Royal Blue Velvet Divan, Carrara Mərmər & Slatted Walnut Wall",
-      badge: "AI 4K Render Engine"
-    },
-    japandi: {
-      name: "Japandi Təbii Estetika",
-      img: "/images/gallery_japandi.png",
-      prompt: "✨ AI Prompt: Japandi Minimalist Təbii Ağac, Soft Warm Ambient Lights",
-      badge: "Japandi v2.4"
-    },
-    emerald: {
-      name: "Zümrüd Yaşıl & Qızıl Loft",
-      img: "/images/gallery_kitchen.png",
-      prompt: "✨ AI Prompt: Emerald Velvet Sofa, Brushed Brass Metal & Dark Obsidian Tile",
-      badge: "Emerald Loft 4K"
-    },
-    nordic: {
-      name: "Nordic Yataq Konsepti",
-      img: "/images/gallery_bedroom.png",
-      prompt: "✨ AI Prompt: Nordic White Linen Bed, Warm Wood Accents & Panoramic Window",
-      badge: "Nordic Minimal"
-    }
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#09090B] text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
@@ -193,173 +157,258 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* INNOVATIVE & TOTALLY UNIQUE HERO EDITOR: AI ARCHITECTURAL LASER SCAN TRANSFORMATION */}
+          {/* MASTERPIECE PROFESSIONAL 3D STUDIO EDITOR SHOWCASE MOCKUP */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.9 }}
             className="w-full mt-20 relative rounded-3xl border border-white/15 bg-neutral-950/95 shadow-2xl p-2 sm:p-3 max-w-6xl backdrop-blur-2xl overflow-hidden"
           >
-            {/* 1. MAC OS STYLE BROWSER HEADER */}
+            {/* 1. TOP MAC OS STYLE BROWSER HEADER */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-neutral-900/90 rounded-t-2xl">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 <div className="ml-4 text-xs font-mono text-neutral-400 hidden sm:inline flex items-center gap-2">
-                  <Wand2 className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                  <span>spacecraft-3d.com/editor/ai-scan-engine</span>
+                  <Box className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>spacecraft-3d.com/editor/living-room-project-104</span>
                 </div>
               </div>
 
-              {/* Laser Scan Toggle & Status Badge */}
-              <div className="flex items-center gap-3">
+              {/* Status Indicator Pill */}
+              <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-200 bg-neutral-950 px-3.5 py-1 rounded-full border border-white/15 whitespace-nowrap shrink-0 shadow-inner">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Raytracing 4K Active • 120 FPS</span>
+              </div>
+            </div>
+
+            {/* 2. TOP ARCHITECTURAL CONTROL TOOLBAR */}
+            <div className="px-4 py-2.5 bg-neutral-900/80 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+              {/* View Mode Switcher */}
+              <div className="flex items-center gap-1 bg-neutral-950/80 p-1 rounded-xl border border-white/10">
                 <button 
-                  onClick={() => setIsAutoScanning(!isAutoScanning)}
-                  className="px-3 py-1 rounded-full bg-neutral-950 border border-white/15 text-[11px] font-mono text-cyan-300 flex items-center gap-1.5 hover:border-cyan-400 transition-colors cursor-pointer"
+                  onClick={() => setActiveViewMode("2d")}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "2d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
                 >
-                  <span className={`w-2 h-2 rounded-full ${isAutoScanning ? 'bg-cyan-400 animate-ping' : 'bg-neutral-500'}`}></span>
-                  <span>{isAutoScanning ? "Laser Scan: Avto" : "Laser Scan: Əl İlə"}</span>
+                  2D Plan
+                </button>
+                <button 
+                  onClick={() => setActiveViewMode("3d")}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "3d" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
+                >
+                  3D Səhnə
+                </button>
+                <button 
+                  onClick={() => setActiveViewMode("vr")}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all cursor-pointer ${activeViewMode === "vr" ? "bg-indigo-600 text-white shadow" : "text-neutral-400 hover:text-white"}`}
+                >
+                  VR Gəzinti
                 </button>
               </div>
-            </div>
 
-            {/* 2. TOP AI COMMAND & PRESET BAR */}
-            <div className="px-4 py-3 bg-neutral-900/80 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
-              {/* Dynamic Prompt Header */}
-              <div className="flex items-center gap-2 font-mono text-neutral-200 text-[11px] bg-neutral-950/80 px-3.5 py-1.5 rounded-xl border border-white/10">
-                <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
-                <span className="truncate max-w-md">{stylePresets[activePreset].prompt}</span>
+              {/* Action Snap / Grid Toggles */}
+              <div className="hidden lg:flex items-center gap-3 text-neutral-400 text-[11px] font-mono">
+                <span className="flex items-center gap-1 text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                  <Grid className="w-3 h-3" /> Grid: Snap 10cm
+                </span>
+                <span className="flex items-center gap-1 text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
+                  <Ruler className="w-3 h-3" /> Auto Dimensions
+                </span>
               </div>
 
-              {/* Style Presets Switcher */}
-              <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
-                {(["luxury", "japandi", "emerald", "nordic"] as const).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => setActivePreset(key)}
-                    className={`px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
-                      activePreset === key 
-                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30 scale-105 border border-indigo-400/40" 
-                        : "bg-neutral-950/60 text-neutral-400 hover:text-white border border-white/10"
-                    }`}
-                  >
-                    {stylePresets[key].name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 3. DYNAMIC BEFORE/AFTER ARCHITECTURAL LASER SCANNER VIEWPORT */}
-            <div 
-              className="aspect-[16/9] md:aspect-[21/9] w-full rounded-b-2xl overflow-hidden relative select-none cursor-ew-resize group"
-              onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                setScanPos(Math.min(Math.max(x, 5), 95));
-              }}
-            >
-              {/* LAYER 1: RAW 2D ARCHITECTURAL CAD BLUEPRINT (LEFT SIDE) */}
-              <div className="absolute inset-0 bg-[#070913] p-8 flex items-center justify-center">
-                {/* CAD Grid Background */}
-                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#38bdf8 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                
-                {/* High-Precision Neon CAD Floorplan Blueprint Graphics */}
-                <div className="relative w-full max-w-2xl aspect-[16/9] border-2 border-cyan-500/60 bg-neutral-950/90 rounded-2xl p-6 shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col justify-between">
-                  {/* Dimension Annotations */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyan-950 border border-cyan-500/50 px-3 py-0.5 rounded text-[10px] font-mono text-cyan-300">
-                    Otaq Sahəsi: 8.40m × 6.20m (52.08 m²)
-                  </div>
-
-                  <div className="flex justify-between items-center text-xs font-mono text-cyan-400 border-b border-cyan-500/30 pb-3">
-                    <span className="font-bold tracking-widest flex items-center gap-2">
-                      <Ruler className="w-4 h-4" /> 2D ARCHITECTURAL CAD SKETCH
-                    </span>
-                    <span className="text-[10px] bg-cyan-500/10 px-2.5 py-0.5 rounded text-cyan-300 border border-cyan-500/20">
-                      SCALE 1:50
-                    </span>
-                  </div>
-
-                  {/* Wireframe Furniture Vectors */}
-                  <div className="my-auto space-y-4">
-                    {/* Sofa Wireframe Vector Box */}
-                    <div className="p-4 border-2 border-dashed border-cyan-400/80 rounded-xl relative flex justify-between items-center text-cyan-300 text-xs font-mono bg-cyan-950/20">
-                      <span className="font-bold">[SOFA_MODULE] W:240cm D:95cm</span>
-                      <span className="text-[10px] text-cyan-400">VECTOR MESH #01</span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-3 border border-dashed border-cyan-500/60 rounded-lg text-[11px] font-mono text-cyan-400 bg-cyan-950/10">
-                        [COFFEE_TABLE] R:42cm
-                      </div>
-                      <div className="p-3 border border-dashed border-cyan-500/60 rounded-lg text-[11px] font-mono text-cyan-400 bg-cyan-950/10">
-                        [ACCENT_PLANT] H:60cm
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center text-[10px] font-mono text-cyan-500 pt-3 border-t border-cyan-500/20">
-                    <span>RAW CAD SKETCH</span>
-                    <span>AI READY • 100% PRECISION</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* LAYER 2: 4K PHOTOREALISTIC AI RENDERED INTERIOR (RIGHT SIDE, CLIPPED) */}
-              <div 
-                className="absolute inset-0"
-                style={{ clipPath: `polygon(${scanPos}% 0, 100% 0, 100% 100%, ${scanPos}% 100%)` }}
+              {/* Render CTA Button */}
+              <Link 
+                href="/editor" 
+                className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
               >
+                <Video className="w-3.5 h-3.5" />
+                <span>🎬 4K Render Et</span>
+              </Link>
+            </div>
+
+            {/* 3. MAIN EDITOR WORKSPACE WITH FULL-BLEED PHOTOREALISTIC RENDER & GIZMO OVERLAYS */}
+            <div className="aspect-[16/9] md:aspect-[21/9] bg-[#0c0e17] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
+              
+              {/* LEFT VERTICAL DOCK TOOLBAR */}
+              <div className="w-14 bg-neutral-950/90 border-r border-white/10 p-2 flex flex-col items-center justify-between z-20 select-none">
+                <div className="space-y-2 w-full">
+                  <button 
+                    onClick={() => setActiveTool("select")}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${activeTool === "select" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/40" : "text-neutral-400 hover:text-white hover:bg-white/5"}`}
+                    title="Seç Və Sürüşdür"
+                  >
+                    <MousePointer className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => setActiveTool("wall")}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${activeTool === "wall" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/40" : "text-neutral-400 hover:text-white hover:bg-white/5"}`}
+                    title="Divar Çək"
+                  >
+                    <Ruler className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => setActiveTool("furniture")}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${activeTool === "furniture" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/40" : "text-neutral-400 hover:text-white hover:bg-white/5"}`}
+                    title="Mebel Kataloqu"
+                  >
+                    <Box className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => setActiveTool("material")}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${activeTool === "material" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/40" : "text-neutral-400 hover:text-white hover:bg-white/5"}`}
+                    title="Material Fırçası"
+                  >
+                    <Paintbrush className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => setActiveTool("ai")}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${activeTool === "ai" ? "bg-purple-600 text-white shadow-lg shadow-purple-600/40" : "text-neutral-400 hover:text-white hover:bg-white/5"}`}
+                    title="Gemini AI Assist"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                  </button>
+                  <button 
+                    onClick={() => setActiveTool("light")}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${activeTool === "light" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/40" : "text-neutral-400 hover:text-white hover:bg-white/5"}`}
+                    title="İşıqlandırma Quraşdır"
+                  >
+                    <Sun className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mb-2"></div>
+              </div>
+
+              {/* CENTER VIEWPORT: HIGH-DEFINITION PHOTOREALISTIC INTERIOR SCENE WITH 3D TRANSFORM GIZMO */}
+              <div className="flex-1 relative overflow-hidden flex items-center justify-center">
+                
+                {/* Photorealistic High-Res Interior Scene Image */}
                 <img 
-                  src={stylePresets[activePreset].img} 
-                  alt="4K Render Preview" 
+                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" 
+                  alt="3D Studio Interior Render" 
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
-                
-                {/* 4K Render Tag Badge */}
-                <div className="absolute top-6 right-6 bg-neutral-900/90 border border-white/20 px-4 py-2 rounded-2xl shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs font-bold text-white">
-                  <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-                  <span>{stylePresets[activePreset].badge}</span>
+
+                {/* Dark Vignette Ambient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+
+                {/* 3D TRANSFORM GIZMO & SELECTION BOUNDING BOX OVERLAY */}
+                <div className="absolute top-[42%] left-[45%] -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+                  
+                  {/* Glowing Selection Frame Around Furniture */}
+                  <div className="w-64 h-32 rounded-2xl border-2 border-indigo-400 bg-indigo-500/10 shadow-[0_0_30px_rgba(99,102,241,0.5)] relative flex items-center justify-center backdrop-blur-[2px]">
+                    
+                    {/* Bounding Box Corner Handles */}
+                    <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
+                    <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
+                    <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
+                    <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-indigo-400 border border-white rounded-full"></div>
+
+                    {/* Dimension Tag Callout */}
+                    <div className="absolute -top-7 bg-neutral-900/90 border border-indigo-400/60 px-3 py-1 rounded-full text-[10px] font-mono text-indigo-300 shadow-xl flex items-center gap-1.5">
+                      <span>W: 240cm • D: 95cm • H: 85cm</span>
+                    </div>
+
+                    {/* Object Hotspot Pin */}
+                    <div className="bg-indigo-600 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow-2xl border border-white/30 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                      <span>🛋️ Royal Blue Velvet Divan</span>
+                    </div>
+
+                    {/* 3D AXIS TRANSFORM GIZMO ARROWS */}
+                    <div className="absolute -bottom-10 right-4 flex items-center gap-2 pointer-events-none">
+                      <span className="text-[10px] font-mono font-bold text-red-400 bg-black/60 px-1.5 py-0.5 rounded border border-red-500/40">X Axis</span>
+                      <span className="text-[10px] font-mono font-bold text-emerald-400 bg-black/60 px-1.5 py-0.5 rounded border border-emerald-500/40">Y Axis</span>
+                      <span className="text-[10px] font-mono font-bold text-sky-400 bg-black/60 px-1.5 py-0.5 rounded border border-sky-500/40">Z Axis</span>
+                    </div>
+
+                  </div>
                 </div>
+
+                {/* ANIMATED MULTIPLAYER CURSORS */}
+                <div className="absolute top-[30%] left-[28%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
+                  <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
+                    <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
+                  </svg>
+                  <div className="bg-purple-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-purple-400/40 whitespace-nowrap">
+                    Sarah (Interior Lead)
+                  </div>
+                </div>
+
+                <div className="absolute top-[65%] right-[25%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-alex">
+                  <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
+                    <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
+                  </svg>
+                  <div className="bg-emerald-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-emerald-400/40 whitespace-nowrap">
+                    Alex (Architect)
+                  </div>
+                </div>
+
+                {/* Bottom Viewport Info Bar */}
+                <div className="absolute bottom-4 left-4 right-4 pointer-events-none flex justify-between items-center text-[10px] font-mono text-neutral-200 z-10">
+                  <span className="bg-neutral-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15 text-emerald-400 shadow-xl">
+                    FPS: 120 (Raytracing 4K)
+                  </span>
+                  <span className="bg-neutral-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/15 text-indigo-300 shadow-xl">
+                    Latency: 6ms • WebGL 2.0 Engine
+                  </span>
+                </div>
+
               </div>
 
-              {/* LAYER 3: GLOWING NEON LASER BEAM DIVIDER LINE */}
-              <div 
-                className="absolute top-0 bottom-0 z-30 pointer-events-none"
-                style={{ left: `${scanPos}%` }}
-              >
-                {/* Vertical Laser Beam Glow Line */}
-                <div className="w-1 h-full bg-gradient-to-b from-cyan-300 via-indigo-400 to-amber-300 shadow-[0_0_25px_rgba(56,189,248,1)]"></div>
+              {/* RIGHT FLOATING GLASS INSPECTOR PANEL */}
+              <div className="hidden lg:flex w-64 bg-neutral-950/90 border-l border-white/10 p-4 flex-col justify-between text-neutral-300 text-xs select-none z-20">
+                <div>
+                  <div className="text-white font-bold mb-4 tracking-wider uppercase text-[10px] flex items-center gap-2 border-b border-white/10 pb-2.5">
+                    <Sliders className="w-4 h-4 text-indigo-400" /> Obyekt Inspector
+                  </div>
 
-                {/* Center Laser Handle Control Indicator */}
-                <div className="absolute top-1/2 -left-4 -translate-y-1/2 w-9 h-9 rounded-full bg-cyan-500 border-2 border-white shadow-[0_0_20px_rgba(6,182,212,0.9)] flex items-center justify-center text-white pointer-events-auto cursor-ew-resize hover:scale-110 transition-transform">
-                  <SlidersHorizontal className="w-4 h-4" />
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase">Seçilmiş 3D Obyekt</span>
+                      <div className="text-xs font-bold text-white mt-1 flex items-center gap-1.5">
+                        <span>🛋️</span> Royal Blue Velvet Divan
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[10px]">
+                      <div className="bg-neutral-900 p-2.5 rounded-xl border border-white/10">
+                        <span className="text-neutral-400">En (W)</span>
+                        <div className="font-bold text-white font-mono mt-0.5">240 cm</div>
+                      </div>
+                      <div className="bg-neutral-900 p-2.5 rounded-xl border border-white/10">
+                        <span className="text-neutral-400">Dərinlik (D)</span>
+                        <div className="font-bold text-white font-mono mt-0.5">95 cm</div>
+                      </div>
+                    </div>
+
+                    <div className="bg-neutral-900 p-3 rounded-xl border border-white/10 space-y-1.5">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase">Koordinatlar</span>
+                      <div className="flex justify-between font-mono text-indigo-300 text-[10px]">
+                        <span>X: 2.40m</span>
+                        <span>Y: 1.80m</span>
+                        <span>Z: 0.00m</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase">İşıqlandırma Rejimi</span>
+                      <div className="text-xs font-bold text-amber-300 mt-1 flex items-center gap-1.5">
+                        <Sun className="w-3.5 h-3.5" /> Warm Ambient 3000K
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* MULTIPLAYER CURSORS ON SCANNED BLUEPRINT */}
-              <div 
-                className="absolute z-40 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah"
-                style={{ top: '35%', left: '25%' }}
-              >
-                <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
-                  <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
-                </svg>
-                <div className="bg-purple-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-purple-400/40 whitespace-nowrap">
-                  Sarah (CAD Lead)
-                </div>
-              </div>
-
-              <div 
-                className="absolute z-40 pointer-events-none flex items-center gap-1.5 animate-cursor-alex"
-                style={{ top: '60%', left: '70%' }}
-              >
-                <svg className="w-4 h-4 text-emerald-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
-                  <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
-                </svg>
-                <div className="bg-emerald-600 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-xl border border-emerald-400/40 whitespace-nowrap">
-                  Alex (Render Engine)
+                <div className="pt-4 border-t border-white/10 space-y-2">
+                  <Link
+                    href="/editor"
+                    className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-600/30"
+                  >
+                    <Paintbrush className="w-3.5 h-3.5" />
+                    <span>Materialı Dəyiş</span>
+                  </Link>
                 </div>
               </div>
 
