@@ -6,8 +6,12 @@
 }
 
 :root {
-  --background: #171717;
-  --foreground: #ededed;
+  --background: #09090b;
+  --foreground: #f4f4f5;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html, body {
@@ -15,19 +19,54 @@ html, body {
   padding: 0;
   background-color: var(--background);
   color: var(--foreground);
+  overflow-x: hidden;
 }
 
-/* Mac OS Style Modern Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+::-webkit-scrollbar-track {
+  background: #09090b;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}
+
+/* Ambient Pulsing Glow Keyframes */
+@keyframes ambientGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.animate-ambient-glow {
+  animation: ambientGlow 8s ease-in-out infinite;
+}
+
+/* Smooth Gradient Shimmer */
+@keyframes gradientX {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradientX 6s ease infinite;
 }

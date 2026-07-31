@@ -1,15 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, Check } from "lucide-react";
+import { 
+  ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, 
+  Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download
+} from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import HeroVideoModal from "@/components/HeroVideoModal";
+import Interactive3DPreview from "@/components/Interactive3DPreview";
 
 export default function LandingPage() {
-  const [animationStep, setAnimationStep] = React.useState(0);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setAnimationStep((prev) => (prev + 1) % 5);
     }, 4000);
@@ -17,765 +24,446 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="h-screen overflow-y-auto overflow-x-hidden bg-[#FAFAF8] text-neutral-900 font-sans selection:bg-[#E5DCC5] selection:text-black">
-      {/* Navigation Header */}
+    <div className="min-h-screen bg-[#09090B] text-neutral-100 font-sans selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+      {/* Navbar Header */}
       <Navbar />
 
-      {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-6 pt-24 pb-20 flex flex-col items-center text-center relative">
-        {/* Ambient Glows */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-indigo-400/8 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-        <div className="absolute top-40 right-1/4 w-96 h-96 bg-amber-400/6 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+      {/* Hero Video Showcase Modal */}
+      <HeroVideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+      />
 
-        {/* Masked Grid Pattern Background */}
-        <div 
-          className="absolute inset-0 -z-20 opacity-30 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-            maskImage: 'linear-gradient(to bottom, black 50%, transparent 95%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 95%)'
-          }}
-        ></div>
-
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-neutral-200/80 text-neutral-700 text-xs font-semibold mb-8 shadow-sm hover:border-indigo-200/80 transition-all hover:scale-102 hover:shadow-md cursor-pointer select-none whitespace-nowrap">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span>SpaceCraft 3D SaaS — İndi Canlıdır!</span>
+      {/* HERO SECTION WITH LUXURY VIDEO & AMBIENT GLOW BACKDROP */}
+      <section className="relative pt-20 pb-32 overflow-hidden">
+        {/* Background Looping Ambient Architectural Video Overlay */}
+        <div className="absolute inset-0 -z-20 overflow-hidden opacity-25">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover scale-105 filter blur-[2px] transition-opacity duration-1000"
+            src="https://cdn.coverr.co/videos/coverr-modern-interior-architecture-design-6756/1080p.mp4"
+            poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+          />
+          {/* Darkness Vignette overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#09090B]/90 via-[#09090B]/80 to-[#09090B]"></div>
         </div>
-        
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-neutral-900 max-w-4xl leading-tight mb-8">
-          İnteryer Dizaynını <br />
-          <span className="relative inline-block my-1">
-            <span className="relative z-10 italic font-serif font-light text-neutral-600 pr-1">Brauzerdə</span>
-            <span className="absolute bottom-1.5 left-0 w-full h-3 bg-gradient-to-r from-amber-400/30 to-amber-500/10 -z-10 -rotate-1 rounded-sm"></span>
-          </span>{' '}
-          <span className="inline-block bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">Yenidən Kəşf Et</span>
-        </h1>
-        
-        <p className="text-lg md:text-xl text-neutral-500 max-w-2xl mb-12 leading-relaxed">
-          Peşəkar proqramlara ehtiyac duymadan, süni intellekt dəstəkli və komanda ilə eyni anda işləyə biləcəyiniz ilk bulud əsaslı 3D memarlıq aləti.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <Link 
-            href="/editor" 
-            className="bg-neutral-900 hover:bg-neutral-800 text-[#FAFAF8] px-8 py-4 rounded-full text-base font-bold transition-all flex items-center gap-2 shadow-xl hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-indigo-500/15 shadow-neutral-900/15 whitespace-nowrap"
+
+        {/* Ambient Pulsing Radial Lights */}
+        <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[150px] pointer-events-none -z-10 animate-ambient-glow"></div>
+        <div className="absolute top-40 right-1/4 w-[450px] h-[450px] bg-amber-500/10 rounded-full blur-[150px] pointer-events-none -z-10 animate-ambient-glow" style={{ animationDelay: '3s' }}></div>
+
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center text-center relative z-10">
+          
+          {/* Status Pill Badge */}
+          <motion.div 
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900/90 border border-white/10 text-neutral-300 text-xs font-semibold mb-8 shadow-2xl backdrop-blur-md hover:border-indigo-500/50 transition-all cursor-pointer group"
           >
-            Ödənişsiz Sına <ArrowRight className="w-5 h-5" />
-          </Link>
-          <a 
-            href="#features" 
-            className="px-8 py-4 rounded-full text-base font-bold text-neutral-700 bg-white border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 transition-all hover:-translate-y-0.5 shadow-sm hover:shadow-md whitespace-nowrap"
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span className="group-hover:text-white transition-colors">SpaceCraft 3D v2.5 SaaS — İndi Canlıdır!</span>
+            <ChevronRight className="w-3.5 h-3.5 text-indigo-400 group-hover:translate-x-1 transition-transform" />
+          </motion.div>
+
+          {/* Main Hero Heading */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight text-white max-w-5xl leading-[1.08] mb-8 uppercase"
           >
-            Daha Çox Öyrən
-          </a>
-        </div>
-        {/* Browser Mockup Image / Editor Preview */}
-        <div className="w-full mt-24 relative rounded-3xl border border-[#E5DCC5] bg-white shadow-2xl p-2 max-w-6xl">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[#E5DCC5]/60 bg-[#FAFAF8] rounded-t-2xl">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-400"></div>
-              <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-              <div className="w-3 h-3 rounded-full bg-green-400"></div>
-              <div className="ml-4 text-xs font-mono text-neutral-400">spacecraft-3d.com/editor</div>
-            </div>
-            {/* Active stage tracker */}
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-neutral-400 bg-neutral-200/50 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-              {animationStep === 0 && "Addım 1: Səhnə Hazırlığı"}
-              {animationStep === 1 && "Addım 2: AI Generasiya"}
-              {animationStep === 2 && "Addım 3: Mebel Yerləşimi"}
-              {animationStep === 3 && "Addım 4: Rəng və Materiallar"}
-              {animationStep === 4 && "Addım 5: Ağıllı Silmə (Magic Erase)"}
-            </div>
-          </div>
+            İnteryer Dizaynını <br />
+            <span className="relative inline-block my-1 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-indigo-300">
+              Brauzerdə
+            </span>{" "}
+            <span className="inline-block bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+              Yenidən Kəşf Et
+            </span>
+          </motion.h1>
 
-          <div className="aspect-[16/9] bg-[#0c0c14] rounded-b-2xl overflow-hidden relative flex text-neutral-300">
-            {/* COLLABORATIVE MULTIPLAYER CURSORS */}
-            {/* Sarah Cursor (Purple) */}
-            <div 
-              className="absolute z-20 pointer-events-none flex items-center gap-1.5"
-              style={{
-                top: 
-                  animationStep === 0 ? '48%' :
-                  animationStep === 1 ? '38%' :
-                  animationStep === 2 ? '64%' :
-                  animationStep === 3 ? '78%' : '44%',
-                left: 
-                  animationStep === 0 ? '60%' :
-                  animationStep === 1 ? '55%' :
-                  animationStep === 2 ? '38%' :
-                  animationStep === 3 ? '85%' : '52%',
-                transition: 'top 1.2s cubic-bezier(0.25, 1, 0.5, 1), left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
-                willChange: 'top, left'
-              }}
+          {/* Subtitle */}
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-base sm:text-xl text-neutral-400 max-w-3xl mb-12 leading-relaxed font-light"
+          >
+            Peşəkar proqramlara ehtiyac duymadan, süni intellekt dəstəkli və komanda ilə eyni anda işləyə biləcəyiniz ilk bulud əsaslı <span className="text-white font-medium">3D memarlıq və dizayn platforması</span>.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row items-center gap-5"
+          >
+            <Link 
+              href="/editor" 
+              className="relative group overflow-hidden rounded-full p-[1.5px] w-full sm:w-auto font-bold text-base shadow-2xl shadow-indigo-600/30"
             >
-              <svg className="w-3 h-3 text-purple-500 fill-current drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 24 24">
-                <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
-              </svg>
-              <div className="bg-purple-500 text-white font-bold text-[7px] px-1.5 py-0.5 rounded shadow-lg whitespace-nowrap">Sarah</div>
-            </div>
+              <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-400 rounded-full animate-gradient-x"></span>
+              <span className="relative px-9 py-4 rounded-full bg-indigo-600 text-white flex items-center justify-center gap-3 group-hover:bg-indigo-500 transition-all font-extrabold whitespace-nowrap">
+                <span>Ödənişsiz Sına</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
 
-            {/* Alex Cursor (Green) */}
-            <div 
-              className="absolute z-20 pointer-events-none flex items-center gap-1.5"
-              style={{
-                top: 
-                  animationStep === 0 ? '62%' :
-                  animationStep === 1 ? '65%' :
-                  animationStep === 2 ? '44%' :
-                  animationStep === 3 ? '44%' : '56%',
-                left: 
-                  animationStep === 0 ? '30%' :
-                  animationStep === 1 ? '32%' :
-                  animationStep === 2 ? '48%' :
-                  animationStep === 3 ? '48%' : '74%',
-                transition: 'top 1.2s cubic-bezier(0.25, 1, 0.5, 1), left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
-                willChange: 'top, left'
-              }}
+            <button 
+              onClick={() => setIsVideoModalOpen(true)}
+              className="w-full sm:w-auto px-8 py-4 rounded-full text-base font-bold text-neutral-200 bg-neutral-900/90 border border-white/15 hover:bg-neutral-800 hover:border-white/30 transition-all shadow-xl backdrop-blur-md flex items-center justify-center gap-3 group hover:-translate-y-0.5"
             >
-              <svg className="w-3 h-3 text-emerald-500 fill-current drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 24 24">
-                <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
-              </svg>
-              <div className="bg-emerald-500 text-white font-bold text-[7px] px-1.5 py-0.5 rounded shadow-lg whitespace-nowrap">Alex</div>
-            </div>
+              <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                <Play className="w-4 h-4 fill-current ml-0.5" />
+              </div>
+              <span>🎬 Nümayiş Videosu</span>
+            </button>
+          </motion.div>
 
-            {/* 1. MOCK SIDEBAR (Left) */}
-            <div className="hidden md:flex w-1/5 bg-neutral-900 border-r border-white/5 p-4 flex-col justify-between text-neutral-400 text-[10px] select-none z-10">
-              <div>
-                <div className="text-white font-bold mb-4 tracking-wider uppercase text-[8px] opacity-75">SpaceCraft Kataloq</div>
-                <div className="space-y-1.5">
-                  <div className={`flex items-center gap-2 p-1.5 rounded transition-colors duration-300 font-semibold ${animationStep === 2 ? 'bg-indigo-500/20 text-white' : 'hover:bg-white/5 text-neutral-400'}`}>
-                    <span>🛋️</span> <span className="truncate min-w-0">Modern Divan</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-1.5 rounded hover:bg-white/5 font-semibold text-neutral-400">
-                    <span>🪴</span> <span className="truncate min-w-0">Dekorativ Bitki</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-1.5 rounded hover:bg-white/5 font-semibold text-neutral-400">
-                    <span>🖥️</span> <span className="truncate min-w-0">İş Masası</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-1.5 rounded hover:bg-white/5 font-semibold text-neutral-400">
-                    <span>💡</span> <span className="truncate min-w-0">Spot İşıq</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-1.5 rounded hover:bg-white/5 font-semibold text-neutral-400">
-                    <span>🚪</span> <span className="truncate min-w-0">Qapı</span>
-                  </div>
-                </div>
+          {/* Stat Ticker Badges */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 pt-8 border-t border-white/10 text-neutral-400 w-full max-w-4xl"
+          >
+            <div className="flex flex-col items-center">
+              <span className="text-2xl md:text-3xl font-black text-white">4K UHD</span>
+              <span className="text-xs text-neutral-400 font-mono mt-1">Real-Time Raytracing</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-2xl md:text-3xl font-black text-indigo-400">10x Daha Sürətli</span>
+              <span className="text-xs text-neutral-400 font-mono mt-1">AI Generasiya Motoru</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-2xl md:text-3xl font-black text-emerald-400">100% Bulud</span>
+              <span className="text-xs text-neutral-400 font-mono mt-1">Quraşdırma Tələb Olunmur</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-2xl md:text-3xl font-black text-amber-400">Multi-Player</span>
+              <span className="text-xs text-neutral-400 font-mono mt-1">Canlı Komanda İş birliyi</span>
+            </div>
+          </motion.div>
+
+          {/* Interactive Browser Mockup / Editor Preview Frame */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.9 }}
+            className="w-full mt-20 relative rounded-3xl border border-white/15 bg-neutral-900/90 shadow-2xl p-2 sm:p-3 max-w-6xl backdrop-blur-xl"
+          >
+            {/* Top Browser Header Bar */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-neutral-950/80 rounded-t-2xl">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                <div className="ml-4 text-xs font-mono text-neutral-400 hidden sm:inline">spacecraft-3d.com/editor</div>
               </div>
               
-              <div className="border-t border-white/5 pt-3">
-                <div className="flex justify-between items-center opacity-60 text-[8px] uppercase tracking-wider font-bold mb-1">Mərtəbə Paneli</div>
-                <div className="flex gap-1.5">
-                  <span className="bg-white/10 text-white px-2 py-0.5 rounded font-bold">1</span>
-                  <span className="px-2 py-0.5 rounded hover:bg-white/5 cursor-pointer">2</span>
-                  <span className="px-2 py-0.5 rounded hover:bg-white/5 cursor-pointer">+</span>
-                </div>
+              {/* Active stage tracker */}
+              <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-300 bg-neutral-900 px-3 py-1 rounded-full border border-white/10 whitespace-nowrap shrink-0">
+                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                {animationStep === 0 && "Addım 1: Səhnə Hazırlığı"}
+                {animationStep === 1 && "Addım 2: AI Generasiya"}
+                {animationStep === 2 && "Addım 3: Mebel Yerləşimi"}
+                {animationStep === 3 && "Addım 4: Rəng və Materiallar"}
+                {animationStep === 4 && "Addım 5: Magic Erase (Ağıllı Silmə)"}
               </div>
             </div>
 
-            {/* 2. MAIN CANVAS AREA (Center) */}
-            <div className="flex-1 relative flex items-center justify-center p-6 overflow-hidden">
-              {/* Grid Background */}
-              <div className="absolute inset-0 bg-[#121218]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+            {/* Interactive Mock Canvas Viewport */}
+            <div className="aspect-[16/9] bg-[#0c0c14] rounded-b-2xl overflow-hidden relative flex text-neutral-300 border border-white/5">
               
-              {/* Mock Toolbar */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 border border-white/10 rounded-full px-4 py-2 flex items-center gap-4 shadow-2xl backdrop-blur-md z-10 text-white/50 text-[10px]">
-                <span className="hover:text-white transition-colors cursor-pointer" title="Geri Qaytar">↩️</span>
-                <span className="hover:text-white transition-colors cursor-pointer" title="İrəli Qaytar">↪️</span>
-                <span className="w-px h-3.5 bg-white/10"></span>
-                <span className="text-white font-bold bg-white/15 px-2.5 py-0.5 rounded cursor-pointer text-[9px] shadow-sm">3D Səhnə</span>
-                <span className="hover:text-white transition-colors cursor-pointer text-[9px]">2D Plan</span>
-                <span className="w-px h-3.5 bg-white/10"></span>
-                <span className="hover:text-white transition-colors cursor-pointer" title="Maqnit (Snap)">🧲</span>
-                <span className="text-indigo-400 hover:text-white transition-colors cursor-pointer" title="Ruler">📏</span>
-              </div>
-
-              {/* AI Typing Overlay */}
+              {/* Collaborative Multiplayer Cursors */}
+              {/* Sarah Cursor */}
               <div 
-                className="absolute top-16 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/30 rounded-2xl px-4 py-2.5 flex items-center gap-2 shadow-2xl backdrop-blur-md z-10 text-white text-[10px]"
+                className="absolute z-20 pointer-events-none flex items-center gap-1.5"
                 style={{
-                  transform: `translate3d(-50%, ${animationStep === 1 ? '0px' : '-8px'}, 0) scale(${animationStep === 1 ? 1 : 0.95})`,
-                  opacity: animationStep === 1 ? 1 : 0,
-                  pointerEvents: animationStep === 1 ? 'auto' : 'none',
-                  transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-out',
-                  willChange: 'transform, opacity'
+                  top: 
+                    animationStep === 0 ? '48%' :
+                    animationStep === 1 ? '38%' :
+                    animationStep === 2 ? '64%' :
+                    animationStep === 3 ? '78%' : '44%',
+                  left: 
+                    animationStep === 0 ? '60%' :
+                    animationStep === 1 ? '55%' :
+                    animationStep === 2 ? '38%' :
+                    animationStep === 3 ? '85%' : '52%',
+                  transition: 'top 1.2s cubic-bezier(0.25, 1, 0.5, 1), left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
+                  willChange: 'top, left'
                 }}
               >
-                <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
-                <span className="font-semibold tracking-wide">AI: "Modern qonaq otağı dizayn edilir..."</span>
+                <svg className="w-3.5 h-3.5 text-purple-400 fill-current drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" viewBox="0 0 24 24">
+                  <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
+                </svg>
+                <div className="bg-purple-600 text-white font-bold text-[8px] px-2 py-0.5 rounded-full shadow-lg border border-purple-400/40 whitespace-nowrap">Sarah</div>
               </div>
 
-              {/* FLOATING AI ASSISTANT CHAT BOX */}
-              <div className="absolute bottom-4 right-4 bg-black/75 border border-white/10 rounded-2xl p-3 w-56 h-[142px] shadow-2xl backdrop-blur-md z-10 text-[9px] flex flex-col gap-2 transition-all duration-500">
-                <div className="flex items-center justify-between border-b border-white/5 pb-1.5">
-                  <div className="flex items-center gap-1.5 font-bold text-white">
-                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping"></span>
-                    <span>Gemini AI Dizayner</span>
+              {/* Alex Cursor */}
+              <div 
+                className="absolute z-20 pointer-events-none flex items-center gap-1.5"
+                style={{
+                  top: 
+                    animationStep === 0 ? '62%' :
+                    animationStep === 1 ? '65%' :
+                    animationStep === 2 ? '44%' :
+                    animationStep === 3 ? '44%' : '56%',
+                  left: 
+                    animationStep === 0 ? '30%' :
+                    animationStep === 1 ? '32%' :
+                    animationStep === 2 ? '48%' :
+                    animationStep === 3 ? '48%' : '74%',
+                  transition: 'top 1.2s cubic-bezier(0.25, 1, 0.5, 1), left 1.2s cubic-bezier(0.25, 1, 0.5, 1)',
+                  willChange: 'top, left'
+                }}
+              >
+                <svg className="w-3.5 h-3.5 text-emerald-400 fill-current drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" viewBox="0 0 24 24">
+                  <path d="M4 3l15 9-6.5 2 4.5 5.5-2.5 2-4.5-5.5L4 18z" />
+                </svg>
+                <div className="bg-emerald-600 text-white font-bold text-[8px] px-2 py-0.5 rounded-full shadow-lg border border-emerald-400/40 whitespace-nowrap">Alex (Architect)</div>
+              </div>
+
+              {/* Mock Sidebar Left */}
+              <div className="hidden md:flex w-1/5 bg-neutral-950 border-r border-white/10 p-4 flex-col justify-between text-neutral-400 text-[10px] select-none z-10">
+                <div>
+                  <div className="text-white font-bold mb-4 tracking-wider uppercase text-[9px] opacity-80">SpaceCraft Kataloq</div>
+                  <div className="space-y-2">
+                    <div className={`flex items-center gap-2 p-2 rounded-xl transition-colors font-semibold ${animationStep === 2 ? 'bg-indigo-600/30 text-white border border-indigo-500/40' : 'hover:bg-white/5 text-neutral-400'}`}>
+                      <span>🛋️</span> <span className="truncate">Modern Divan</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
+                      <span>🪴</span> <span className="truncate">Dekorativ Bitki</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
+                      <span>🖥️</span> <span className="truncate">İş Masası</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5 font-semibold text-neutral-400">
+                      <span>💡</span> <span className="truncate">Spot İşıq</span>
+                    </div>
                   </div>
-                  <span className="opacity-40 text-[7px] uppercase tracking-widest font-black">Aktiv</span>
                 </div>
-                <div className="space-y-2 max-h-24 overflow-y-auto">
-                  <div className="flex flex-col gap-0.5 items-end">
-                    <span className="bg-white/10 text-white px-2.5 py-1 rounded-xl rounded-tr-none max-w-[90%] break-words">
-                      Otağı modern üslubda bəzə, divarı yaşıl et!
-                    </span>
-                    <span className="text-[6px] opacity-40 mr-1 mt-0.5">Sən</span>
-                  </div>
-                  <div 
-                    className="flex flex-col gap-0.5 items-start"
-                    style={{
-                      transform: `translate3d(0, ${animationStep >= 1 ? '0px' : '4px'}, 0)`,
-                      opacity: animationStep >= 1 ? 1 : 0,
-                      transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-out',
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    <span className="bg-purple-950/60 border border-purple-500/20 text-purple-200 px-2.5 py-1 rounded-xl rounded-tl-none max-w-[90%] break-words leading-relaxed">
-                      {animationStep === 1 && "Baş üstə, otaq tənzimlənir... ✨"}
-                      {animationStep === 2 && "Mebelləri (Divan, Masa, Bitki, TV Stendi) otağa yerləşdirdim! 🛋️"}
-                      {animationStep === 3 && "Materialları tənzimlədim və divarları zümrüd yaşılına boyadım! 🟢"}
-                      {animationStep >= 4 && "Hazırdır! İndi isə 'Magic Erase' aləti ilə istədiyiniz mebeli təmizləyə bilərsiniz."}
-                    </span>
-                    <span className="text-[6px] opacity-40 ml-1 mt-0.5">AI Asistent</span>
-                  </div>
+                <div className="pt-3 border-t border-white/10 flex justify-between items-center text-[9px]">
+                  <span>3D Memarlıq v2.5</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 </div>
               </div>
 
-              {/* CSS 3D Isometric View */}
-              <div className="relative w-full h-full flex items-center justify-center" style={{ perspective: '800px' }}>
+              {/* Main Canvas Area */}
+              <div className="flex-1 relative flex items-center justify-center p-6 overflow-hidden">
+                <div className="absolute inset-0 bg-[#0d0e15]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                
+                {/* Floating Gemini AI Prompt Overlay */}
                 <div 
-                  className="relative w-72 h-72 transition-transform duration-1000 ease-in-out" 
-                  style={{ 
-                    transform: 'rotateX(55deg) rotateZ(-45deg)', 
-                    transformStyle: 'preserve-3d',
-                    willChange: 'transform'
+                  className="absolute top-6 left-1/2 bg-gradient-to-r from-purple-950/90 to-indigo-950/90 border border-indigo-500/40 rounded-2xl px-5 py-2.5 flex items-center gap-3 shadow-2xl backdrop-blur-md z-10 text-white text-[11px]"
+                  style={{
+                    transform: `translate3d(-50%, ${animationStep === 1 ? '0px' : '-10px'}, 0) scale(${animationStep === 1 ? 1 : 0.95})`,
+                    opacity: animationStep === 1 ? 1 : 0,
+                    transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-out',
                   }}
                 >
-                  {/* Floor Grid Plane with baseboards */}
-                  <div 
-                    className="absolute inset-0 border border-indigo-500/20 rounded-lg"
-                    style={{ 
-                      backgroundImage: 'radial-gradient(rgba(79, 70, 229, 0.2) 1.5px, transparent 1.5px)', 
-                      backgroundSize: '20px 20px',
-                      backgroundColor: '#0c0c14',
-                      transform: 'translate3d(0, 0, 0)',
-                      boxShadow: 'inset 0 0 24px rgba(0,0,0,0.8)'
-                    }}
-                  >
-                    {/* White wood baseboards along the wall edges */}
-                    <div className="absolute top-0 left-0 w-full h-[3px] bg-white/20"></div>
-                    <div className="absolute top-0 left-0 h-full w-[3px] bg-white/20"></div>
-                  </div>
-
-                  {/* Cozy Patterned Carpet */}
-                  <div 
-                    className="absolute"
-                    style={{
-                      width: '140px',
-                      height: '110px',
-                      bottom: '50px',
-                      left: '70px',
-                      transform: 'translate3d(0, 0, 1px)',
-                      background: 'repeating-linear-gradient(45deg, #161622, #161622 8px, #201b2d 8px, #201b2d 16px)',
-                      border: '1.5px solid rgba(255,255,255,0.05)',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-                      borderRadius: '8px',
-                      transition: 'transform 1s ease-out, opacity 1s ease-out',
-                      willChange: 'transform, opacity'
-                    }}
-                  ></div>
-
-                  {/* Left Back Wall */}
-                  <div 
-                    className="absolute origin-bottom"
-                    style={{ 
-                      width: '288px', 
-                      height: '140px', 
-                      bottom: '288px', 
-                      left: '0px',
-                      transform: 'rotateX(-90deg)', 
-                      transformStyle: 'preserve-3d',
-                      backgroundColor: animationStep >= 3 ? '#12261e' : '#1b1b26', 
-                      borderBottom: '2px solid rgba(255,255,255,0.08)',
-                      borderLeft: '2px solid rgba(255,255,255,0.08)',
-                      transition: 'background-color 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1)',
-                      willChange: 'background-color'
-                    }}
-                  >
-                    {/* Mock Window with Sky and cloud preview */}
-                    <div className="absolute left-[130px] bottom-24 w-28 h-18 bg-gradient-to-b from-sky-400 to-sky-200 border-2 border-white/20 rounded flex items-center justify-center text-[8px] text-white/30 backdrop-blur-xs shadow-inner overflow-hidden">
-                      <div className="absolute top-1 left-2 w-8 h-4 bg-white/40 rounded-full blur-xs"></div>
-                      <div className="absolute top-3 right-3 w-10 h-5 bg-white/40 rounded-full blur-xs"></div>
-                    </div>
-
-                    {/* Abstract Art Frame 1 */}
-                    <div 
-                      className="absolute"
-                      style={{
-                        width: '32px',
-                        height: '45px',
-                        left: '40px',
-                        bottom: '50px',
-                        backgroundColor: '#fff',
-                        border: '2px solid #1a1a24',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.4)',
-                        padding: '3px',
-                        transform: 'translate3d(0, 0, 1px)',
-                        transformStyle: 'preserve-3d',
-                        transition: 'transform 1s cubic-bezier(0.25, 1, 0.5, 1)',
-                        willChange: 'transform'
-                      }}
-                    >
-                      <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-amber-500 rounded-xs"></div>
-                    </div>
-
-                    {/* Abstract Art Frame 2 */}
-                    <div 
-                      className="absolute"
-                      style={{
-                        width: '32px',
-                        height: '45px',
-                        left: '80px',
-                        bottom: '50px',
-                        backgroundColor: '#fff',
-                        border: '2px solid #1a1a24',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.4)',
-                        padding: '3px',
-                        transform: 'translate3d(0, 0, 1px)',
-                        transformStyle: 'preserve-3d',
-                        transition: 'transform 1s cubic-bezier(0.25, 1, 0.5, 1)',
-                        willChange: 'transform'
-                      }}
-                    >
-                      <div className="w-full h-full bg-gradient-to-tr from-emerald-500 via-teal-500 to-sky-500 rounded-xs"></div>
-                    </div>
-                  </div>
-
-                  {/* Right Back Wall */}
-                  <div 
-                    className="absolute origin-left"
-                    style={{ 
-                      width: '140px', 
-                      height: '288px', 
-                      left: '288px', 
-                      top: '0px',
-                      transform: 'rotateY(90deg)', 
-                      transformStyle: 'preserve-3d',
-                      backgroundColor: animationStep >= 3 ? '#12261e' : '#1b1b26', 
-                      borderBottom: '2px solid rgba(255,255,255,0.08)',
-                      borderRight: '2px solid rgba(255,255,255,0.08)',
-                      transition: 'background-color 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1)',
-                      willChange: 'background-color'
-                    }}
-                  >
-                    {/* Mock Door with handle */}
-                    <div className="absolute right-12 bottom-0 w-16 h-28 bg-[#8b5a2b]/25 border-2 border-white/20 rounded-t flex items-center justify-center text-[8px] text-white/30" style={{ transform: 'rotateY(-60deg)', transformOrigin: 'left' }}>
-                      <div className="absolute left-2 top-1/2 w-1.5 h-1.5 rounded-full bg-yellow-600"></div>
-                      Qapı
-                    </div>
-                  </div>
-
-                  {/* 3D SOFA (Divan) */}
-                  <div 
-                    className="absolute"
-                    style={{
-                      width: '100px',
-                      height: '50px',
-                      bottom: '80px',
-                      left: '90px',
-                      transform: `translate3d(0, 0, ${animationStep >= 2 ? '0px' : '300px'}) scale(${animationStep >= 2 ? 1 : 0})`,
-                      opacity: animationStep >= 2 ? 1 : 0,
-                      transformStyle: 'preserve-3d',
-                      transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease-out',
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    {/* Top Cushion */}
-                    <div className="absolute inset-0 bg-[#e0a96d] border border-[#c59159]" style={{ transform: 'translateZ(30px)' }}></div>
-                    {/* Front Face */}
-                    <div className="absolute origin-bottom" style={{ width: '100px', height: '30px', bottom: '0px', transform: 'rotateX(-90deg)', backgroundColor: '#c59159' }}></div>
-                    {/* Right Face */}
-                    <div className="absolute origin-left" style={{ width: '30px', height: '50px', left: '100px', transform: 'rotateY(90deg)', backgroundColor: '#a77642' }}></div>
-                    
-                    {/* Selected state indicator overlay */}
-                    <div 
-                      className="absolute -inset-1 border-2 border-indigo-400 rounded-lg animate-pulse pointer-events-none" 
-                      style={{ 
-                        transform: 'translate3d(0, 0, 15px)',
-                        opacity: animationStep === 2 ? 1 : 0,
-                        transition: 'opacity 0.5s ease-out',
-                        willChange: 'opacity'
-                      }}
-                    ></div>
-                  </div>
-
-                  {/* 3D COFFEE TABLE (Masa) */}
-                  <div 
-                    className="absolute"
-                    style={{
-                      width: '60px',
-                      height: '40px',
-                      bottom: '150px',
-                      left: '110px',
-                      transform: `translate3d(0, 0, ${animationStep >= 2 ? '0px' : '300px'}) scale(${animationStep >= 2 ? 1 : 0})`,
-                      opacity: animationStep >= 2 ? 1 : 0,
-                      transformStyle: 'preserve-3d',
-                      transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease-out',
-                      transitionDelay: '150ms',
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    {/* Glass Top */}
-                    <div className="absolute inset-0 bg-white/20 border border-white/20 backdrop-blur-xs" style={{ transform: 'translateZ(18px)' }}></div>
-                    {/* Metal Legs */}
-                    <div className="absolute w-1.5 h-1.5 bg-neutral-600" style={{ bottom: '0px', left: '0px', transform: 'translateZ(0px) rotateX(90deg)', height: '18px' }}></div>
-                    <div className="absolute w-1.5 h-1.5 bg-neutral-600" style={{ bottom: '0px', right: '0px', transform: 'translateZ(0px) rotateX(90deg)', height: '18px' }}></div>
-                    <div className="absolute w-1.5 h-1.5 bg-neutral-600" style={{ top: '0px', left: '0px', transform: 'translateZ(0px) rotateX(90deg)', height: '18px' }}></div>
-                    <div className="absolute w-1.5 h-1.5 bg-neutral-600" style={{ top: '0px', right: '0px', transform: 'translateZ(0px) rotateX(90deg)', height: '18px' }}></div>
-                  </div>
-
-                  {/* 3D DECORATIVE PLANT (Dibçək) */}
-                  <div 
-                    className="absolute"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      bottom: '35px',
-                      left: '35px',
-                      transform: `translate3d(0, 0, ${animationStep >= 2 ? '0px' : '300px'}) scale(${animationStep >= 2 ? 1 : 0})`,
-                      opacity: animationStep >= 2 ? 1 : 0,
-                      transformStyle: 'preserve-3d',
-                      transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease-out',
-                      transitionDelay: '300ms',
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    {/* Pot */}
-                    <div className="absolute inset-0 bg-neutral-100 border border-neutral-300 rounded-full" style={{ transform: 'translateZ(25px)' }}></div>
-                    <div className="absolute w-7 h-10 bg-neutral-300" style={{ bottom: '0px', left: '0px', transform: 'translateZ(0px) rotateX(90deg)', borderRadius: '50%' }}></div>
-                    {/* Green Leaves */}
-                    <div className="absolute w-9 h-9 bg-emerald-500 rounded-full shadow-lg" style={{ bottom: '-3px', left: '-3px', transform: 'translateZ(35px) rotateX(10deg)' }}></div>
-                    <div className="absolute w-7 h-7 bg-emerald-600 rounded-full" style={{ bottom: '5px', left: '6px', transform: 'translateZ(42px) rotateY(15deg)' }}></div>
-                  </div>
-
-                  {/* 3D TV & TV STAND (TV Konsolu) */}
-                  <div 
-                    className="absolute"
-                    style={{
-                      width: '120px',
-                      height: '25px',
-                      bottom: '250px',
-                      left: '80px',
-                      transform: `translate3d(0, 0, ${animationStep >= 2 ? '0px' : '300px'}) scale(${animationStep >= 2 ? 1 : 0})`,
-                      opacity: animationStep >= 2 ? 1 : 0,
-                      transformStyle: 'preserve-3d',
-                      transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease-out',
-                      transitionDelay: '200ms',
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    {/* Top Console Wood */}
-                    <div className="absolute inset-0 bg-[#2d2d38] border border-white/10" style={{ transform: 'translateZ(15px)' }}></div>
-                    {/* Front Console */}
-                    <div className="absolute origin-bottom" style={{ width: '120px', height: '15px', bottom: '0px', transform: 'rotateX(-90deg)', backgroundColor: '#1d1d25' }}></div>
-                    {/* Side Console */}
-                    <div className="absolute origin-left" style={{ width: '15px', height: '25px', left: '120px', transform: 'rotateY(90deg)', backgroundColor: '#14141c' }}></div>
-
-                    {/* TV Screen */}
-                    <div 
-                      className="absolute"
-                      style={{
-                        width: '90px',
-                        height: '55px',
-                        bottom: '12px',
-                        left: '15px',
-                        transform: 'translateZ(15px) rotateX(90deg)',
-                        transformOrigin: 'bottom',
-                        backgroundColor: '#070709',
-                        border: '2px solid #1a1a24',
-                        boxShadow: '0 -4px 12px rgba(0,0,0,0.6)',
-                        transformStyle: 'preserve-3d'
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10"></div>
-                      <div className="absolute bottom-1 left-1 bg-[#ef4444] w-1 h-1 rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-
-                  {/* 3D MODERN FLOOR LAMP (Torser) */}
-                  <div 
-                    className="absolute"
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      bottom: '210px',
-                      left: '20px',
-                      transform: `translate3d(0, 0, ${animationStep >= 2 ? '0px' : '300px'}) scale(${animationStep >= 2 ? 1 : 0})`,
-                      opacity: animationStep >= 2 ? 1 : 0,
-                      transformStyle: 'preserve-3d',
-                      transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease-out',
-                      transitionDelay: '350ms',
-                      willChange: 'transform, opacity'
-                    }}
-                  >
-                    {/* Lamp base */}
-                    <div className="absolute inset-0 bg-[#d4af37] rounded-full" style={{ transform: 'translateZ(2px)' }}></div>
-                    {/* Lamp stem */}
-                    <div className="absolute w-1 h-1 bg-[#d4af37]" style={{ bottom: '9px', left: '9px', transform: 'translateZ(0px) rotateX(90deg)', height: '70px' }}></div>
-                    {/* Lamp shade */}
-                    <div className="absolute w-8 h-8 bg-neutral-100 border border-neutral-300 rounded-full" style={{ bottom: '-4px', left: '-4px', transform: 'translateZ(70px)' }}>
-                      <div className={`absolute inset-0 rounded-full bg-yellow-300/40 blur-xs transition-opacity duration-1000 ${animationStep >= 3 ? 'opacity-100' : 'opacity-20'}`}></div>
-                    </div>
-                    {/* Emissive Lamp Glow on the Floor */}
-                    <div 
-                      className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-yellow-300/10 blur-xl pointer-events-none"
-                      style={{ 
-                        transform: `translate3d(0, 0, 1px) scale(${animationStep >= 3 ? 1 : 0.5})`,
-                        opacity: animationStep >= 3 ? 1 : 0,
-                        transition: 'transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease-out',
-                        willChange: 'transform, opacity'
-                      }}
-                    ></div>
-                  </div>
-
-                  {/* Red Measurement Ruler (Ruler Tool) */}
-                  <div 
-                    className="absolute pointer-events-none"
-                    style={{ 
-                      width: '90px', 
-                      height: '1px', 
-                      bottom: '105px', 
-                      left: '0px', 
-                      borderTop: '1px dashed #ef4444',
-                      transform: 'translate3d(0, 0, 10px)',
-                      transformStyle: 'preserve-3d',
-                      opacity: animationStep >= 2 ? 1 : 0,
-                      transition: 'opacity 0.5s ease-out',
-                      willChange: 'opacity'
-                    }}
-                  >
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-red-500 text-white text-[7px] font-mono font-bold px-1 rounded transform rotate-45 select-none shadow">1.20 m</div>
-                  </div>
-
-                  {/* AI Magic Erase Overlay (Step 5 Showcase) */}
-                  <div 
-                    className="absolute bg-purple-500/10 border-2 border-dashed border-purple-500 rounded-xl animate-pulse pointer-events-none"
-                    style={{
-                      width: '70px',
-                      height: '70px',
-                      bottom: '160px',
-                      left: '190px',
-                      transform: 'translate3d(0, 0, 12px)',
-                      transformStyle: 'preserve-3d',
-                      opacity: animationStep === 4 ? 1 : 0,
-                      transition: 'opacity 0.5s ease-out',
-                      willChange: 'opacity'
-                    }}
-                  >
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-[6px] font-bold px-1.5 py-0.5 rounded whitespace-nowrap shadow-lg">✨ AI Məhv Et (Erase)</div>
-                  </div>
+                  <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+                  <span className="font-semibold">Gemini AI: "Lüks modern otaq konsepti generasiya olunur..."</span>
                 </div>
-              </div>
-            </div>
 
-            {/* 3. MOCK PROPERTIES PANEL (Right) */}
-            <div className="hidden lg:flex w-1/5 bg-neutral-900 border-l border-white/5 p-4 flex-col gap-4 text-neutral-400 text-[9px] select-none z-10">
-              <div>
-                <div className="text-white font-bold tracking-wider uppercase text-[8px] opacity-75 mb-3">Xüsusiyyətlər</div>
-                <div className="space-y-3">
-                  <div>
-                    <div className="flex justify-between items-center mb-1 gap-2"><span className="opacity-60 shrink-0">Seçilən:</span> <span className="text-white font-semibold truncate min-w-0">{animationStep >= 2 ? 'Modern Divan' : 'Seçilməyib'}</span></div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between mb-1"><span className="opacity-60">Ölçü X:</span> <span>{animationStep >= 2 ? '1.20 m' : '0.00 m'}</span></div>
-                    <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-                      <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: animationStep >= 2 ? '65%' : '0%' }}></div>
+                {/* Isometric 3D Room Mock Graphics */}
+                <div className="relative w-72 h-72 flex items-center justify-center">
+                  <div className="w-64 h-64 rounded-3xl bg-neutral-900/90 border border-white/15 p-4 shadow-2xl flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl"></div>
+                    <div className="flex justify-between items-center text-xs font-bold text-neutral-300">
+                      <span>Otaq #104</span>
+                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Active 3D</span>
                     </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between mb-1"><span className="opacity-60">Ölçü Z:</span> <span>{animationStep >= 2 ? '-0.85 m' : '0.00 m'}</span></div>
-                    <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-                      <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: animationStep >= 2 ? '40%' : '0%' }}></div>
+
+                    <div className="grid grid-cols-2 gap-3 my-4">
+                      <div className={`p-3 rounded-2xl border transition-all ${animationStep >= 2 ? 'bg-indigo-950/40 border-indigo-500/40' : 'bg-neutral-800/40 border-white/5'}`}>
+                        <div className="text-[10px] font-bold text-neutral-400">Divan Seçimi</div>
+                        <div className="text-xs font-bold text-white mt-1">Velvet Sofistike</div>
+                      </div>
+                      <div className={`p-3 rounded-2xl border transition-all ${animationStep >= 3 ? 'bg-emerald-950/40 border-emerald-500/40' : 'bg-neutral-800/40 border-white/5'}`}>
+                        <div className="text-[10px] font-bold text-neutral-400">İşıqlandırma</div>
+                        <div className="text-xs font-bold text-white mt-1">Warm Ambient</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-neutral-400 pt-2 border-t border-white/10">
+                      <span>FPS: 120</span>
+                      <span>Latency: 12ms</span>
                     </div>
                   </div>
                 </div>
-              </div>
-              
-              <div className="border-t border-white/5 pt-3">
-                <div className="text-white font-bold tracking-wider uppercase text-[8px] opacity-75 mb-2.5">Material Rəngi</div>
-                <div className="flex gap-2">
-                  <span 
-                    className="w-4 h-4 rounded-full border border-white/20 bg-white cursor-pointer"
-                    style={{
-                      transform: `scale(${animationStep < 3 ? 1.25 : 1})`,
-                      boxShadow: animationStep < 3 ? '0 0 0 2px #6366f1' : 'none',
-                      transition: 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease-out',
-                      willChange: 'transform, box-shadow'
-                    }}
-                  ></span>
-                  <span className="w-4 h-4 rounded-full border border-white/20 bg-neutral-600 cursor-pointer hover:scale-110"></span>
-                  <span className="w-4 h-4 rounded-full border border-white/20 bg-amber-800 cursor-pointer hover:scale-110"></span>
-                  <span 
-                    className="w-4 h-4 rounded-full border border-white/20 bg-emerald-700 cursor-pointer"
-                    style={{
-                      transform: `scale(${animationStep >= 3 ? 1.25 : 1})`,
-                      boxShadow: animationStep >= 3 ? '0 0 0 2px #6366f1' : 'none',
-                      transition: 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease-out',
-                      willChange: 'transform, box-shadow'
-                    }}
-                  ></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
 
-
-      {/* Features Section */}
-      <section id="features" className="bg-white border-t border-[#E5DCC5] py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-black text-neutral-900 mb-4">Niyə SpaceCraft?</h2>
-            <p className="text-neutral-500 max-w-2xl mx-auto">Biz qarmaqarışıq və ağır 3D proqramlarını sadələşdirdik, müasir bulud və AI texnologiyaları ilə brauzerinizə gətirdik.</p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card 1 - AI Dizayner */}
-            <div className="p-8 rounded-3xl bg-[#FAFAF8] border border-[#E5DCC5] hover:-translate-y-1 hover:shadow-xl hover:border-amber-200/80 transition-all duration-300">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#E5DCC5] mb-6 shadow-sm">
-                <Sparkles className="w-6 h-6 text-amber-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3">AI Dizayner</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">Otağınızın ölçülərini daxil edin və Süni İntellekt (Gemini) bir saniyədə ideal mebel yerləşimi ilə tam dizayn təklif etsin.</p>
-            </div>
-            
-            {/* Card 2 - Canlı Kollaborasiya */}
-            <div className="p-8 rounded-3xl bg-[#FAFAF8] border border-[#E5DCC5] hover:-translate-y-1 hover:shadow-xl hover:border-indigo-200/80 transition-all duration-300">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#E5DCC5] mb-6 shadow-sm">
-                <Users className="w-6 h-6 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Canlı Kollaborasiya</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">Eynilə Figma və Google Docs kimi, müştərilərinizlə eyni vaxtda otağa daxil olub canlı dəyişikliklər və müzakirələr edin.</p>
-            </div>
 
-            {/* Card 3 - CSG Memarlıq */}
-            <div className="p-8 rounded-3xl bg-[#FAFAF8] border border-[#E5DCC5] hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200/80 transition-all duration-300">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#E5DCC5] mb-6 shadow-sm">
-                <Layers className="w-6 h-6 text-emerald-600" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">CSG Memarlıq</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">Qalınlığı olan real 3D divarlar yaradın. Qapı və pəncərə əlavə edərkən divarlarda avtomatik deşiklər açılsın.</p>
             </div>
+          </motion.div>
 
-            {/* Card 4 - Sürətli Render */}
-            <div className="p-8 rounded-3xl bg-[#FAFAF8] border border-[#E5DCC5] hover:-translate-y-1 hover:shadow-xl hover:border-rose-200/80 transition-all duration-300">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#E5DCC5] mb-6 shadow-sm">
-                <Camera className="w-6 h-6 text-rose-600" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Sürətli Render</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">Ağır kompüterlərə ehtiyac yoxdur. Bir kliklə buludda real işıqlandırma, kölgələr və 360° panoramik görüntülər yaradın.</p>
-            </div>
-
-            {/* Card 5 - Ağıllı Smeta */}
-            <div className="p-8 rounded-3xl bg-[#FAFAF8] border border-[#E5DCC5] hover:-translate-y-1 hover:shadow-xl hover:border-blue-200/80 transition-all duration-300">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#E5DCC5] mb-6 shadow-sm">
-                <FileText className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Ağıllı Smeta</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">İstifadə etdiyiniz bütün mebel və materialların qiymətini, sayını və ölçülərini avtomatik hesablayan PDF hesabatları çıxarın.</p>
-            </div>
-
-            {/* Card 6 - Dərhal Paylaşım */}
-            <div className="p-8 rounded-3xl bg-[#FAFAF8] border border-[#E5DCC5] hover:-translate-y-1 hover:shadow-xl hover:border-violet-200/80 transition-all duration-300">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-[#E5DCC5] mb-6 shadow-sm">
-                <Share2 className="w-6 h-6 text-violet-600" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Dərhal Paylaşım</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">Layihələrinizi dərhal buluda yükləyin və sadəcə bir keçid (link) göndərməklə müştərinizə istənilən cihazda açdırın.</p>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="bg-[#FAFAF8] border-t border-[#E5DCC5] py-24">
+      {/* FEATURED SHOWCASE BANNER — MERIDIAN STYLE CINEMATIC SECTION */}
+      <section className="py-24 border-y border-white/10 bg-neutral-950 relative overflow-hidden" id="showcase">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-black text-neutral-900 mb-4">Üç Sadə Addımda Dizayn</h2>
-            <p className="text-neutral-500 max-w-2xl mx-auto">Mürəkkəb interyer proqramlarını öyrənməyə günlər sərf etməyin. Biz hər şeyi sadələşdirdik.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {/* Step 1 */}
-            <div className="relative flex flex-col items-start">
-              <div className="text-7xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent opacity-20 mb-4 select-none">01</div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-3">Səhnəni Hazırlayın</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">
-                Otağınızın ölçülərini daxil edin və ya divarları sərbəst şəkildə çəkin. Divarlara asanlıqla qapı və pəncərələr əlavə edin.
-              </p>
+          
+          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-mono text-indigo-400 uppercase tracking-widest mb-3">
+                <Sparkles className="w-4 h-4" /> Cinematic Nümayiş
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
+                3D Memarlığın <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-amber-300">Yeni Standartı</span>
+              </h2>
             </div>
 
-            {/* Step 2 */}
-            <div className="relative flex flex-col items-start">
-              <div className="text-7xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent opacity-20 mb-4 select-none">02</div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-3">AI Generasiya və Materiallar</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">
-                Süni intellekt (Gemini) bir saniyədə ideal mebel düzülüşünü təklif etsin. Mebellərin rəngini və materiallarını zövqünüzə görə seçin.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative flex flex-col items-start">
-              <div className="text-7xl font-black bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent opacity-20 mb-4 select-none">03</div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-3">Render və Canlı Gəzinti</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">
-                Bulud render texnologiyası ilə real işıqlandırmalı şəkillər çıxarın. Virtual Reallıq (VR) dəstəyi ilə dizaynınızın daxilində addımlayın.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section id="cta" className="bg-[#FAFAF8] py-24 border-t border-[#E5DCC5]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-900 text-white p-12 md:p-16 text-center border border-white/10 shadow-2xl">
-            {/* Ambient Glows */}
-            <div className="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            
-            <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-6">
-              Dizayn Səyahətinizə Bu Gün Başlayın
-            </h2>
-            <p className="text-neutral-400 max-w-2xl mx-auto mb-10 text-base md:text-lg leading-relaxed">
-              Heç bir quraşdırma tələb olunmur. Saniyələr ərzində qeydiyyatdan keçin və Süni İntellekt dəstəkli 3D memarlıq və interyer dizayn dünyasına daxil olun.
+            <p className="text-neutral-400 max-w-md text-sm leading-relaxed">
+              SpaceCraft 3D ilə hər bir detal real vaxtda işıqlandırılır, istənilən bucaqdan 4K keyfiyyətində cinematic görüntülər əldə edilir.
             </p>
-            <div className="flex justify-center">
-              <Link 
-                href="/editor" 
-                className="bg-white hover:bg-neutral-100 text-neutral-900 px-8 py-4 rounded-full text-base font-bold transition-all flex items-center gap-2 shadow-xl hover:-translate-y-0.5 hover:shadow-white/10"
-              >
-                İndi Dizayna Başla <ArrowRight className="w-5 h-5 text-neutral-900" />
-              </Link>
+          </div>
+
+          {/* Interactive Live 3D Room Showcase Component */}
+          <Interactive3DPreview />
+
+        </div>
+      </section>
+
+      {/* FEATURES GRID SECTION */}
+      <section className="py-32 relative" id="features">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight mb-6">
+              Niyə SpaceCraft 3D?
+            </h2>
+            <p className="text-base sm:text-lg text-neutral-400">
+              Gələcəyin memarlıq və interyer dizayn alətlərini bir brauzer pəncərəsində birləşdirdik.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <motion.div 
+              whileHover={{ y: -8 }}
+              className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-indigo-500/50 transition-all shadow-2xl relative overflow-hidden group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">AI Dəstəkli Dizayn</h3>
+              <p className="text-sm text-neutral-400 leading-relaxed">
+                Mətn əmrləri ilə otağınızın üslubunu, rənglərini və mebel quruluşunu saniyələr içində avtomatik dəyişdirin.
+              </p>
+            </motion.div>
+
+            {/* Feature 2 */}
+            <motion.div 
+              whileHover={{ y: -8 }}
+              className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-purple-500/50 transition-all shadow-2xl relative overflow-hidden group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+                <Users className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Canlı Komanda İş Birliyi</h3>
+              <p className="text-sm text-neutral-400 leading-relaxed">
+                Müştəriniz və ya komandanızla eyni 3D səhnədə eyni anda kursor hərəkətlərini görərək işləyin.
+              </p>
+            </motion.div>
+
+            {/* Feature 3 */}
+            <motion.div 
+              whileHover={{ y: -8 }}
+              className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-amber-500/50 transition-all shadow-2xl relative overflow-hidden group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-amber-600/20 border border-amber-500/40 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Ultra HD Render</h3>
+              <p className="text-sm text-neutral-400 leading-relaxed">
+                Yüksək güclü bulud serverləri vasitəsilə 4K keyfiyyətində fotorealistik görüntülər hazırlayın.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* GALLERY PREVIEW SECTION */}
+      <section className="py-24 bg-neutral-950 border-t border-white/10" id="gallery">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-16 gap-4">
+            <div>
+              <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">Qalereya Showcase</span>
+              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-1">
+                Hazırlanmış Lüks Dizaynlar
+              </h2>
+            </div>
+            <Link 
+              href="/gallery" 
+              className="inline-flex items-center gap-2 text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              <span>Bütün Qalereyaya Bax</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="group relative rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl aspect-[4/3]">
+              <img 
+                src="/images/gallery_bedroom.png" 
+                alt="Bedroom Design"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
+                <span className="text-xs font-mono text-indigo-300">Modern Yataq Otağı</span>
+                <h4 className="text-lg font-bold text-white">Minimalist Vibe</h4>
+              </div>
+            </div>
+
+            <div className="group relative rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl aspect-[4/3]">
+              <img 
+                src="/images/gallery_japandi.png" 
+                alt="Japandi Style"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
+                <span className="text-xs font-mono text-amber-300">Japandi Estetika</span>
+                <h4 className="text-lg font-bold text-white">Təbii Ağac & İşıq</h4>
+              </div>
+            </div>
+
+            <div className="group relative rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl aspect-[4/3]">
+              <img 
+                src="/images/gallery_kitchen.png" 
+                alt="Luxury Kitchen"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
+                <span className="text-xs font-mono text-emerald-300">Lüks Mətbəx</span>
+                <h4 className="text-lg font-bold text-white">Mərmər & Ada Konsepti</h4>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-neutral-900 text-neutral-400 py-12 border-t border-neutral-800">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <div className="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
-              <Box className="w-4 h-4 text-white" />
+      {/* FOOTER */}
+      <footer className="py-16 border-t border-white/10 bg-neutral-950 text-neutral-400 text-xs">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold">
+              <Box className="w-4 h-4" />
             </div>
-            <span className="text-lg font-bold text-white">SpaceCraft 3D</span>
+            <span className="text-sm font-bold text-white">SpaceCraft 3D Platform</span>
           </div>
-          <p className="text-sm">© 2026 SpaceCraft 3D. Bütün hüquqlar qorunur.</p>
+
+          <p className="text-neutral-500">
+            © 2026 SpaceCraft 3D Inc. Bütün hüquqlar qorunur.
+          </p>
         </div>
       </footer>
     </div>
