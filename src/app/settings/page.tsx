@@ -604,18 +604,24 @@ export default function SettingsPage() {
                     <button 
                       onClick={handleStripePortal}
                       disabled={isBillingLoading}
+                      className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer"
+                    >
+                      {isBillingLoading ? "Yüklenir..." : "Stripe Portalına Keç"}
+                    </button>
+                  </div>
+                </div>
 
                 {/* Payment Method Card */}
-                <div className="p-6 rounded-2xl border border-[#E5DCC5] bg-[#FAFAF8] flex flex-col justify-between">
+                <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] flex flex-col justify-between backdrop-blur-xl">
                   <div>
-                    <span className="text-xs font-bold tracking-widest text-neutral-500 uppercase">Ödəniş Metodu</span>
+                    <span className="text-xs font-bold tracking-widest text-neutral-400 uppercase">Ödəniş Metodu</span>
                     <div className="flex items-center gap-3 mt-4">
-                      <div className="w-12 h-8 bg-neutral-900 text-white rounded-md flex items-center justify-center font-bold text-xs">
+                      <div className="w-12 h-8 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 rounded-lg flex items-center justify-center font-bold text-xs">
                         CARD
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-neutral-800">Mövcud Kart Məlumatları</p>
-                        <p className="text-xs text-neutral-500">Stripe vasitəsilə qorunur</p>
+                        <p className="text-sm font-bold text-white">Mövcud Kart Məlumatları</p>
+                        <p className="text-xs text-neutral-400">Stripe vasitəsilə 100% təhlükəsiz qorunur</p>
                       </div>
                     </div>
                   </div>
@@ -623,7 +629,7 @@ export default function SettingsPage() {
                     <button 
                       onClick={handleStripePortal}
                       disabled={isBillingLoading}
-                      className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
+                      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
                     >
                       {isBillingLoading ? "Gözləyin..." : "Kartı Yenilə"}
                     </button>
