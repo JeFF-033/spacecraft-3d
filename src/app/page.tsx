@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls, Float, ContactShadows, Html } from "@react-three/drei";
+import * as THREE from "three";
 import { 
   ArrowRight, Box, Sparkles, Layers, Users, Camera, FileText, Share2, 
   Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download,
@@ -10,16 +13,329 @@ import {
   Compass, Video, Home, Utensils, Bed, Waves
 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import HeroVideoModal from "@/components/HeroVideoModal";
 import Interactive3DPreview from "@/components/Interactive3DPreview";
+
+// Camera Controller for Smooth Zoom Transitions between Penthouse Zones
+function CameraController({ activeZone }: { activeZone: string }) {
+  const { camera } = useThree();
+  const targetPos = useRef(new THREE.Vector3(7.2, 5.8, 7.6));
+
+  useEffect(() => {
+    switch (activeZone) {
+      case "living":
+        targetPos.current.set(2.2, 3.2, 4.2);
+        break;
+      case "kitchen":
+        targetPos.current.set(5.8, 3.8, 1.0);
+        break;
+      case "bedroom":
+        targetPos.current.set(5.8, 3.8, 5.8);
+        break;
+      case "pool":
+        targetPos.current.set(2.2, 3.5, 6.2);
+        break;
+      default: // all
+        targetPos.current.set(7.2, 5.8, 7.6);
+        break;
+    }
+  }, [activeZone]);
+
+  useFrame(() => {
+    camera.position.lerp(targetPos.current, 0.05);
+  });
+
+  return null;
+}
+
+// REAL 3D WEBGL PENTHOUSE SCENE WITH REALISTIC PBR MATERIALS & LIGHTING
+function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lightingMood }: { 
+  activeZone: string; 
+  setActiveZone: (zone: string) => void;
+  materialStyle: string;
+  lightingMood: string;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((_, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.04;
+    }
+  });
+
+  // Dynamic Theme Palette
+  const themeColors = React.useMemo(() => {
+    switch (materialStyle) {
+      case "japandi":
+        return { sofa: "#B45309", cushions: "#FDE68A", headboard: "#9A3412", table: "#F59E0B", rug: "#D97706" };
+      case "emerald":
+        return { sofa: "#047857", cushions: "#34D399", headboard: "#065F46", table: "#27272A", rug: "#064E3B" };
+      case "obsidian":
+        return { sofa: "#18181B", cushions: "#52525B", headboard: "#27272A", table: "#09090B", rug: "#27272A" };
+      default: // royal
+        return { sofa: "#1E3A8A", cushions: "#3B82F6", headboard: "#059669", table: "#FFFFFF", rug: "#374151" };
+    }
+  }, [materialStyle]);
+
+  return (
+    <group ref={groupRef} position={[0, -0.6, 0]}>
+      {/* 1. LARGE APARTMENT FLOOR (140 m² Marble Slab) */}
+      <mesh position={[0, -0.05, 0]} receiveShadow>
+        <boxGeometry args={[7.2, 0.1, 6.2]} />
+        <meshStandardMaterial color="#E5E7EB" roughness={0.12} metalness={0.15} />
+      </mesh>
+
+      {/* LOW CUTAWAY WALLS (Height: 0.45m — DOLLHOUSE VIEW MODE FOR UNCLUTTERED VISIBILITY) */}
+      <mesh position={[0, 0.22, -3.05]} receiveShadow castShadow>
+        <boxGeometry args={[7.2, 0.45, 0.1]} />
+        <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
+      </mesh>
+      <mesh position={[-3.55, 0.22, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 0.45, 6.2]} />
+        <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
+      </mesh>
+      <mesh position={[3.55, 0.22, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 0.45, 6.2]} />
+        <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
+      </mesh>
+      <mesh position={[0.2, 0.22, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 0.45, 6.0]} />
+        <meshStandardMaterial color="#6B7280" roughness={0.3} />
+      </mesh>
+
+      {/* ZONE 1: DETAILED LIVING ROOM MODULE (Top Left) */}
+      <group position={[-1.7, 0, -1.3]}>
+        <mesh position={[0, 0.01, 0]} receiveShadow>
+          <boxGeometry args={[2.8, 0.02, 2.2]} />
+          <meshStandardMaterial color={themeColors.rug} roughness={0.85} />
+        </mesh>
+        
+        {/* L-Shaped Sectional Sofa */}
+        <group position={[0, 0, -0.4]}>
+          <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.4, 0.25, 0.9]} />
+            <meshStandardMaterial color={themeColors.sofa} roughness={0.6} />
+          </mesh>
+          <mesh position={[-0.85, 0.25, 0.7]} castShadow receiveShadow>
+            <boxGeometry args={[0.7, 0.25, 0.8]} />
+            <meshStandardMaterial color={themeColors.sofa} roughness={0.6} />
+          </mesh>
+          <mesh position={[0, 0.55, -0.38]} castShadow receiveShadow>
+            <boxGeometry args={[2.4, 0.4, 0.2]} />
+            <meshStandardMaterial color={themeColors.cushions} roughness={0.55} />
+          </mesh>
+          {[-0.6, 0.2, 0.7].map((px, i) => (
+            <mesh key={i} position={[px, 0.45, -0.2]} rotation={[0, 0.2 * i, 0.1]} castShadow>
+              <boxGeometry args={[0.35, 0.3, 0.15]} />
+              <meshStandardMaterial color="#F59E0B" roughness={0.4} />
+            </mesh>
+          ))}
+          {[-1.1, 1.1].map((lx, i) =>
+            [-0.35, 0.35].map((lz, j) => (
+              <mesh key={`${i}-${j}`} position={[lx, 0.07, lz]} castShadow>
+                <cylinderGeometry args={[0.025, 0.015, 0.14, 16]} />
+                <meshStandardMaterial color="#F59E0B" metalness={0.95} roughness={0.1} />
+              </mesh>
+            ))
+          )}
+        </group>
+
+        {/* Coffee Table */}
+        <group position={[0.2, 0.18, 0.6]}>
+          <mesh castShadow receiveShadow>
+            <cylinderGeometry args={[0.6, 0.6, 0.06, 32]} />
+            <meshStandardMaterial color={themeColors.table} roughness={0.05} metalness={0.1} />
+          </mesh>
+          <mesh position={[0, -0.07, 0]} castShadow>
+            <cylinderGeometry args={[0.25, 0.4, 0.12, 32]} />
+            <meshStandardMaterial color="#1E293B" metalness={0.8} />
+          </mesh>
+          <mesh position={[0.15, 0.18, 0]} castShadow>
+            <cylinderGeometry args={[0.08, 0.06, 0.2, 16]} />
+            <meshStandardMaterial color="#38BDF8" opacity={0.7} transparent roughness={0.1} />
+          </mesh>
+        </group>
+
+        {/* TV Wall Console */}
+        <group position={[0, 0.4, -1.65]}>
+          {[-0.8, -0.4, 0, 0.4, 0.8].map((xPos, i) => (
+            <mesh key={i} position={[xPos, 0.4, 0]} castShadow>
+              <boxGeometry args={[0.12, 1.2, 0.04]} />
+              <meshStandardMaterial color="#B45309" roughness={0.35} />
+            </mesh>
+          ))}
+          <mesh position={[0, 0.15, 0.1]} castShadow>
+            <boxGeometry args={[1.8, 0.2, 0.35]} />
+            <meshStandardMaterial color="#1E293B" roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0.6, 0.03]} castShadow>
+            <boxGeometry args={[1.4, 0.75, 0.03]} />
+            <meshStandardMaterial color="#09090B" metalness={0.95} roughness={0.05} />
+          </mesh>
+        </group>
+
+        {/* SLEEK MICRO GLASS PIN */}
+        <Html position={[0, 0.6, 0]} center>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setActiveZone("living"); }}
+            className={`px-3 py-1 rounded-full text-[11px] font-semibold shadow-xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer whitespace-nowrap ${
+              activeZone === "living" 
+                ? "bg-indigo-600/90 text-white border-white scale-105 shadow-indigo-600/50" 
+                : "bg-neutral-900/80 text-neutral-300 border-white/20 hover:bg-neutral-800 hover:text-white hover:border-white/40"
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></span>
+            <span>🛋️ Qonaq Otağı • 45 m²</span>
+          </button>
+        </Html>
+      </group>
+
+      {/* ZONE 2: DETAILED KITCHEN & ISLAND MODULE (Top Right) */}
+      <group position={[1.8, 0, -1.4]}>
+        <mesh position={[0, 0.4, 0]} castShadow receiveShadow>
+          <boxGeometry args={[2.2, 0.8, 0.95]} />
+          <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[0, 0.82, 0]} castShadow receiveShadow>
+          <boxGeometry args={[2.3, 0.05, 1.0]} />
+          <meshStandardMaterial color={themeColors.table} roughness={0.05} />
+        </mesh>
+        {[-0.65, 0, 0.65].map((sx, i) => (
+          <group key={i} position={[sx, 0.35, 0.75]}>
+            <mesh castShadow>
+              <cylinderGeometry args={[0.18, 0.18, 0.05, 16]} />
+              <meshStandardMaterial color="#F59E0B" metalness={0.9} />
+            </mesh>
+            <mesh position={[0, 0.15, -0.15]} castShadow>
+              <boxGeometry args={[0.32, 0.25, 0.04]} />
+              <meshStandardMaterial color="#D97706" />
+            </mesh>
+            <mesh position={[0, -0.18, 0]} castShadow>
+              <cylinderGeometry args={[0.02, 0.02, 0.4, 16]} />
+              <meshStandardMaterial color="#1E293B" metalness={0.9} />
+            </mesh>
+          </group>
+        ))}
+        <mesh position={[0, 0.6, -1.25]} castShadow>
+          <boxGeometry args={[2.4, 1.2, 0.4]} />
+          <meshStandardMaterial color="#374151" roughness={0.3} />
+        </mesh>
+
+        {/* SLEEK MICRO GLASS PIN */}
+        <Html position={[0, 0.7, 0]} center>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setActiveZone("kitchen"); }}
+            className={`px-3 py-1 rounded-full text-[11px] font-semibold shadow-xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer whitespace-nowrap ${
+              activeZone === "kitchen" 
+                ? "bg-amber-600/90 text-white border-white scale-105 shadow-amber-600/50" 
+                : "bg-neutral-900/80 text-neutral-300 border-white/20 hover:bg-neutral-800 hover:text-white hover:border-white/40"
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>🍳 Mətbəx & Ada • 28 m²</span>
+          </button>
+        </Html>
+      </group>
+
+      {/* ZONE 3: DETAILED MASTER BEDROOM MODULE (Bottom Right) */}
+      <group position={[1.8, 0, 1.4]}>
+        <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
+          <boxGeometry args={[1.95, 0.2, 2.05]} />
+          <meshStandardMaterial color="#B45309" roughness={0.4} />
+        </mesh>
+        <mesh position={[0, 0.32, 0.05]} castShadow receiveShadow>
+          <boxGeometry args={[1.8, 0.22, 1.8]} />
+          <meshStandardMaterial color="#F9FAFB" roughness={0.3} />
+        </mesh>
+        <mesh position={[0, 0.38, 0.35]} castShadow receiveShadow>
+          <boxGeometry args={[1.82, 0.14, 1.2]} />
+          <meshStandardMaterial color="#E0E7FF" roughness={0.5} />
+        </mesh>
+        <mesh position={[0, 0.65, -0.85]} castShadow receiveShadow>
+          <boxGeometry args={[2.0, 0.8, 0.18]} />
+          <meshStandardMaterial color={themeColors.headboard} roughness={0.3} />
+        </mesh>
+        {[-1.2, 1.2].map((nx, i) => (
+          <group key={i} position={[nx, 0.2, -0.7]}>
+            <mesh castShadow>
+              <boxGeometry args={[0.4, 0.35, 0.4]} />
+              <meshStandardMaterial color="#1E293B" roughness={0.3} />
+            </mesh>
+            <mesh position={[0, 0.3, 0]} castShadow>
+              <cylinderGeometry args={[0.08, 0.12, 0.25, 16]} />
+              <meshStandardMaterial color="#FDE68A" emissive="#FEF08A" emissiveIntensity={0.5} />
+            </mesh>
+          </group>
+        ))}
+
+        {/* SLEEK MICRO GLASS PIN */}
+        <Html position={[0, 0.6, 0]} center>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setActiveZone("bedroom"); }}
+            className={`px-3 py-1 rounded-full text-[11px] font-semibold shadow-xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer whitespace-nowrap ${
+              activeZone === "bedroom" 
+                ? "bg-emerald-600/90 text-white border-white scale-105 shadow-emerald-600/50" 
+                : "bg-neutral-900/80 text-neutral-300 border-white/20 hover:bg-neutral-800 hover:text-white hover:border-white/40"
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>🛏️ Yataq Otağı • 32 m²</span>
+          </button>
+        </Html>
+      </group>
+
+      {/* ZONE 4: OUTDOOR POOL & TERRACE DECK (Bottom Left) */}
+      <group position={[-1.7, 0, 1.4]}>
+        <mesh position={[0, 0.01, 0]} receiveShadow>
+          <boxGeometry args={[2.8, 0.02, 2.2]} />
+          <meshStandardMaterial color="#B45309" roughness={0.4} />
+        </mesh>
+        <mesh position={[-0.3, -0.06, 0]} receiveShadow>
+          <boxGeometry args={[1.8, 0.15, 1.6]} />
+          <meshStandardMaterial color="#06B6D4" roughness={0.05} metalness={0.8} opacity={0.75} transparent />
+        </mesh>
+        {[-0.3, 0.4].map((lx, i) => (
+          <group key={i} position={[lx, 0.12, 0.7]}>
+            <mesh castShadow>
+              <boxGeometry args={[0.45, 0.12, 1.1]} />
+              <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
+            </mesh>
+            <mesh position={[0, 0.12, -0.35]} rotation={[0.3, 0, 0]} castShadow>
+              <boxGeometry args={[0.45, 0.1, 0.4]} />
+              <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
+            </mesh>
+          </group>
+        ))}
+
+        {/* SLEEK MICRO GLASS PIN */}
+        <Html position={[0, 0.5, 0]} center>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setActiveZone("pool"); }}
+            className={`px-3 py-1 rounded-full text-[11px] font-semibold shadow-xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer whitespace-nowrap ${
+              activeZone === "pool" 
+                ? "bg-cyan-600/90 text-white border-white scale-105 shadow-cyan-600/50" 
+                : "bg-neutral-900/80 text-neutral-300 border-white/20 hover:bg-neutral-800 hover:text-white hover:border-white/40"
+            }`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>🏊 Teras & Hovuz • 35 m²</span>
+          </button>
+        </Html>
+      </group>
+
+      <ContactShadows position={[0, 0.02, 0]} opacity={0.6} scale={8} blur={2.0} far={5} />
+    </group>
+  );
+}
 
 export default function LandingPage() {
   const [animationStep, setAnimationStep] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeZone, setActiveZone] = useState<string>("all");
   const [materialStyle, setMaterialStyle] = useState<string>("royal");
+  const [lightingMood, setLightingMood] = useState<string>("day");
 
   const styleThemes = [
     { id: "royal", label: "Royal Velvet & Mərmər", color: "bg-blue-600" },
@@ -28,51 +344,12 @@ export default function LandingPage() {
     { id: "obsidian", label: "Qara Obsidian Minimal", color: "bg-neutral-800" },
   ];
 
-  const zoneData = {
-    all: {
-      title: "Bütün Penthouse Layihəsi (140 m²)",
-      area: "140 m²",
-      desc: "4 Zonadan ibarət lüks penthouse: Qonaq Otağı (45 m²), Açıq Mətbəx (28 m²), Master Yataq Otağı (32 m²) Və Teras Hovuz Deki (35 m²).",
-      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
-    },
-    living: {
-      title: "Lüks Qonaq Otağı Zonası",
-      area: "45 m²",
-      desc: "Royal Blue Velvet Sectional Divan dəsti, İtalyan Carrara Mərmər Kofe Masası Və Qızılı Ceviz Taxta Slats TV Divarı.",
-      img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80",
-    },
-    kitchen: {
-      title: "Mətbəx Və Ada Zonası",
-      area: "28 m²",
-      desc: "Waterfall mərmər island masası, parıldayan brass metal bar stulları Və daxili işıqlandırmalı şkaf modulları.",
-      img: "/images/gallery_kitchen.png",
-    },
-    bedroom: {
-      title: "Master Yataq Otağı Zonası",
-      area: "32 m²",
-      desc: "King size platform çarpayı, Zümrüd parça başlıq, gizli ambient LED-lər Və panoramik pəncərə kəsiyi.",
-      img: "/images/gallery_bedroom.png",
-    },
-    pool: {
-      title: "Outdoor Teras Və Hovuz Deki",
-      area: "35 m²",
-      desc: "Təbii teak ağacından teras döşəməsi, kristal şüşə infinity hovuz suyu Və lüks şezlonqlar.",
-      img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80",
-    }
-  };
-
-  // Get style theme CSS filter
-  const getStyleFilter = () => {
-    switch (materialStyle) {
-      case "japandi":
-        return "sepia(0.25) saturate(1.2) hue-rotate(-15deg)";
-      case "emerald":
-        return "hue-rotate(50deg) saturate(1.15)";
-      case "obsidian":
-        return "grayscale(0.65) contrast(1.25) brightness(0.85)";
-      default: // royal
-        return "none";
-    }
+  const zoneDetails = {
+    all: { title: "Bütün Penthouse Layihəsi (Dollhouse View)", area: "140 m²", desc: "Alçaq kəsik divarlar vasitəsilə 4 zonanın (Qonaq otağı, Mətbəx, Yataq otağı Və Hovuz) içi maneesiz aydın görünür." },
+    living: { title: "Lüks Qonaq Otağı Zonası", area: "45 m²", desc: "Sectional L-divan dəsti, Carrara Mərmər Kofe Masası, Glass Vaza Və OLED TV Paneli." },
+    kitchen: { title: "Mətbəx Və Ada Zonası", area: "28 m²", desc: "Waterfall Mərmər island masası, metal bar stulları Və divar şkafları." },
+    bedroom: { title: "Master Yataq Otağı Zonası", area: "32 m²", desc: "King platform çarpayı, yumşaq yorğan qatı, lüks baş tərəf paneli Və komodlar." },
+    pool: { title: "Outdoor Teras Və Hovuz Deki", area: "35 m²", desc: "Teak ağac döşəməsi, kristal şəffaf infinity hovuz suyu Və dual şezlonqlar." }
   };
 
   useEffect(() => {
@@ -211,7 +488,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* FLAGSHIP ULTRA-PHOTOREALISTIC 140 m² MULTI-ROOM PENTHOUSE ARCHITECTURAL ENGINE */}
+          {/* FLAGSHIP ENHANCED 140 m² MULTI-ROOM PENTHOUSE ARCHITECTURAL CANVAS */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -284,72 +561,9 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* PHOTOREALISTIC ARCHITECTURAL PENTHOUSE VIEWPORT */}
-            <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl bg-[#1a1c24] overflow-hidden border border-white/15 my-6 shadow-2xl group">
+            {/* REAL 3D WEBGL CANVAS VIEWPORT */}
+            <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl bg-[#1a1c24] overflow-hidden border border-white/15 my-6 shadow-2xl">
               
-              {/* PHOTOREALISTIC HIGH-RESOLUTION RENDER WITH DYNAMIC STYLE FILTER */}
-              <AnimatePresence mode="wait">
-                <motion.img 
-                  key={activeZone}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                  src={zoneData[activeZone as keyof typeof zoneData].img}
-                  alt={zoneData[activeZone as keyof typeof zoneData].title}
-                  className="w-full h-full object-cover transition-all duration-700"
-                  style={{ filter: getStyleFilter() }}
-                />
-              </AnimatePresence>
-
-              {/* Darkness Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
-
-              {/* SLEEK MICRO GLASS HOTSPOT PINS */}
-              {activeZone === "all" && (
-                <>
-                  <div className="absolute top-[38%] left-[28%] z-20">
-                    <button 
-                      onClick={() => setActiveZone("living")}
-                      className="px-3 py-1 rounded-full text-[11px] font-semibold bg-neutral-900/85 hover:bg-indigo-600 text-white border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
-                      <span>🛋️ Qonaq Otağı • 45 m²</span>
-                    </button>
-                  </div>
-
-                  <div className="absolute top-[35%] right-[25%] z-20">
-                    <button 
-                      onClick={() => setActiveZone("kitchen")}
-                      className="px-3 py-1 rounded-full text-[11px] font-semibold bg-neutral-900/85 hover:bg-amber-600 text-white border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                      <span>🍳 Mətbəx & Ada • 28 m²</span>
-                    </button>
-                  </div>
-
-                  <div className="absolute bottom-[28%] right-[22%] z-20">
-                    <button 
-                      onClick={() => setActiveZone("bedroom")}
-                      className="px-3 py-1 rounded-full text-[11px] font-semibold bg-neutral-900/85 hover:bg-emerald-600 text-white border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                      <span>🛏️ Yataq Otağı • 32 m²</span>
-                    </button>
-                  </div>
-
-                  <div className="absolute bottom-[25%] left-[24%] z-20">
-                    <button 
-                      onClick={() => setActiveZone("pool")}
-                      className="px-3 py-1 rounded-full text-[11px] font-semibold bg-neutral-900/85 hover:bg-cyan-600 text-white border border-white/30 shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-transform hover:scale-110 cursor-pointer"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                      <span>🏊 Teras & Hovuz • 35 m²</span>
-                    </button>
-                  </div>
-                </>
-              )}
-
               {/* ANIMATED MULTIPLAYER CURSORS */}
               <div className="absolute top-[32%] left-[24%] z-30 pointer-events-none flex items-center gap-1.5 animate-cursor-sarah">
                 <svg className="w-4 h-4 text-purple-400 fill-current drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" viewBox="0 0 24 24">
@@ -372,19 +586,66 @@ export default function LandingPage() {
               {/* Active Zone Inspector Floating Glass Overlay */}
               <div className="absolute top-4 right-4 z-30 bg-neutral-900/95 border border-indigo-500/40 p-4 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs text-xs text-white text-left animate-fadeIn">
                 <div className="flex items-center justify-between font-bold text-indigo-300 mb-1">
-                  <span>{zoneData[activeZone as keyof typeof zoneData].title}</span>
+                  <span>{zoneDetails[activeZone as keyof typeof zoneDetails].title}</span>
                   <span className="text-[10px] bg-indigo-500/20 px-2 py-0.5 rounded text-indigo-200 font-mono">
-                    {zoneData[activeZone as keyof typeof zoneData].area}
+                    {zoneDetails[activeZone as keyof typeof zoneDetails].area}
                   </span>
                 </div>
                 <p className="text-neutral-300 text-[11px] leading-relaxed">
-                  {zoneData[activeZone as keyof typeof zoneData].desc}
+                  {zoneDetails[activeZone as keyof typeof zoneDetails].desc}
                 </p>
+              </div>
+
+              <Canvas shadows camera={{ position: [7.2, 5.8, 7.6], fov: 42 }}>
+                {lightingMood === "day" && (
+                  <>
+                    <ambientLight intensity={1.9} color="#F8FAFC" />
+                    <directionalLight position={[8, 12, 8]} intensity={2.6} color="#FFFFFF" castShadow shadow-mapSize={[2048, 2048]} />
+                    <directionalLight position={[-6, 6, -6]} intensity={1.3} color="#E0E7FF" />
+                    <pointLight position={[0, 6, 0]} intensity={2.5} color="#FEF08A" />
+                  </>
+                )}
+                {lightingMood === "sunset" && (
+                  <>
+                    <ambientLight intensity={1.4} color="#FDBA74" />
+                    <directionalLight position={[8, 5, 4]} intensity={3.5} color="#F97316" castShadow shadow-mapSize={[2048, 2048]} />
+                    <pointLight position={[-4, 5, -3]} intensity={2.0} color="#C084FC" />
+                  </>
+                )}
+                {lightingMood === "night" && (
+                  <>
+                    <ambientLight intensity={0.9} color="#93C5FD" />
+                    <directionalLight position={[5, 7, 5]} intensity={1.5} color="#6366F1" />
+                    <pointLight position={[0, 4, 0]} intensity={4.0} color="#818CF8" />
+                  </>
+                )}
+
+                <CameraController activeZone={activeZone} />
+
+                <HeroPenthouse3DScene 
+                  activeZone={activeZone}
+                  setActiveZone={setActiveZone}
+                  materialStyle={materialStyle}
+                  lightingMood={lightingMood}
+                />
+
+                <OrbitControls 
+                  enableZoom={false} 
+                  minPolarAngle={Math.PI / 4} 
+                  maxPolarAngle={Math.PI / 2.15}
+                  rotateSpeed={0.8}
+                />
+              </Canvas>
+
+              {/* Drag Guidance Badge */}
+              <div className="absolute bottom-4 left-4 pointer-events-none bg-neutral-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-xs font-semibold text-white flex items-center gap-2.5 shadow-2xl">
+                <RefreshCw className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
+                <span>3D Mənzili 360° Sürüşdürərək Baxın</span>
               </div>
 
               {/* Stats Badge */}
               <div className="absolute bottom-4 right-4 pointer-events-none bg-neutral-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-xs font-mono text-emerald-400 shadow-2xl">
-                4K Raytraced Render Engine • 120 FPS
+                Real 3D WebGL Engine • 120 FPS
               </div>
             </div>
 
