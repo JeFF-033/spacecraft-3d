@@ -10,7 +10,7 @@ import {
   Check, Play, Shield, Zap, Eye, ChevronRight, Star, Globe, Download,
   Maximize2, Move, RotateCcw, Ruler, Grid, MousePointer, Paintbrush,
   Sun, Moon, Settings, Trash2, Lock, Plus, Sliders, RefreshCw, Wand2, SlidersHorizontal,
-  Compass, Video, Home, Utensils, Bed
+  Compass, Video, Home, Utensils, Bed, Waves
 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
@@ -18,24 +18,27 @@ import Navbar from "@/components/Navbar";
 import HeroVideoModal from "@/components/HeroVideoModal";
 import Interactive3DPreview from "@/components/Interactive3DPreview";
 
-// Camera Controller for Smooth Zoom Transitions between Apartment Zones
+// Camera Controller for Smooth Zoom Transitions between Penthouse Zones
 function CameraController({ activeZone }: { activeZone: string }) {
   const { camera } = useThree();
-  const targetPos = useRef(new THREE.Vector3(6.8, 5.5, 7.2));
+  const targetPos = useRef(new THREE.Vector3(7.2, 5.8, 7.6));
 
   useEffect(() => {
     switch (activeZone) {
       case "living":
-        targetPos.current.set(2.5, 3.2, 4.5);
+        targetPos.current.set(2.2, 3.2, 4.2);
         break;
       case "kitchen":
-        targetPos.current.set(5.5, 3.8, 1.2);
+        targetPos.current.set(5.8, 3.8, 1.0);
         break;
       case "bedroom":
-        targetPos.current.set(5.5, 3.8, 5.5);
+        targetPos.current.set(5.8, 3.8, 5.8);
+        break;
+      case "pool":
+        targetPos.current.set(2.2, 3.5, 6.2);
         break;
       default: // all
-        targetPos.current.set(6.8, 5.5, 7.2);
+        targetPos.current.set(7.2, 5.8, 7.6);
         break;
     }
   }, [activeZone]);
@@ -47,10 +50,12 @@ function CameraController({ activeZone }: { activeZone: string }) {
   return null;
 }
 
-// 140 m² Multi-Room Penthouse Architectural 3D Scene
-function HeroPenthouse3DScene({ activeZone, setActiveZone }: { 
+// 140 m² Multi-Room Penthouse Architectural 3D Scene with Pool & Style Themes
+function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lightingMood }: { 
   activeZone: string; 
   setActiveZone: (zone: string) => void;
+  materialStyle: string;
+  lightingMood: string;
 }) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -60,65 +65,68 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone }: {
     }
   });
 
+  // Dynamic Theme Palette
+  const themeColors = React.useMemo(() => {
+    switch (materialStyle) {
+      case "japandi":
+        return { sofa: "#B45309", cushions: "#FDE68A", headboard: "#9A3412", table: "#F59E0B" };
+      case "emerald":
+        return { sofa: "#047857", cushions: "#34D399", headboard: "#065F46", table: "#27272A" };
+      case "obsidian":
+        return { sofa: "#18181B", cushions: "#52525B", headboard: "#27272A", table: "#09090B" };
+      default: // royal
+        return { sofa: "#1E3A8A", cushions: "#3B82F6", headboard: "#059669", table: "#FFFFFF" };
+    }
+  }, [materialStyle]);
+
   return (
     <group ref={groupRef} position={[0, -0.6, 0]}>
       {/* 1. LARGE APARTMENT FLOOR (140 m² Slab) */}
       <mesh position={[0, -0.05, 0]} receiveShadow>
-        <boxGeometry args={[6.8, 0.1, 5.8]} />
+        <boxGeometry args={[7.2, 0.1, 6.2]} />
         <meshStandardMaterial color="#E5E7EB" roughness={0.12} metalness={0.15} />
       </mesh>
 
       {/* Exterior & Partition Walls */}
-      {/* Back Wall */}
-      <mesh position={[0, 1.5, -2.85]} receiveShadow castShadow>
-        <boxGeometry args={[6.8, 3.0, 0.1]} />
+      <mesh position={[0, 1.5, -3.05]} receiveShadow castShadow>
+        <boxGeometry args={[7.2, 3.0, 0.1]} />
         <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
       </mesh>
-      {/* Left Wall */}
-      <mesh position={[-3.35, 1.5, 0]} receiveShadow castShadow>
-        <boxGeometry args={[0.1, 3.0, 5.8]} />
+      <mesh position={[-3.55, 1.5, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 3.0, 6.2]} />
         <meshStandardMaterial color="#D1D5DB" roughness={0.5} />
       </mesh>
-      {/* Middle Divider Wall (Separating Living Room & Bedroom) */}
-      <mesh position={[0.2, 1.2, 1.4]} receiveShadow castShadow>
-        <boxGeometry args={[0.1, 2.4, 3.0]} />
+      {/* Middle Divider Wall */}
+      <mesh position={[0.2, 1.2, 0]} receiveShadow castShadow>
+        <boxGeometry args={[0.1, 2.4, 6.0]} />
         <meshStandardMaterial color="#9CA3AF" roughness={0.4} />
       </mesh>
 
-      {/* ZONE 1: LIVING ROOM MODULE (Left Side) */}
-      <group position={[-1.6, 0, -0.2]}>
-        {/* Living Room Rug */}
-        <mesh position={[0, 0.01, 0.2]} receiveShadow>
+      {/* ZONE 1: LIVING ROOM MODULE (Top Left) */}
+      <group position={[-1.7, 0, -1.3]}>
+        <mesh position={[0, 0.01, 0]} receiveShadow>
           <boxGeometry args={[2.8, 0.02, 2.2]} />
           <meshStandardMaterial color="#4B5563" roughness={0.85} />
         </mesh>
         {/* Sofa */}
         <mesh position={[0, 0.35, -0.6]} castShadow receiveShadow>
           <boxGeometry args={[2.4, 0.4, 1.1]} />
-          <meshStandardMaterial color="#1E3A8A" roughness={0.6} />
+          <meshStandardMaterial color={themeColors.sofa} roughness={0.6} />
         </mesh>
         <mesh position={[0, 0.75, -1.05]} castShadow receiveShadow>
           <boxGeometry args={[2.4, 0.5, 0.25]} />
-          <meshStandardMaterial color="#2563EB" roughness={0.55} />
+          <meshStandardMaterial color={themeColors.cushions} roughness={0.55} />
         </mesh>
         {/* Coffee Table */}
-        <mesh position={[0, 0.2, 0.5]} castShadow receiveShadow>
+        <mesh position={[0, 0.2, 0.4]} castShadow receiveShadow>
           <cylinderGeometry args={[0.7, 0.7, 0.06, 32]} />
-          <meshStandardMaterial color="#FFFFFF" roughness={0.05} metalness={0.1} />
+          <meshStandardMaterial color={themeColors.table} roughness={0.05} metalness={0.1} />
         </mesh>
-        {/* Slatted TV Wall Panel */}
-        {[-0.8, -0.4, 0, 0.4, 0.8].map((xPos, i) => (
-          <mesh key={i} position={[xPos, 1.6, -2.78]} castShadow>
-            <boxGeometry args={[0.12, 2.6, 0.04]} />
-            <meshStandardMaterial color="#B45309" roughness={0.35} />
-          </mesh>
-        ))}
 
-        {/* Zone Hotspot */}
         <Html position={[0, 1.1, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("living"); }}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "living" ? "bg-indigo-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "living" ? "bg-indigo-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
           >
             <span className="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
             <span>🛋️ Qonaq Otağı (45 m²)</span>
@@ -128,17 +136,14 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone }: {
 
       {/* ZONE 2: KITCHEN & ISLAND MODULE (Top Right) */}
       <group position={[1.8, 0, -1.4]}>
-        {/* Kitchen Island */}
         <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
           <boxGeometry args={[2.2, 0.9, 1.0]} />
           <meshStandardMaterial color="#1E293B" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Waterfall Marble Countertop */}
         <mesh position={[0, 0.92, 0]} castShadow receiveShadow>
           <boxGeometry args={[2.3, 0.05, 1.05]} />
-          <meshStandardMaterial color="#FFFFFF" roughness={0.05} />
+          <meshStandardMaterial color={themeColors.table} roughness={0.05} />
         </mesh>
-        {/* Bar Stools */}
         {[-0.6, 0, 0.6].map((sx, i) => (
           <mesh key={i} position={[sx, 0.35, 0.8]} castShadow>
             <cylinderGeometry args={[0.18, 0.18, 0.7, 16]} />
@@ -146,11 +151,10 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone }: {
           </mesh>
         ))}
 
-        {/* Zone Hotspot */}
         <Html position={[0, 1.2, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("kitchen"); }}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "kitchen" ? "bg-amber-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "kitchen" ? "bg-amber-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
             <span>🍳 Mətbəx & Ada (28 m²)</span>
@@ -159,31 +163,56 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone }: {
       </group>
 
       {/* ZONE 3: MASTER BEDROOM MODULE (Bottom Right) */}
-      <group position={[1.8, 0, 1.3]}>
-        {/* King Bed Base */}
+      <group position={[1.8, 0, 1.4]}>
         <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
           <boxGeometry args={[1.9, 0.4, 2.0]} />
           <meshStandardMaterial color="#374151" roughness={0.7} />
         </mesh>
-        {/* Mattress & Pillows */}
         <mesh position={[0, 0.5, 0.1]} castShadow receiveShadow>
           <boxGeometry args={[1.8, 0.25, 1.7]} />
           <meshStandardMaterial color="#F9FAFB" roughness={0.3} />
         </mesh>
-        {/* Velvet Headboard */}
         <mesh position={[0, 0.85, -0.8]} castShadow receiveShadow>
           <boxGeometry args={[2.0, 0.8, 0.2]} />
-          <meshStandardMaterial color="#059669" roughness={0.3} />
+          <meshStandardMaterial color={themeColors.headboard} roughness={0.3} />
         </mesh>
 
-        {/* Zone Hotspot */}
         <Html position={[0, 1.1, 0]} center>
           <button 
             onClick={(e) => { e.stopPropagation(); setActiveZone("bedroom"); }}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "bedroom" ? "bg-emerald-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "bedroom" ? "bg-emerald-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>🛏️ Yataq Otağı (32 m²)</span>
+          </button>
+        </Html>
+      </group>
+
+      {/* ZONE 4: OUTDOOR POOL & TERRACE DECK (Bottom Left) */}
+      <group position={[-1.7, 0, 1.4]}>
+        {/* Teak Wood Decking */}
+        <mesh position={[0, 0.01, 0]} receiveShadow>
+          <boxGeometry args={[2.8, 0.02, 2.2]} />
+          <meshStandardMaterial color="#B45309" roughness={0.4} />
+        </mesh>
+        {/* Glass Infinity Pool Water */}
+        <mesh position={[-0.3, -0.08, 0]} receiveShadow>
+          <boxGeometry args={[1.8, 0.2, 1.6]} />
+          <meshStandardMaterial color="#06B6D4" roughness={0.05} metalness={0.8} opacity={0.85} transparent />
+        </mesh>
+        {/* Pool Loungers */}
+        <mesh position={[0.8, 0.2, 0]} castShadow>
+          <boxGeometry args={[0.6, 0.25, 1.4]} />
+          <meshStandardMaterial color="#F8FAFC" roughness={0.2} />
+        </mesh>
+
+        <Html position={[0, 0.9, 0]} center>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setActiveZone("pool"); }}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer ${activeZone === "pool" ? "bg-cyan-600 text-white border-white scale-110" : "bg-neutral-900/90 text-neutral-200 border-white/30 hover:bg-neutral-800"}`}
+          >
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>🏊 Teras & Hovuz (35 m²)</span>
           </button>
         </Html>
       </group>
@@ -197,6 +226,23 @@ export default function LandingPage() {
   const [animationStep, setAnimationStep] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeZone, setActiveZone] = useState<string>("all");
+  const [materialStyle, setMaterialStyle] = useState<string>("royal");
+  const [lightingMood, setLightingMood] = useState<string>("day");
+
+  const styleThemes = [
+    { id: "royal", label: "Royal Velvet & Mərmər", color: "bg-blue-600" },
+    { id: "japandi", label: "Japandi Təbii Ağac", color: "bg-amber-600" },
+    { id: "emerald", label: "Zümrüd Yaşıl Loft", color: "bg-emerald-600" },
+    { id: "obsidian", label: "Qara Obsidian Minimal", color: "bg-neutral-800" },
+  ];
+
+  const zoneDetails = {
+    all: { title: "Bütün Penthouse Layihəsi", area: "140 m²", desc: "4 Zonadan ibarət lüks penthouse: Qonaq Otağı (45 m²), Açıq Mətbəx (28 m²), Yataq Otağı (32 m²) Və Teras Hovuz Deki (35 m²)." },
+    living: { title: "Lüks Qonaq Otağı Zonası", area: "45 m²", desc: "Royal Blue Velvet Divan dəsti, İtalyan Carrara Mərmər Kofe Masası Və Qızılı Ceviz Taxta Slats TV Divarı." },
+    kitchen: { title: "Mətbəx Və Ada Zonası", area: "28 m²", desc: "Qara mərmər ada masası, parıldayan brass metal bar stulları Və daxili işıqlandırmalı şkaf modulları." },
+    bedroom: { title: "Master Yataq Otağı Zonası", area: "32 m²", desc: "King size çarpayı, Zümrüd parça başlıq, gizli ambient LED-lər Və panoramik pəncərə kəsiyi." },
+    pool: { title: "Outdoor Teras Və Hovuz Deki", area: "35 m²", desc: "Təbii teak ağacından teras döşəməsi, kristal şüşə infinity hovuz suyu Və lüks şezlonqlar." }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -334,7 +380,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* TOTALLY UNIQUE HERO SHOWCASE: 140 m² MULTI-ROOM PENTHOUSE ARCHITECTURAL CANVAS */}
+          {/* FLAGSHIP ENHANCED 140 m² MULTI-ROOM PENTHOUSE ARCHITECTURAL CANVAS */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -394,6 +440,16 @@ export default function LandingPage() {
                 >
                   <Bed className="w-3.5 h-3.5" /> Yataq Otağı (32 m²)
                 </button>
+                <button
+                  onClick={() => setActiveZone("pool")}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    activeZone === "pool"
+                      ? "bg-cyan-600 text-white shadow-lg shadow-cyan-600/30"
+                      : "text-neutral-400 hover:text-white"
+                  }`}
+                >
+                  <Waves className="w-3.5 h-3.5" /> Teras & Hovuz (35 m²)
+                </button>
               </div>
             </div>
 
@@ -419,17 +475,50 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <Canvas shadows camera={{ position: [6.8, 5.5, 7.2], fov: 42 }}>
-                <ambientLight intensity={1.9} color="#F8FAFC" />
-                <directionalLight position={[8, 12, 8]} intensity={2.6} color="#FFFFFF" castShadow shadow-mapSize={[2048, 2048]} />
-                <directionalLight position={[-6, 6, -6]} intensity={1.3} color="#E0E7FF" />
-                <pointLight position={[0, 6, 0]} intensity={2.5} color="#FEF08A" />
+              {/* Active Zone Inspector Floating Glass Overlay */}
+              <div className="absolute top-4 right-4 z-30 bg-neutral-900/95 border border-indigo-500/40 p-4 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs text-xs text-white text-left animate-fadeIn">
+                <div className="flex items-center justify-between font-bold text-indigo-300 mb-1">
+                  <span>{zoneDetails[activeZone as keyof typeof zoneDetails].title}</span>
+                  <span className="text-[10px] bg-indigo-500/20 px-2 py-0.5 rounded text-indigo-200 font-mono">
+                    {zoneDetails[activeZone as keyof typeof zoneDetails].area}
+                  </span>
+                </div>
+                <p className="text-neutral-300 text-[11px] leading-relaxed">
+                  {zoneDetails[activeZone as keyof typeof zoneDetails].desc}
+                </p>
+              </div>
+
+              <Canvas shadows camera={{ position: [7.2, 5.8, 7.6], fov: 42 }}>
+                {lightingMood === "day" && (
+                  <>
+                    <ambientLight intensity={1.9} color="#F8FAFC" />
+                    <directionalLight position={[8, 12, 8]} intensity={2.6} color="#FFFFFF" castShadow shadow-mapSize={[2048, 2048]} />
+                    <directionalLight position={[-6, 6, -6]} intensity={1.3} color="#E0E7FF" />
+                    <pointLight position={[0, 6, 0]} intensity={2.5} color="#FEF08A" />
+                  </>
+                )}
+                {lightingMood === "sunset" && (
+                  <>
+                    <ambientLight intensity={1.4} color="#FDBA74" />
+                    <directionalLight position={[8, 5, 4]} intensity={3.5} color="#F97316" castShadow shadow-mapSize={[2048, 2048]} />
+                    <pointLight position={[-4, 5, -3]} intensity={2.0} color="#C084FC" />
+                  </>
+                )}
+                {lightingMood === "night" && (
+                  <>
+                    <ambientLight intensity={0.9} color="#93C5FD" />
+                    <directionalLight position={[5, 7, 5]} intensity={1.5} color="#6366F1" />
+                    <pointLight position={[0, 4, 0]} intensity={4.0} color="#818CF8" />
+                  </>
+                )}
 
                 <CameraController activeZone={activeZone} />
 
                 <HeroPenthouse3DScene 
                   activeZone={activeZone}
                   setActiveZone={setActiveZone}
+                  materialStyle={materialStyle}
+                  lightingMood={lightingMood}
                 />
 
                 <OrbitControls 
@@ -452,20 +541,29 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Bottom Info Bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10 text-xs text-neutral-300">
-              <div className="flex items-center gap-2 font-mono">
-                <span className="text-indigo-400 font-bold">Mənzil Haqqında:</span>
-                <span>3 Otaqlı Lüks Penthouse (14.20m × 9.80m) • Sahə: 140 m²</span>
+            {/* Style Theme Switcher Controls */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-white/10 relative z-10">
+              <div className="flex items-center gap-2 text-xs font-semibold text-neutral-300">
+                <Layers className="w-4 h-4 text-indigo-400" /> Bütün Mənzil İnteryer Stilini Seçin:
               </div>
 
-              <Link 
-                href="/editor"
-                className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-indigo-600/30"
-              >
-                <span>Mənzili Editor-da Aç</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                {styleThemes.map((st) => (
+                  <button
+                    key={st.id}
+                    onClick={() => setMaterialStyle(st.id)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 border cursor-pointer ${
+                      materialStyle === st.id
+                        ? "bg-white text-neutral-900 border-white shadow-2xl scale-105"
+                        : "bg-neutral-800/90 text-neutral-300 border-white/15 hover:border-white/40"
+                    }`}
+                  >
+                    <span className={`w-3.5 h-3.5 rounded-full ${st.color}`}></span>
+                    <span>{st.label}</span>
+                    {materialStyle === st.id && <Check className="w-3.5 h-3.5 text-indigo-600" />}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
 
