@@ -111,7 +111,7 @@ export default function PricingPage() {
               <p className="text-xs text-neutral-400 mb-6">Fərdi istifadə və sınaq dizaynları üçün</p>
               
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black text-white">₼0</span>
+                <span className="text-4xl font-black text-white">$0</span>
                 <span className="text-xs text-neutral-400 font-mono">/ həmişə pulsuz</span>
               </div>
 
@@ -155,7 +155,7 @@ export default function PricingPage() {
               
               <div className="flex items-baseline gap-1 mb-8">
                 <span className="text-5xl font-black text-white">
-                  {billingCycle === "monthly" ? "₼39" : "₼31"}
+                  {billingCycle === "monthly" ? "$39" : "$31"}
                 </span>
                 <span className="text-xs text-neutral-400 font-mono">/ aylıq</span>
               </div>
@@ -212,7 +212,7 @@ export default function PricingPage() {
               
               <div className="flex items-baseline gap-1 mb-8">
                 <span className="text-4xl font-black text-white">
-                  {billingCycle === "monthly" ? "₼129" : "₼99"}
+                  {billingCycle === "monthly" ? "$129" : "$99"}
                 </span>
                 <span className="text-xs text-neutral-400 font-mono">/ aylıq</span>
               </div>
@@ -254,48 +254,178 @@ export default function PricingPage() {
 
         {/* DETAILED FEATURE COMPARISON MATRIX TABLE */}
         <div className="w-full max-w-5xl rounded-3xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl p-8 shadow-2xl">
-          <h3 className="text-xl font-bold text-white mb-6 text-center">Planların Müqayisə Cədvəli</h3>
+          <div className="text-center mb-8">
+            <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest">Ətraflı İcmal</span>
+            <h3 className="text-2xl font-bold text-white mt-1">Planların Genişləndirilmiş Müqayisə Cədvəli</h3>
+            <p className="text-xs text-neutral-400 mt-2">Spacecraft 3D tətbiqinin bütün imkanlarını planlar üzrə müqayisə edin</p>
+          </div>
           
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-white/10 text-neutral-400 font-mono uppercase text-[10px]">
-                  <th className="py-3 px-4">Xüsusiyyətlər</th>
-                  <th className="py-3 px-4 text-center">Həvəskar</th>
-                  <th className="py-3 px-4 text-center text-indigo-400 font-bold">PRO Memar</th>
-                  <th className="py-3 px-4 text-center">Enterprise</th>
+                <tr className="border-b border-white/10 text-neutral-400 font-mono uppercase text-[10px] bg-neutral-950/60">
+                  <th className="py-4 px-4 font-semibold">Xüsusiyyətlər</th>
+                  <th className="py-4 px-4 text-center font-semibold">Həvəskar ($0)</th>
+                  <th className="py-4 px-4 text-center text-indigo-400 font-bold">PRO Memar ($39)</th>
+                  <th className="py-4 px-4 text-center font-semibold">Enterprise ($129)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 text-neutral-300 font-light">
+                
+                {/* CATEGORY 1: LAYİHƏ VƏ BULUD */}
+                <tr className="bg-white/[0.02]">
+                  <td colSpan={4} className="py-3 px-4 text-indigo-300 font-bold uppercase tracking-wider text-[11px] font-mono">
+                    1. Layihə Və Bulud İdarəetməsi
+                  </td>
+                </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-white">3D Səhnə Limiti</td>
+                  <td className="py-3.5 px-4 font-semibold text-white">Aktiv 3D Səhnə Limiti</td>
                   <td className="py-3.5 px-4 text-center">3 Səhnə</td>
-                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Sonsuz</td>
-                  <td className="py-3.5 px-4 text-center">Sonsuz</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Limitsiz</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Limitsiz</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-white">Render Keyfiyyəti</td>
-                  <td className="py-3.5 px-4 text-center">1080p</td>
+                  <td className="py-3.5 px-4 font-semibold text-white">Bulud Yaddaşı (Cloud Storage)</td>
+                  <td className="py-3.5 px-4 text-center">500 MB</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">10 GB</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Limitsiz</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Avtomatik Versiya Və Bakap</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Prioritet)</td>
+                </tr>
+
+                {/* CATEGORY 2: RENDER VƏ GÖRÜNTÜ */}
+                <tr className="bg-white/[0.02]">
+                  <td colSpan={4} className="py-3 px-4 text-indigo-300 font-bold uppercase tracking-wider text-[11px] font-mono">
+                    2. Render Və Görüntü İmkanları
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Maksimum Render Keyfiyyəti</td>
+                  <td className="py-3.5 px-4 text-center">1080p Full HD</td>
                   <td className="py-3.5 px-4 text-center font-bold text-indigo-400">4K Ultra HD</td>
-                  <td className="py-3.5 px-4 text-center">8K Max UHD</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">8K Cinema UHD</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-white">Gemini AI Dəstəyi</td>
-                  <td className="py-3.5 px-4 text-center">Məhdud (5/gün)</td>
-                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Sonsuz</td>
-                  <td className="py-3.5 px-4 text-center">Sonsuz + Custom AI</td>
+                  <td className="py-3.5 px-4 font-semibold text-white">Real-Time Raytracing & HDRI</td>
+                  <td className="py-3.5 px-4 text-center">Standart</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Qabaqcıl PBR</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Xüsusi Raytracing Server</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-white">Smeta Və PDF İxracı</td>
-                  <td className="py-3.5 px-4 text-center">❌</td>
+                  <td className="py-3.5 px-4 font-semibold text-white">Watermark-sız Eksport</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌ (Watermark var)</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Watermarksız</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Watermarksız</td>
+                </tr>
+
+                {/* CATEGORY 3: AI ASİSTENT VƏ 3D REKONSTRUKSİYA */}
+                <tr className="bg-white/[0.02]">
+                  <td colSpan={4} className="py-3 px-4 text-indigo-300 font-bold uppercase tracking-wider text-[11px] font-mono">
+                    3. AI Asistent Və 3D Rekonstruksiya
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Gemini AI Dizayn Asistenti</td>
+                  <td className="py-3.5 px-4 text-center">5 Əmr / Gün</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Limitsiz</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Limitsiz + Custom Prompts</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Şəkil / Eskizdən 3D Otaq Yaradılması</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
                   <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Yüksək Dəqiqlik)</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Ağıllı AI Material Və Stil Seçimi</td>
+                  <td className="py-3.5 px-4 text-center">Standart</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Ağıllı AI Stilizasiya</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Xüsusi Şirkət Stili AI</td>
+                </tr>
+
+                {/* CATEGORY 4: KATALOQ VƏ RESURSLAR */}
+                <tr className="bg-white/[0.02]">
+                  <td colSpan={4} className="py-3 px-4 text-indigo-300 font-bold uppercase tracking-wider text-[11px] font-mono">
+                    4. Kataloq Və 3D Resurslar
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Mebel & Obyekt Kataloqu</td>
+                  <td className="py-3.5 px-4 text-center">1,000+ Standart Obyekt</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">25,000+ Premium Obyekt</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Tam Kitabxana + Şirkət Modeli</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Custom 3D Model İdxalı (OBJ/GLTF/FBX)</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Max 50MB / fayl</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Limitsiz Ölçü</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">4K PBR Material Və Tekstura Kitabxanası</td>
+                  <td className="py-3.5 px-4 text-center">Əsas Teksturalar</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">500+ PBR Tekstura</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">Limitsiz + Custom Material</td>
+                </tr>
+
+                {/* CATEGORY 5: SMETA VƏ İXRAC */}
+                <tr className="bg-white/[0.02]">
+                  <td colSpan={4} className="py-3 px-4 text-indigo-300 font-bold uppercase tracking-wider text-[11px] font-mono">
+                    5. Smeta Və İxrac
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Avtomatik Smeta Və Xərc Hesablanması</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Canlı Qiymətlər)</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">PDF / Excel Smeta Export</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Xüsusi Format)</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">3D Model İxracı (GLTF, OBJ, USDZ, DWG)</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Bütün Formatlar)</td>
+                </tr>
+
+                {/* CATEGORY 6: KOMANDA VƏ DƏSTƏK */}
+                <tr className="bg-white/[0.02]">
+                  <td colSpan={4} className="py-3 px-4 text-indigo-300 font-bold uppercase tracking-wider text-[11px] font-mono">
+                    6. Komanda Və Dəstək
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Canlı Multiplayer Kollaborasiya</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Max 5 Nəfər)</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var (Limitsiz Üzv)</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Xüsusi Şirkət Loqosu Və Breandinq</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
                   <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-white">Multiplayer Canlı İş</td>
-                  <td className="py-3.5 px-4 text-center">❌</td>
+                  <td className="py-3.5 px-4 font-semibold text-white">Xüsusi API Və Server İnteqrasiyası</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-500">❌</td>
                   <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
-                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">✔ Var</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-white">Müştəri Dəstəyi</td>
+                  <td className="py-3.5 px-4 text-center text-neutral-400">İcma Dəstəyi</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-indigo-400">Prioritet E-poçt (24 Saat)</td>
+                  <td className="py-3.5 px-4 text-center font-bold text-emerald-400">7/24 Şəxsi Menecer + SLA</td>
                 </tr>
               </tbody>
             </table>
