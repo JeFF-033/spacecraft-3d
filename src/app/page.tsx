@@ -688,16 +688,16 @@ export default function LandingPage() {
           
           <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 text-xs font-mono text-indigo-400 uppercase tracking-widest mb-3">
-                <Sparkles className="w-4 h-4" /> Cinematic Nümayiş
+              <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3">
+                <Sparkles className="w-4 h-4 text-white" /> Cinematic Nümayiş
               </div>
               <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
                 3D Memarlığın <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-amber-300">Yeni Standartı</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400">Yeni Standartı</span>
               </h2>
             </div>
 
-            <p className="text-neutral-400 max-w-md text-sm leading-relaxed">
+            <p className="text-zinc-400 max-w-md text-sm leading-relaxed">
               SpaceCraft 3D ilə hər bir detal real vaxtda işıqlandırılır, istənilən bucaqdan 4K keyfiyyətində cinematic görüntülər əldə edilir.
             </p>
           </div>
@@ -712,10 +712,10 @@ export default function LandingPage() {
       <section className="py-32 relative" id="features">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight mb-6">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight mb-6 uppercase">
               Niyə SpaceCraft 3D?
             </h2>
-            <p className="text-base sm:text-lg text-neutral-400">
+            <p className="text-base sm:text-lg text-zinc-400">
               Gələcəyin memarlıq və interyer dizayn alətlərini bir brauzer pəncərəsində birləşdirdik.
             </p>
           </div>
@@ -724,13 +724,13 @@ export default function LandingPage() {
             {/* Feature 1 */}
             <motion.div 
               whileHover={{ y: -8 }}
-              className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-indigo-500/50 transition-all shadow-2xl relative overflow-hidden group"
+              className="p-8 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition-all shadow-2xl relative overflow-hidden group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
                 <Sparkles className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white mb-3">AI Dəstəkli Dizayn</h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed font-light">
                 Mətn əmrləri ilə otağınızın üslubunu, rənglərini və mebel quruluşunu saniyələr içində avtomatik dəyişdirin.
               </p>
             </motion.div>
@@ -738,13 +738,13 @@ export default function LandingPage() {
             {/* Feature 2 */}
             <motion.div 
               whileHover={{ y: -8 }}
-              className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-purple-500/50 transition-all shadow-2xl relative overflow-hidden group"
+              className="p-8 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition-all shadow-2xl relative overflow-hidden group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
                 <Users className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white mb-3">Canlı Komanda İş Birliyi</h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed font-light">
                 Müştəriniz və ya komandanızla eyni 3D səhnədə eyni anda kursor hərəkətlərini görərək işləyin.
               </p>
             </motion.div>
@@ -752,12 +752,13 @@ export default function LandingPage() {
             {/* Feature 3 */}
             <motion.div 
               whileHover={{ y: -8 }}
-              className="p-8 rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-amber-500/50 transition-all shadow-2xl relative overflow-hidden group"
+              className="p-8 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-white/30 transition-all shadow-2xl relative overflow-hidden group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-amber-600/20 border border-amber-500/40 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
                 <Zap className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white mb-3">Ultra HD Render</h3>
+
               <p className="text-sm text-neutral-400 leading-relaxed">
                 Yüksək güclü bulud serverləri vasitəsilə 4K keyfiyyətində fotorealistik görüntülər hazırlayın.
               </p>
