@@ -525,8 +525,8 @@ export default function LandingPage() {
                   onClick={() => setActiveZone("living")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     activeZone === "living"
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                      : "text-neutral-400 hover:text-white"
+                      ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   <Box className="w-3.5 h-3.5" /> Qonaq Otağı (45 m²)
@@ -535,8 +535,8 @@ export default function LandingPage() {
                   onClick={() => setActiveZone("kitchen")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     activeZone === "kitchen"
-                      ? "bg-amber-600 text-white shadow-lg shadow-amber-600/30"
-                      : "text-neutral-400 hover:text-white"
+                      ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   <Utensils className="w-3.5 h-3.5" /> Mətbəx & Ada (28 m²)
@@ -545,8 +545,8 @@ export default function LandingPage() {
                   onClick={() => setActiveZone("bedroom")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     activeZone === "bedroom"
-                      ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/30"
-                      : "text-neutral-400 hover:text-white"
+                      ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   <Bed className="w-3.5 h-3.5" /> Yataq Otağı (32 m²)
@@ -555,12 +555,13 @@ export default function LandingPage() {
                   onClick={() => setActiveZone("pool")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     activeZone === "pool"
-                      ? "bg-cyan-600 text-white shadow-lg shadow-cyan-600/30"
-                      : "text-neutral-400 hover:text-white"
+                      ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   <Waves className="w-3.5 h-3.5" /> Teras & Hovuz (35 m²)
                 </button>
+
               </div>
             </div>
 
