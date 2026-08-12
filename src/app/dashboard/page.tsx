@@ -110,29 +110,27 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white selection:bg-indigo-500/30 relative overflow-hidden font-sans">
       {/* Background Gradients & Glow Effects */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-gradient-to-b from-indigo-600/15 via-purple-600/5 to-transparent rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute top-1/3 -right-40 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none"></div>
-      <div className="absolute bottom-10 -left-40 w-[600px] h-[600px] bg-indigo-900/10 rounded-full blur-[160px] pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none"></div>
       
       {/* Subtle Grid Pattern Overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293710_1px,transparent_1px),linear-gradient(to_bottom,#1f293710_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
       {/* Header / Navbar */}
-      <nav className="border-b border-white/10 bg-[#030712]/70 backdrop-blur-2xl sticky top-0 z-50 transition-all duration-300">
+      <nav className="border-b border-white/10 bg-[#09090b]/80 backdrop-blur-2xl sticky top-0 z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-[0_0_25px_rgba(99,102,241,0.4)] group-hover:scale-105 transition-transform duration-300 border border-white/20">
+              <div className="w-11 h-11 bg-white/10 rounded-2xl flex items-center justify-center border border-white/15 group-hover:scale-105 transition-transform duration-300">
                 <Box className="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-black bg-gradient-to-r from-white via-neutral-100 to-neutral-400 bg-clip-text text-transparent tracking-tight">SpaceCraft</h1>
-                  <span className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 text-indigo-300 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Zap className="w-3 h-3 text-indigo-400 fill-indigo-400" /> PRO
+                  <h1 className="text-xl font-black text-white tracking-tight">SpaceCraft</h1>
+                  <span className="bg-white/10 border border-white/15 text-zinc-300 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1">
+                    <Zap className="w-3 h-3 text-white fill-white" /> PRO
                   </span>
                 </div>
-                <p className="text-[11px] text-neutral-400 font-medium">3D & VR Studio Studio Dashboard</p>
+                <p className="text-[11px] text-zinc-400 font-medium">3D Studio Dashboard</p>
               </div>
             </Link>
           </div>
@@ -140,28 +138,28 @@ export default function DashboardPage() {
           <div className="flex items-center gap-4">
             <Link 
               href="/settings" 
-              className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-indigo-500/40 hover:bg-white/[0.06] transition-all group"
+              className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/25 hover:bg-white/[0.06] transition-all group"
             >
               <div className="relative">
                 <img 
                   src={session?.user?.image || "https://api.dicebear.com/7.x/avataaars/svg"} 
                   alt="User" 
-                  className="w-9 h-9 rounded-xl border border-indigo-500/40 object-cover" 
+                  className="w-9 h-9 rounded-xl border border-white/20 object-cover" 
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#030712] rounded-full"></span>
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#09090b] rounded-full"></span>
               </div>
               <div className="hidden sm:block text-left">
-                <p className="text-xs font-bold text-neutral-200 group-hover:text-indigo-300 transition-colors">{session?.user?.name || "İstifadəçi"}</p>
-                <p className="text-[10px] text-neutral-400 truncate max-w-[120px]">{session?.user?.email}</p>
+                <p className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">{session?.user?.name || "İstifadəçi"}</p>
+                <p className="text-[10px] text-zinc-400 truncate max-w-[120px]">{session?.user?.email}</p>
               </div>
-              <Settings className="w-4 h-4 text-neutral-400 group-hover:text-white transition-colors ml-1 hidden sm:block" />
+              <Settings className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors ml-1 hidden sm:block" />
             </Link>
 
             <div className="w-px h-7 bg-white/10 hidden sm:block"></div>
 
             <button 
               onClick={() => signOut({ callbackUrl: "/" })} 
-              className="p-2.5 bg-white/[0.03] border border-white/10 hover:border-red-500/40 hover:bg-red-500/10 text-neutral-400 hover:text-red-400 rounded-xl transition-all" 
+              className="p-2.5 bg-white/[0.03] border border-white/10 hover:border-red-500/40 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-xl transition-all" 
               title="Sistemdən Çıx"
             >
               <LogOut className="w-4 h-4" />
@@ -175,48 +173,46 @@ export default function DashboardPage() {
         
         {/* Banner / Stat Overview Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="bg-gradient-to-br from-indigo-900/40 via-indigo-950/20 to-neutral-900/40 border border-indigo-500/20 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl group hover:border-indigo-500/40 transition-all">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all"></div>
+          <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-indigo-400">
+              <div className="p-3 bg-white/5 border border-white/10 rounded-2xl text-zinc-200">
                 <FolderKanban className="w-6 h-6" />
               </div>
-              <span className="text-xs font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full flex items-center gap-1">
+              <span className="text-xs font-semibold text-zinc-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" /> Aktiv
               </span>
             </div>
             <h3 className="text-3xl font-black text-white mb-1">{projects.length}</h3>
-            <p className="text-xs font-medium text-neutral-400">Ümumi Yaratdığınız Layihələr</p>
+            <p className="text-xs font-medium text-zinc-400">Ümumi Yaratdığınız Layihələr</p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-900/30 via-purple-950/20 to-neutral-900/40 border border-purple-500/20 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl group hover:border-purple-500/40 transition-all">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
+          <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-2xl text-purple-400">
+              <div className="p-3 bg-white/5 border border-white/10 rounded-2xl text-zinc-200">
                 <Sparkles className="w-6 h-6" />
               </div>
-              <span className="text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-semibold text-zinc-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
                 Sonsuz 3D
               </span>
             </div>
             <h3 className="text-3xl font-black text-white mb-1">PRO Plan</h3>
-            <p className="text-xs font-medium text-neutral-400">Ultra Yüksək Keyfiyyətli Render Mühərriki</p>
+            <p className="text-xs font-medium text-zinc-400">Ultra Yüksək Keyfiyyətli Render Mühərriki</p>
           </div>
 
-          <div className="bg-gradient-to-br from-emerald-900/30 via-emerald-950/20 to-neutral-900/40 border border-emerald-500/20 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl group hover:border-emerald-500/40 transition-all">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+          <div className="bg-zinc-900/60 border border-white/10 rounded-3xl p-6 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400">
+              <div className="p-3 bg-white/5 border border-white/10 rounded-2xl text-zinc-200">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-semibold text-zinc-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
                 Təhlükəsiz
               </span>
             </div>
             <h3 className="text-3xl font-black text-white mb-1">100% Cloud</h3>
-            <p className="text-xs font-medium text-neutral-400">Layihələr Buludda Avtomatik Saxlanılır</p>
+            <p className="text-xs font-medium text-zinc-400">Layihələr Buludda Avtomatik Saxlanılır</p>
           </div>
         </div>
+
 
         {/* Section Title & Controls Bar */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 bg-white/[0.02] border border-white/10 p-6 rounded-3xl backdrop-blur-xl">
@@ -272,14 +268,15 @@ export default function DashboardPage() {
               </button>
             </div>
 
-            {/* Create Project Button */}
+            {/* Create New Project CTA */}
             <Link 
               href="/editor" 
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:-translate-y-0.5 flex items-center gap-2 ml-auto md:ml-0"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-extrabold text-xs transition-all shadow-xl shadow-white/10 active:scale-[0.98]"
             >
               <Plus className="w-4 h-4" />
               <span>Yeni Otaq Yarat</span>
             </Link>
+
           </div>
         </div>
 

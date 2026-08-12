@@ -172,11 +172,12 @@ export default function TopToolbar() {
       <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
         <button 
           onClick={() => setIsRoomDimensionsOpen(true)} 
-          className="flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all bg-gradient-to-r from-indigo-600/40 to-purple-600/40 hover:from-indigo-600/60 hover:to-purple-600/60 text-white border border-indigo-400/50 shadow-md cursor-pointer active:scale-95"
+          className="flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-md cursor-pointer active:scale-95"
           title="Otaq Ölçülərini Və Rənglərini Redaktə Et"
         >
           📐 Otaq Ölçüləri
         </button>
+
 
         <button 
           onClick={addDoor} 
