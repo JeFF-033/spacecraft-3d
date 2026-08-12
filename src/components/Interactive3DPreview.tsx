@@ -248,16 +248,15 @@ export default function Interactive3DPreview() {
   ];
 
   return (
-    <div className="w-full max-w-6xl mx-auto rounded-3xl border border-white/15 bg-neutral-900/90 backdrop-blur-xl shadow-2xl p-6 relative overflow-hidden">
+    <div className="w-full max-w-6xl mx-auto rounded-3xl border border-white/15 bg-zinc-900/90 backdrop-blur-xl shadow-2xl p-6 relative overflow-hidden">
       {/* Ambient Background Lights */}
-      <div className="absolute top-0 right-1/3 w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-amber-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-0 right-1/3 w-96 h-96 bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10 relative z-10">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-1">
-            <Sparkles className="w-4 h-4" /> Canlı 3D Render Təcrübəsi
+          <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-1">
+            <Sparkles className="w-4 h-4 text-white" /> Canlı 3D Render Təcrübəsi
           </div>
           <h3 className="text-xl sm:text-3xl font-black text-white tracking-tight">
             İnteraktiv 3D Otaq Önizləməsi
@@ -265,39 +264,40 @@ export default function Interactive3DPreview() {
         </div>
 
         {/* Lighting Mood Controls */}
-        <div className="flex items-center gap-2 bg-neutral-950/80 p-1.5 rounded-2xl border border-white/10 shadow-inner">
+        <div className="flex items-center gap-2 bg-zinc-950/80 p-1.5 rounded-2xl border border-white/10 shadow-inner">
           <button
             onClick={() => setLightingMood("day")}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               lightingMood === "day"
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                : "text-neutral-400 hover:text-white"
+                ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
-            <Sun className="w-3.5 h-3.5 text-amber-300" /> Parlaq Gündüz
+            <Sun className="w-3.5 h-3.5" /> Parlaq Gündüz
           </button>
           <button
             onClick={() => setLightingMood("sunset")}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               lightingMood === "sunset"
-                ? "bg-amber-600 text-white shadow-lg shadow-amber-600/30"
-                : "text-neutral-400 hover:text-white"
+                ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-200" /> Günbatımı
+            <Sparkles className="w-3.5 h-3.5" /> Günbatımı
           </button>
           <button
             onClick={() => setLightingMood("night")}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               lightingMood === "night"
-                ? "bg-purple-600 text-white shadow-lg shadow-purple-600/30"
-                : "text-neutral-400 hover:text-white"
+                ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
-            <Moon className="w-3.5 h-3.5 text-indigo-300" /> Gecə Cyber
+            <Moon className="w-3.5 h-3.5" /> Gecə Rejimi
           </button>
         </div>
       </div>
+
 
       {/* 3D Canvas Viewport - Brightened Studio Backdrop */}
       <div className="relative aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl bg-[#1e2029] overflow-hidden border border-white/15 my-6 shadow-2xl">
