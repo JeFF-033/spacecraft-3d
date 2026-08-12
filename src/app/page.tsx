@@ -469,25 +469,26 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 pt-8 border-t border-white/10 text-neutral-400 w-full max-w-4xl"
+            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 pt-8 border-t border-white/10 text-zinc-400 w-full max-w-4xl"
           >
             <div className="flex flex-col items-center">
               <span className="text-2xl md:text-3xl font-black text-white">4K UHD</span>
-              <span className="text-xs text-neutral-400 font-mono mt-1">Real-Time Raytracing</span>
+              <span className="text-xs text-zinc-400 font-mono mt-1">Real-Time Raytracing</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-2xl md:text-3xl font-black text-indigo-400">10x Daha Sürətli</span>
-              <span className="text-xs text-neutral-400 font-mono mt-1">AI Generasiya Motoru</span>
+              <span className="text-2xl md:text-3xl font-black text-white">10x Sürətli</span>
+              <span className="text-xs text-zinc-400 font-mono mt-1">AI Generasiya Motoru</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-2xl md:text-3xl font-black text-emerald-400">100% Bulud</span>
-              <span className="text-xs text-neutral-400 font-mono mt-1">Quraşdırma Tələb Olunmur</span>
+              <span className="text-2xl md:text-3xl font-black text-white">100% Bulud</span>
+              <span className="text-xs text-zinc-400 font-mono mt-1">Quraşdırma Tələb Olunmur</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-2xl md:text-3xl font-black text-amber-400">Multi-Player</span>
-              <span className="text-xs text-neutral-400 font-mono mt-1">Canlı Komanda İş birliyi</span>
+              <span className="text-2xl md:text-3xl font-black text-white">Multi-Player</span>
+              <span className="text-xs text-zinc-400 font-mono mt-1">Canlı Komanda İş birliyi</span>
             </div>
           </motion.div>
+
 
           {/* FLAGSHIP ENHANCED 140 m² MULTI-ROOM PENTHOUSE ARCHITECTURAL CANVAS */}
           <motion.div 
@@ -513,12 +514,13 @@ export default function LandingPage() {
                   onClick={() => setActiveZone("all")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     activeZone === "all"
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                      : "text-neutral-400 hover:text-white"
+                      ? "bg-white text-zinc-950 shadow-lg shadow-white/10"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   <Home className="w-3.5 h-3.5" /> Bütün Mənzil (140 m²)
                 </button>
+
                 <button
                   onClick={() => setActiveZone("living")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${

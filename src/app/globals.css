@@ -154,15 +154,16 @@ html, body {
 }
 
 .glow-cyan {
-  box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 10px 30px -5px rgba(255, 255, 255, 0.05);
 }
 
 .glow-purple {
-  box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 10px 30px -5px rgba(255, 255, 255, 0.05);
 }
 
 .glow-border-hover:hover {
-  border-color: rgba(6, 182, 212, 0.5);
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
 }
+
 
