@@ -182,8 +182,8 @@ function HeroPenthouse3DScene({ activeZone, setActiveZone, materialStyle, lighti
             onClick={(e) => { e.stopPropagation(); setActiveZone("living"); }}
             className={`px-3 py-1 rounded-full text-[11px] font-semibold shadow-xl backdrop-blur-md flex items-center gap-1.5 border transition-all cursor-pointer whitespace-nowrap ${
               activeZone === "living" 
-                ? "bg-indigo-600/90 text-white border-white scale-105 shadow-indigo-600/50" 
-                : "bg-neutral-900/80 text-neutral-300 border-white/20 hover:bg-neutral-800 hover:text-white hover:border-white/40"
+                ? "bg-white text-zinc-950 border-white scale-105 shadow-white/20" 
+                : "bg-zinc-900/80 text-zinc-300 border-white/20 hover:bg-zinc-800 hover:text-white hover:border-white/40"
             }`}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></span>
@@ -389,8 +389,8 @@ export default function LandingPage() {
         </div>
 
         {/* Ambient Pulsing Radial Lights */}
-        <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[150px] pointer-events-none -z-10 animate-ambient-glow"></div>
-        <div className="absolute top-40 right-1/4 w-[450px] h-[450px] bg-amber-500/10 rounded-full blur-[150px] pointer-events-none -z-10 animate-ambient-glow" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-[150px] pointer-events-none -z-10 animate-ambient-glow"></div>
+        <div className="absolute top-40 right-1/4 w-[450px] h-[450px] bg-zinc-400/5 rounded-full blur-[150px] pointer-events-none -z-10 animate-ambient-glow" style={{ animationDelay: '3s' }}></div>
 
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center text-center relative z-10">
           
@@ -399,14 +399,14 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900/90 border border-white/10 text-neutral-300 text-xs font-semibold mb-8 shadow-2xl backdrop-blur-md hover:border-indigo-500/50 transition-all cursor-pointer group"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-900/90 border border-white/10 text-zinc-300 text-xs font-semibold mb-8 shadow-2xl backdrop-blur-md hover:border-white/40 transition-all cursor-pointer group"
           >
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-200"></span>
             </span>
             <span className="group-hover:text-white transition-colors">SpaceCraft 3D v2.5 SaaS — İndi Canlıdır!</span>
-            <ChevronRight className="w-3.5 h-3.5 text-indigo-400 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-1 transition-transform" />
           </motion.div>
 
           {/* Main Hero Heading */}
@@ -417,10 +417,10 @@ export default function LandingPage() {
             className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight text-white max-w-5xl leading-[1.08] mb-8 uppercase"
           >
             İnteryer Dizaynını <br />
-            <span className="relative inline-block my-1 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-indigo-300">
+            <span className="relative inline-block my-1 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-300 to-zinc-400">
               Brauzerdə
             </span>{" "}
-            <span className="inline-block bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="inline-block bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-600 bg-clip-text text-transparent">
               Yenidən Kəşf Et
             </span>
           </motion.h1>
@@ -430,7 +430,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-base sm:text-xl text-neutral-400 max-w-3xl mb-12 leading-relaxed font-light"
+            className="text-base sm:text-xl text-zinc-400 max-w-3xl mb-12 leading-relaxed font-light"
           >
             Peşəkar proqramlara ehtiyac duymadan, süni intellekt dəstəkli və komanda ilə eyni anda işləyə biləcəyiniz ilk bulud əsaslı <span className="text-white font-medium">3D memarlıq və dizayn platforması</span>.
           </motion.p>
@@ -444,10 +444,10 @@ export default function LandingPage() {
           >
             <Link 
               href={session ? "/editor" : "/auth/signin"} 
-              className="relative group overflow-hidden rounded-full p-[1.5px] w-full sm:w-auto font-bold text-base shadow-2xl shadow-indigo-600/30"
+              className="relative group overflow-hidden rounded-full p-[1.5px] w-full sm:w-auto font-bold text-base shadow-2xl shadow-white/10"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-400 rounded-full animate-gradient-x"></span>
-              <span className="relative px-9 py-4 rounded-full bg-indigo-600 text-white flex items-center justify-center gap-3 group-hover:bg-indigo-500 transition-all font-extrabold whitespace-nowrap">
+              <span className="absolute inset-0 bg-gradient-to-r from-white via-zinc-400 to-zinc-600 rounded-full animate-gradient-x"></span>
+              <span className="relative px-9 py-4 rounded-full bg-white text-zinc-950 flex items-center justify-center gap-3 group-hover:bg-zinc-200 transition-all font-extrabold whitespace-nowrap">
                 <span>Ödənişsiz Sına</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
